@@ -117,7 +117,7 @@
                                 <div class="dropdown-menu dropdown-menu-right dropdown-lg">
                                     <!-- item-->
                                     <h6 class="dropdown-item-text">
-                                        Notifikasi (<?php echo get_count_unread_notifikasi();?>)
+                                        Notifikasi (<?php echo get_count_unread_notifikasi(TRUE);?>)
                                     </h6>
                                     <div class="slimscroll notification-list">
                                         <?php 
@@ -126,7 +126,7 @@
 										{
 											$message = trim(strip_tags($item->message));
 										?>
-                                        <a href="javascript:void(0);" class="dropdown-item notify-item">
+                                        <a href="<?php echo site_url('notifications/view/'.$item->id);?>" class="dropdown-item notify-item">
                                             <div class="notify-icon bg-success"><i class="mdi mdi-message"></i></div>
                                             <p class="notify-details"><?php echo $item->title;?><small class="text-muted"><?php echo (strlen($message) > 60)? substr($message,0,60).'...':$message; ?></small></p>
                                         </a>
