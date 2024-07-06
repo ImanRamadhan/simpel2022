@@ -1,4 +1,4 @@
-<?php defined('BASEPATH') OR exit('No direct script access allowed');
+<?php defined('BASEPATH') or exit('No direct script access allowed');
 /*
 |-------------------------------------------------------------------------- 
 | Code Version 
@@ -7,7 +7,7 @@
 | This is the version of Open Source Point of Sale you're running 
 | 
 | 
-*/ 
+*/
 $config['application_version'] = '3.2.1';
 
 /* 
@@ -18,9 +18,9 @@ $config['application_version'] = '3.2.1';
 | This is the commit hash for the version you are currently using 
 | 
 | 
-*/ 
+*/
 $config['commit_sha1'] = '$Id $';
- 
+
 /* 
 |-------------------------------------------------------------------------- 
 | Internal to OSPOS XSS Clean 
@@ -30,7 +30,7 @@ $config['commit_sha1'] = '$Id $';
 | By default it's enabled as it's assumed the installation has Internet access and needs to be protected, 
 | however intranet only installations may not need this so they can set FALSE to improve performance 
 | 
-*/ 
+*/
 $config['ospos_xss_clean'] = TRUE;
 
 /*
@@ -68,8 +68,8 @@ $config['db_log_enabled'] = FALSE;
 //$config['base_url'] = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') || isset($_ENV['FORCE_HTTPS'])) ? 'https' : 'http';
 //$config['base_url'] .= '://' . $_SERVER['HTTP_HOST'];
 //$config['base_url'] .= str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']);
-//$config['base_url'] = 'http://localhost/simpel2022/public';
-$config['base_url'] = 'https://simpellpk.pom.go.id/simpel2022/public/';
+$config['base_url'] = 'http://localhost/simpel2022/public';
+//$config['base_url'] = 'https://simpellpk.pom.go.id/simpel2022/public/';
 /*
 |--------------------------------------------------------------------------
 | Index File
@@ -97,7 +97,7 @@ $config['index_page'] = '';
 |
 | WARNING: If you set this to 'PATH_INFO', URIs will always be URL-decoded!
 */
-$config['uri_protocol']	= 'REQUEST_URI';
+$config['uri_protocol']    = 'REQUEST_URI';
 
 /*
 |--------------------------------------------------------------------------
@@ -488,7 +488,7 @@ $config['csrf_token_name'] = 'csrf_simpellpk_beta_a';
 $config['csrf_cookie_name'] = 'csrf_cookie_simpellpk_beta_a';
 $config['csrf_expire'] = 14400;
 $config['csrf_regenerate'] = TRUE;
-$config['csrf_exclude_uris'] = array('login','databases/database_data','databases/database_rujukan_data');
+$config['csrf_exclude_uris'] = array('login', 'databases/database_data', 'databases/database_rujukan_data');
 
 /*
 |--------------------------------------------------------------------------

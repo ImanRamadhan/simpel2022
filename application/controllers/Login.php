@@ -1,35 +1,29 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-require_once APPPATH.'third_party/securimage/securimage.php';
+require_once APPPATH . 'third_party/securimage/securimage.php';
 
 class Login extends CI_Controller
 {
 	public function index()
 	{
-		
-		if($this->User->is_logged_in())
-		{
-			redirect('home');
-		}
-		else
-		{
-			
-			
-			$this->form_validation->set_error_delimiters('<div class="error">', '</div>');
-			
-			$this->form_validation->set_rules('username', 'lang:login_username', 'required|callback_login_check');			
 
-			if($this->form_validation->run() == FALSE)
-			{
+		if ($this->User->is_logged_in()) {
+			redirect('home');
+		} else {
+
+
+			$this->form_validation->set_error_delimiters('<div class="error">', '</div>');
+
+			$this->form_validation->set_rules('username', 'lang:login_username', 'required|callback_login_check');
+
+			if ($this->form_validation->run() == FALSE) {
 				$this->load->view('login');
-			}
-			else
-			{	
-				redirect(base_url().'home', 'refresh');
+			} else {
+				redirect(base_url() . 'home', 'refresh');
 			}
 		}
 	}
-	
+
 	function captcha()
 	{
 		$img = new Securimage();
@@ -42,102 +36,97 @@ class Login extends CI_Controller
 		$img->captcha_type = Securimage::SI_CAPTCHA_STRING;
 		$img->show();
 	}
-	
+
 	function clear_cache()
-    {
-       // $this->output->set_header("Cache-Control: no-store, no-cache, must-revalidate, no-transform, max-age=0, post-check=0, pre-check=0");
-       // $this->output->set_header("Pragma: no-cache");
-    }
+	{
+		// $this->output->set_header("Cache-Control: no-store, no-cache, must-revalidate, no-transform, max-age=0, post-check=0, pre-check=0");
+		// $this->output->set_header("Pragma: no-cache");
+	}
 
 	public function login_check($username)
 	{
-		
-		
-		
-		
-		
+
+
+
+
+
 		$username = $this->input->post('username');
 		$password = $this->input->post('password');
-		
-		if(empty($username) || empty($password))
-		{
+
+		if (empty($username) || empty($password)) {
 			$this->form_validation->set_message('login_check', 'Silakan input username dan password');
-			
+
 			return FALSE;
 		}
-		
+
 		$code = $this->input->post('validasi');
-		
-		if(empty($code))
-		{
+
+		if (empty($code)) {
 			$this->form_validation->set_message('login_check', 'Silakan input kode validasi');
 			return FALSE;
 		}
-		
-		
+
+
 		$image = new Securimage();
 		if ($image->check($code) == false) {
 			$this->form_validation->set_message('login_check', 'Kode validasi salah');
 			return FALSE;
 		}
-		
 
-		if(!$this->User->login($username, $password))
-		{
+
+		if (!$this->User->login($username, $password)) {
 			$this->form_validation->set_message('login_check', $this->lang->line('login_invalid_username_and_password'));
-			
+
 			$user = $this->User->get_info_by_username($username);
-			if(!empty($user->username))
-			{
+			if (!empty($user->username)) {
 				$failed_login = (int)$user->failed_login + 1;
 
 				$login_data = array(
 					'failed_login' => $failed_login,
 					'username' => $username
 				);
-				if($failed_login > 3)
-				{
+				if ($failed_login > 3) {
 					$login_data['is_locked'] = 1; //locked
 					$this->form_validation->set_message('login_check', 'Username Anda terkunci.');
 				}
-				
+
 				//$this->User->save($login_data, $user->user_id);
 			}
-			
+
 
 			return FALSE;
 		}
-		
-		
+
+
 		$user = $this->User->get_info_by_username($username);
-		if(!empty($user->username))
-		{
+		if (!empty($user->username)) {
 			$login_data = array(
 				'failed_login' => 0,
 				'username' => $username
 			);
-			
+
 			//$this->User->save($login_data, $user->user_id);
 		}
 
-		
-		
+
+
 
 		return TRUE;
 	}
-	
-	public function getRandom($n) { 
-		$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'; 
-		$randomString = ''; 
-	  
-		for ($i = 0; $i < $n; $i++) { 
-			$index = rand(0, strlen($characters) - 1); 
-			$randomString .= $characters[$index]; 
-		} 
-	  
-		return $randomString; 
-	} 
-	
+
+	public function getRandom($n)
+	{
+		$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+		$randomString = '';
+
+		for ($i = 0; $i < $n; $i++) {
+			$index = rand(0, strlen($characters) - 1);
+			$randomString .= $characters[$index];
+		}
+
+		return $randomString;
+	}
+
 	/*
 	public function forgot_password()
 	{
@@ -245,4 +234,3 @@ class Login extends CI_Controller
 	}
 	*/
 }
-?>
