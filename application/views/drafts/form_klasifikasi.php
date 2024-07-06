@@ -7,16 +7,17 @@
 			<div class="col-sm-8">
 				<div class="form-check-inline my-1">
 					<div class="custom-control custom-radio">
-						<input type="radio" id="pengaduanradio" name="info" class="custom-control-input" value="P" <?php echo ($item_info->info == 'P'?'checked':'')?>>
-						<label class="custom-control-label" for="pengaduanradio">Pengaduan</label>
-					</div>
-				</div>
-				<div class="form-check-inline my-1">
-					<div class="custom-control custom-radio">
 						<input type="radio" id="informasiradio" name="info" class="custom-control-input" value="I" <?php echo ($item_info->info == 'I'?'checked':'')?>>
 						<label class="custom-control-label" for="informasiradio">Permintaan Informasi</label>
 					</div>
 				</div>
+				<div class="form-check-inline my-1">
+					<div class="custom-control custom-radio">
+						<input type="radio" id="pengaduanradio" name="info" class="custom-control-input" value="P" <?php echo ($item_info->info == 'P'?'checked':'')?>>
+						<label class="custom-control-label" for="pengaduanradio">Pengaduan</label>
+					</div>
+				</div>
+				
 			</div>
 		</div>
 		<div class="form-group form-group-sm row">
