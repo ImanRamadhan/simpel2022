@@ -994,276 +994,863 @@ class Report extends CI_Model
 
 	public function get_data_kelompok_mutu($sheet, $form_type, $inputTgl1, $inputTgl2, $inputKota, $kategori, $jenis, $gender)
 	{
+		if ($gender == 'ALL') {
+			$query = "SELECT 
+				t1.subklasifikasi AS name,
+				t2.cnt AS cnt_pl,
+				t4.cnt AS cnt_pp,
+				t3.cnt AS cnt_il,
+				t5.cnt AS cnt_ip 
+			FROM 
+				desk_subklasifikasi t1 
+			LEFT JOIN 
+			( 
+				SELECT subklasifikasi, count(*) as cnt 
+				FROM desk_tickets 
+				WHERE 
+					tglpengaduan  BETWEEN '$inputTgl1' AND '$inputTgl2' 
+					AND info='P' 
+				";
 
-		$query = "select t1.subklasifikasi as name, t2.cnt as cnt_p, t3.cnt as cnt_i 
-		from desk_subklasifikasi t1 left join 
-		( 
-			select subklasifikasi, count(*) as cnt 
-			from desk_tickets 
-			WHERE tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
-			AND info='P' ";
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "L");
 
-		$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender);
+			if ($form_type == "YANBLIK") {
+				$query .= " AND subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
+				//$query .= " and klasifikasi = 'Layanan Publik' ";
+			}
 
-		if ($form_type == "YANBLIK") {
-			$query .= " and subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
-			//$query .= " and klasifikasi = 'Layanan Publik' ";
-		}
-		if ($form_type == "PPID") {
-			$query .= " and jenis = 'PPID' ";
-		}
-		if ($form_type == "GENDER") {
-			if ($jenis == 'LAYANAN')
-				$query .= " and jenis = '' ";
-			elseif ($jenis == 'LAYANAN_SP4N')
-				$query .= " and jenis IN ('','SP4N') ";
-			else
-				$query .= " and jenis = '" . $jenis . "' ";
-		}
+			if ($form_type == "PPID") {
+				$query .= " AND jenis = 'PPID' ";
+			}
+			if ($form_type == "GENDER") {
+				if ($jenis == 'LAYANAN')
+					$query .= " and jenis = '' ";
+				elseif ($jenis == 'LAYANAN_SP4N')
+					$query .= " and jenis IN ('','SP4N') ";
+			}
 
-		$query .= " group by subklasifikasi
-			) t2 on t1.subklasifikasi=t2.subklasifikasi 
-		left join 
-		( 
-			select subklasifikasi, count(*) as cnt 
-			from desk_tickets 
-			WHERE tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
-			AND info='I' ";
+			$query .= " GROUP BY subklasifikasi ) t2 on t1.subklasifikasi=t2.subklasifikasi 
+			LEFT JOIN
+			( 
+				SELECT 
+					subklasifikasi, COUNT(*) AS cnt
+				FROM
+					desk_tickets
+				WHERE
+					tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
+					AND info='P' ";
 
-		$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender);
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "P");
+			if ($form_type == "YANBLIK") {
+				$query .= " AND subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
+				//$query .= " and klasifikasi = 'Layanan Publik' ";
+			}
+			if ($form_type == "PPID") {
+				$query .= " AND jenis = 'PPID' ";
+			}
+			if ($form_type == "GENDER") {
+				if ($jenis == 'LAYANAN')
+					$query .= " AND jenis = '' ";
+				elseif ($jenis == 'LAYANAN_SP4N')
+					$query .= " AND jenis IN ('','SP4N') ";
+			}
+			$query .= " GROUP BY subklasifikasi) t4 on t1.subklasifikasi=t4.subklasifikasi 
+				LEFT JOIN
+				( 
+					SELECT 
+						subklasifikasi, COUNT(*) AS cnt
+					FROM
+						desk_tickets
+					WHERE
+						tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
+						AND info='I' ";
 
-		if ($form_type == "YANBLIK") {
-			$query .= " and subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
-			//$query .= " and klasifikasi = 'Layanan Publik' ";
-		}
-		if ($form_type == "PPID") {
-			$query .= " and jenis = 'PPID' ";
-		}
-		if ($form_type == "GENDER") {
-			if ($jenis == 'LAYANAN')
-				$query .= " and jenis = '' ";
-			elseif ($jenis == 'LAYANAN_SP4N')
-				$query .= " and jenis IN ('','SP4N') ";
-			else
-				$query .= " and jenis = '" . $jenis . "' ";
-		}
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "L");
+			if ($form_type == "YANBLIK") {
+				$query .= " AND subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
+				//$query .= " and klasifikasi = 'Layanan Publik' ";
+			}
+			if ($form_type == "PPID") {
+				$query .= " AND jenis = 'PPID' ";
+			}
+			if ($form_type == "GENDER") {
+				if ($jenis == 'LAYANAN')
+					$query .= " AND jenis = '' ";
+				elseif ($jenis == 'LAYANAN_SP4N')
+					$query .= " AND jenis IN ('','SP4N') ";
+			}
 
-		$query .= " group by subklasifikasi ) t3 on t1.subklasifikasi=t3.subklasifikasi 
+			$query .= " GROUP BY subklasifikasi) t3 on t1.subklasifikasi=t3.subklasifikasi 
+				LEFT JOIN
+				( 
+					SELECT 
+						subklasifikasi, COUNT(*) AS cnt
+					FROM
+						desk_tickets
+					WHERE
+						tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
+						AND info='I' ";
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "P");
+			if ($form_type == "YANBLIK") {
+				$query .= " AND subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
+				//$query .= " and klasifikasi = 'Layanan Publik' ";
+			}
+			if ($form_type == "PPID") {
+				$query .= " AND jenis = 'PPID' ";
+			}
+			if ($form_type == "GENDER") {
+				if ($jenis == 'LAYANAN')
+					$query .= " AND jenis = '' ";
+				elseif ($jenis == 'LAYANAN_SP4N')
+					$query .= " AND jenis IN ('','SP4N') ";
+			}
+
+			$query .= " GROUP BY subklasifikasi) t5 on t1.subklasifikasi=t5.subklasifikasi 
+				WHERE t1.klasifikasi='Mutu' 
+				order by t1.id";
+		} else {
+			$query = "SELECT 
+				t1.subklasifikasi as name, t2.cnt as cnt_p, t3.cnt as cnt_i 
+				FROM desk_subklasifikasi t1 left join 
+				( 
+					SELECT subklasifikasi, count(*) as cnt 
+					FROM desk_tickets 
+					WHERE tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
+					AND info='P' ";
+
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender);
+
+			if ($form_type == "YANBLIK") {
+				$query .= " and subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
+				//$query .= " and klasifikasi = 'Layanan Publik' ";
+			}
+			if ($form_type == "PPID") {
+				$query .= " and jenis = 'PPID' ";
+			}
+			if ($form_type == "GENDER") {
+				if ($jenis == 'LAYANAN')
+					$query .= " and jenis = '' ";
+				elseif ($jenis == 'LAYANAN_SP4N')
+					$query .= " and jenis IN ('','SP4N') ";
+			}
+
+			$query .= " group by subklasifikasi
+				) t2 on t1.subklasifikasi=t2.subklasifikasi 
+			left join 
+			( 
+				select subklasifikasi, count(*) as cnt 
+				from desk_tickets 
+				WHERE tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
+				AND info='I' ";
+
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender);
+
+			if ($form_type == "YANBLIK") {
+				$query .= " and subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
+				//$query .= " and klasifikasi = 'Layanan Publik' ";
+			}
+			if ($form_type == "PPID") {
+				$query .= " and jenis = 'PPID' ";
+			}
+			if ($form_type == "GENDER") {
+				if ($jenis == 'LAYANAN')
+					$query .= " and jenis = '' ";
+				elseif ($jenis == 'LAYANAN_SP4N')
+					$query .= " and jenis IN ('','SP4N') ";
+			}
+
+			$query .= " group by subklasifikasi ) t3 on t1.subklasifikasi=t3.subklasifikasi 
 			WHERE t1.klasifikasi='Mutu' 
 			order by t1.id";
+		}
+
 
 		$results = $this->db->query($query);
+
+		// echo "<pre>";
+		// print_r($query);
+		// exit;
+
 		return $results->result_array();
 	}
 
 	public function get_data_kelompok_legalitas($sheet, $form_type, $inputTgl1, $inputTgl2, $inputKota, $kategori, $jenis, $gender)
 	{
+		if ($gender == 'ALL') {
+			$query = "SELECT 
+				t1.subklasifikasi AS name,
+				t2.cnt AS cnt_pl,
+				t4.cnt AS cnt_pp,
+				t3.cnt AS cnt_il,
+				t5.cnt AS cnt_ip 
+			FROM 
+				desk_subklasifikasi t1 
+			LEFT JOIN 
+			( 
+				SELECT subklasifikasi, count(*) as cnt 
+				FROM desk_tickets 
+				WHERE 
+					tglpengaduan  BETWEEN '$inputTgl1' AND '$inputTgl2' 
+					AND info='P' 
+				";
 
-		$query = "select t1.subklasifikasi as name, t2.cnt as cnt_p, t3.cnt as cnt_i 
-		from desk_subklasifikasi t1 left join 
-		( 
-			select subklasifikasi, count(*) as cnt 
-			from desk_tickets 
-			WHERE tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
-			AND info='P'  ";
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "L");
 
-		$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender);
+			if ($form_type == "YANBLIK") {
+				$query .= " AND subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
+				//$query .= " and klasifikasi = 'Layanan Publik' ";
+			}
 
-		if ($form_type == "YANBLIK") {
-			$query .= " and subklasifikasi IN('Proses pendaftaran','Sertifikasi', 'Petugas Yanblik') ";
-			//$query .= " and klasifikasi = 'Layanan Publik' ";
-		}
-		if ($form_type == "PPID") {
-			$query .= " and jenis = 'PPID' ";
-		}
-		if ($form_type == "GENDER") {
-			if ($jenis == 'LAYANAN')
-				$query .= " and jenis = '' ";
-			elseif ($jenis == 'LAYANAN_SP4N')
-				$query .= " and jenis IN ('','SP4N') ";
-			else
-				$query .= " and jenis = '" . $jenis . "' ";
-		}
+			if ($form_type == "PPID") {
+				$query .= " AND jenis = 'PPID' ";
+			}
+			if ($form_type == "GENDER") {
+				if ($jenis == 'LAYANAN')
+					$query .= " and jenis = '' ";
+				elseif ($jenis == 'LAYANAN_SP4N')
+					$query .= " and jenis IN ('','SP4N') ";
+			}
 
-		$query .= " group by subklasifikasi
-			) t2 on t1.subklasifikasi=t2.subklasifikasi 
-			left join 
-		( 
-			select subklasifikasi, count(*) as cnt 
-			from desk_tickets 
-			WHERE tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
-			AND info='I' ";
+			$query .= " GROUP BY subklasifikasi ) t2 on t1.subklasifikasi=t2.subklasifikasi 
+			LEFT JOIN
+			( 
+				SELECT 
+					subklasifikasi, COUNT(*) AS cnt
+				FROM
+					desk_tickets
+				WHERE
+					tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
+					AND info='P' ";
 
-		$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender);
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "P");
+			if ($form_type == "YANBLIK") {
+				$query .= " AND subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
+				//$query .= " and klasifikasi = 'Layanan Publik' ";
+			}
+			if ($form_type == "PPID") {
+				$query .= " AND jenis = 'PPID' ";
+			}
+			if ($form_type == "GENDER") {
+				if ($jenis == 'LAYANAN')
+					$query .= " AND jenis = '' ";
+				elseif ($jenis == 'LAYANAN_SP4N')
+					$query .= " AND jenis IN ('','SP4N') ";
+			}
+			$query .= " GROUP BY subklasifikasi) t4 on t1.subklasifikasi=t4.subklasifikasi 
+				LEFT JOIN
+				( 
+					SELECT 
+						subklasifikasi, COUNT(*) AS cnt
+					FROM
+						desk_tickets
+					WHERE
+						tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
+						AND info='I' ";
 
-		if ($form_type == "YANBLIK") {
-			$query .= " and subklasifikasi IN('Proses pendaftaran','Sertifikasi', 'Petugas Yanblik') ";
-			//$query .= " and klasifikasi = 'Layanan Publik' ";
-		}
-		if ($form_type == "PPID") {
-			$query .= " and jenis = 'PPID' ";
-		}
-		if ($form_type == "GENDER") {
-			if ($jenis == 'LAYANAN')
-				$query .= " and jenis = '' ";
-			elseif ($jenis == 'LAYANAN_SP4N')
-				$query .= " and jenis IN ('','SP4N') ";
-			else
-				$query .= " and jenis = '" . $jenis . "' ";
-		}
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "L");
+			if ($form_type == "YANBLIK") {
+				$query .= " AND subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
+				//$query .= " and klasifikasi = 'Layanan Publik' ";
+			}
+			if ($form_type == "PPID") {
+				$query .= " AND jenis = 'PPID' ";
+			}
+			if ($form_type == "GENDER") {
+				if ($jenis == 'LAYANAN')
+					$query .= " AND jenis = '' ";
+				elseif ($jenis == 'LAYANAN_SP4N')
+					$query .= " AND jenis IN ('','SP4N') ";
+			}
 
-		$query .= " group by subklasifikasi ) t3 on t1.subklasifikasi=t3.subklasifikasi ";
+			$query .= " GROUP BY subklasifikasi) t3 on t1.subklasifikasi=t3.subklasifikasi 
+				LEFT JOIN
+				( 
+					SELECT 
+						subklasifikasi, COUNT(*) AS cnt
+					FROM
+						desk_tickets
+					WHERE
+						tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
+						AND info='I' ";
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "P");
+			if ($form_type == "YANBLIK") {
+				$query .= " AND subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
+				//$query .= " and klasifikasi = 'Layanan Publik' ";
+			}
+			if ($form_type == "PPID") {
+				$query .= " AND jenis = 'PPID' ";
+			}
+			if ($form_type == "GENDER") {
+				if ($jenis == 'LAYANAN')
+					$query .= " AND jenis = '' ";
+				elseif ($jenis == 'LAYANAN_SP4N')
+					$query .= " AND jenis IN ('','SP4N') ";
+			}
 
-		if ($form_type == "YANBLIK") {
-			$query .= " WHERE t3.subklasifikasi IN ('Proses pendaftaran','Sertifikasi', 'Petugas Yanblik') ";
+			$query .= " GROUP BY subklasifikasi) t5 on t1.subklasifikasi=t5.subklasifikasi 
+				WHERE t1.klasifikasi='Legalitas'  AND t1.deleted = '0' 
+				order by t1.id";
 		} else {
-			$query .= " WHERE t1.klasifikasi='Legalitas' AND t1.deleted = 0 ";
-		}
+			$query = "SELECT t1.subklasifikasi as name, t2.cnt as cnt_p, t3.cnt as cnt_i 
+				FROM desk_subklasifikasi t1 left join 
+				( 
+					SELECT subklasifikasi, count(*) as cnt 
+					FROM desk_tickets 
+					WHERE tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
+					AND info='P'  ";
 
-		$query .= " order by t1.id";
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender);
+
+			if ($form_type == "YANBLIK") {
+				$query .= " and subklasifikasi IN('Proses pendaftaran','Sertifikasi', 'Petugas Yanblik') ";
+				//$query .= " and klasifikasi = 'Layanan Publik' ";
+			}
+			if ($form_type == "PPID") {
+				$query .= " and jenis = 'PPID' ";
+			}
+			if ($form_type == "GENDER") {
+				if ($jenis == 'LAYANAN')
+					$query .= " and jenis = '' ";
+				elseif ($jenis == 'LAYANAN_SP4N')
+					$query .= " and jenis IN ('','SP4N') ";
+				else
+					$query .= " and jenis = '" . $jenis . "' ";
+			}
+
+			$query .= " GROUP BY subklasifikasi
+				) t2 on t1.subklasifikasi=t2.subklasifikasi 
+				left join 
+			( 
+				SELECT subklasifikasi, count(*) as cnt 
+				FROM desk_tickets 
+				WHERE tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
+				AND info='I' ";
+
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender);
+
+			if ($form_type == "YANBLIK") {
+				$query .= " and subklasifikasi IN('Proses pendaftaran','Sertifikasi', 'Petugas Yanblik') ";
+				//$query .= " and klasifikasi = 'Layanan Publik' ";
+			}
+			if ($form_type == "PPID") {
+				$query .= " and jenis = 'PPID' ";
+			}
+			if ($form_type == "GENDER") {
+				if ($jenis == 'LAYANAN')
+					$query .= " and jenis = '' ";
+				elseif ($jenis == 'LAYANAN_SP4N')
+					$query .= " and jenis IN ('','SP4N') ";
+				else
+					$query .= " and jenis = '" . $jenis . "' ";
+			}
+
+			$query .= " group by subklasifikasi ) t3 on t1.subklasifikasi=t3.subklasifikasi ";
+
+			if ($form_type == "YANBLIK") {
+				$query .= " WHERE t3.subklasifikasi IN ('Proses pendaftaran','Sertifikasi', 'Petugas Yanblik') ";
+			} else {
+				$query .= " WHERE t1.klasifikasi='Legalitas' AND t1.deleted = 0 ";
+			}
+
+			$query .= " order by t1.id";
+		}
 
 		$results = $this->db->query($query);
+		// echo "<pre>";
+		// print_r($query);
+		// exit;
 		return $results->result_array();
 	}
 
 	public function get_data_kelompok_penandaan($sheet, $form_type, $inputTgl1, $inputTgl2, $inputKota, $kategori, $jenis, $gender)
 	{
+		if ($gender == 'ALL') {
+			$query = "SELECT 
+				t1.subklasifikasi AS name,
+				t2.cnt AS cnt_pl,
+				t4.cnt AS cnt_pp,
+				t3.cnt AS cnt_il,
+				t5.cnt AS cnt_ip 
+			FROM 
+				desk_subklasifikasi t1 
+			LEFT JOIN 
+			( 
+				SELECT subklasifikasi, count(*) as cnt 
+				FROM desk_tickets 
+				WHERE 
+					tglpengaduan  BETWEEN '$inputTgl1' AND '$inputTgl2' 
+					AND info='P' 
+				";
 
-		$query = "select t1.subklasifikasi as name, t2.cnt as cnt_p, t3.cnt as cnt_i 
-		from desk_subklasifikasi t1 left join 
-		( 
-			select subklasifikasi, count(*) as cnt 
-			from desk_tickets 
-			WHERE tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
-			AND info='P' ";
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "L");
 
-		$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender);
+			if ($form_type == "YANBLIK") {
+				$query .= " AND subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
+				//$query .= " and klasifikasi = 'Layanan Publik' ";
+			}
 
-		if ($form_type == "YANBLIK") {
-			$query .= " and subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
-			//$query .= " and klasifikasi = 'Layanan Publik' ";
-		}
-		if ($form_type == "PPID") {
-			$query .= " and jenis = 'PPID' ";
-		}
-		if ($form_type == "GENDER") {
-			if ($jenis == 'LAYANAN')
-				$query .= " and jenis = '' ";
-			elseif ($jenis == 'LAYANAN_SP4N')
-				$query .= " and jenis IN ('','SP4N') ";
-			else
-				$query .= " and jenis = '" . $jenis . "' ";
-		}
+			if ($form_type == "PPID") {
+				$query .= " AND jenis = 'PPID' ";
+			}
+			if ($form_type == "GENDER") {
+				if ($jenis == 'LAYANAN')
+					$query .= " and jenis = '' ";
+				elseif ($jenis == 'LAYANAN_SP4N')
+					$query .= " and jenis IN ('','SP4N') ";
+			}
 
-		$query .= " group by subklasifikasi
-			) t2 on t1.subklasifikasi=t2.subklasifikasi 
-		left join 
-		( 
-			select subklasifikasi, count(*) as cnt 
-			from desk_tickets 
-			WHERE tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
-			AND info='I' ";
+			$query .= " GROUP BY subklasifikasi ) t2 on t1.subklasifikasi=t2.subklasifikasi 
+			LEFT JOIN
+			( 
+				SELECT 
+					subklasifikasi, COUNT(*) AS cnt
+				FROM
+					desk_tickets
+				WHERE
+					tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
+					AND info='P' ";
 
-		$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender);
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "P");
+			if ($form_type == "YANBLIK") {
+				$query .= " AND subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
+				//$query .= " and klasifikasi = 'Layanan Publik' ";
+			}
+			if ($form_type == "PPID") {
+				$query .= " AND jenis = 'PPID' ";
+			}
+			if ($form_type == "GENDER") {
+				if ($jenis == 'LAYANAN')
+					$query .= " AND jenis = '' ";
+				elseif ($jenis == 'LAYANAN_SP4N')
+					$query .= " AND jenis IN ('','SP4N') ";
+			}
+			$query .= " GROUP BY subklasifikasi) t4 on t1.subklasifikasi=t4.subklasifikasi 
+				LEFT JOIN
+				( 
+					SELECT 
+						subklasifikasi, COUNT(*) AS cnt
+					FROM
+						desk_tickets
+					WHERE
+						tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
+						AND info='I' ";
 
-		if ($form_type == "YANBLIK") {
-			$query .= " and subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
-			//$query .= " and klasifikasi = 'Layanan Publik' ";
-		}
-		if ($form_type == "PPID") {
-			$query .= " and jenis = 'PPID' ";
-		}
-		if ($form_type == "GENDER") {
-			if ($jenis == 'LAYANAN')
-				$query .= " and jenis = '' ";
-			elseif ($jenis == 'LAYANAN_SP4N')
-				$query .= " and jenis IN ('','SP4N') ";
-			else
-				$query .= " and jenis = '" . $jenis . "' ";
-		}
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "L");
+			if ($form_type == "YANBLIK") {
+				$query .= " AND subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
+				//$query .= " and klasifikasi = 'Layanan Publik' ";
+			}
+			if ($form_type == "PPID") {
+				$query .= " AND jenis = 'PPID' ";
+			}
+			if ($form_type == "GENDER") {
+				if ($jenis == 'LAYANAN')
+					$query .= " AND jenis = '' ";
+				elseif ($jenis == 'LAYANAN_SP4N')
+					$query .= " AND jenis IN ('','SP4N') ";
+			}
 
-		$query .= " group by subklasifikasi ) t3 on t1.subklasifikasi=t3.subklasifikasi ";
+			$query .= " GROUP BY subklasifikasi) t3 on t1.subklasifikasi=t3.subklasifikasi 
+				LEFT JOIN
+				( 
+					SELECT 
+						subklasifikasi, COUNT(*) AS cnt
+					FROM
+						desk_tickets
+					WHERE
+						tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
+						AND info='I' ";
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "P");
+			if ($form_type == "YANBLIK") {
+				$query .= " AND subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
+				//$query .= " and klasifikasi = 'Layanan Publik' ";
+			}
+			if ($form_type == "PPID") {
+				$query .= " AND jenis = 'PPID' ";
+			}
+			if ($form_type == "GENDER") {
+				if ($jenis == 'LAYANAN')
+					$query .= " AND jenis = '' ";
+				elseif ($jenis == 'LAYANAN_SP4N')
+					$query .= " AND jenis IN ('','SP4N') ";
+			}
 
-		if ($form_type == "YANBLIK") {
-			$query .= " WHERE t1.subklasifikasi IN ('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
+			$query .= " GROUP BY subklasifikasi) t5 on t1.subklasifikasi=t5.subklasifikasi 
+				WHERE t1.klasifikasi='Penandaan' 
+				order by t1.id";
 		} else {
-			$query .= " WHERE t1.klasifikasi='Penandaan' ";
-		}
+			$query = "SELECT t1.subklasifikasi as name, t2.cnt as cnt_p, t3.cnt as cnt_i 
+			FROM desk_subklasifikasi t1 left join 
+			( 
+				SELECT subklasifikasi, count(*) as cnt 
+				from desk_tickets 
+				WHERE tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
+				AND info='P' ";
 
-		$query .= " order by t1.id";
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender);
+
+			if ($form_type == "YANBLIK") {
+				$query .= " and subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
+				//$query .= " and klasifikasi = 'Layanan Publik' ";
+			}
+			if ($form_type == "PPID") {
+				$query .= " and jenis = 'PPID' ";
+			}
+			if ($form_type == "GENDER") {
+				if ($jenis == 'LAYANAN')
+					$query .= " and jenis = '' ";
+				elseif ($jenis == 'LAYANAN_SP4N')
+					$query .= " and jenis IN ('','SP4N') ";
+			}
+
+			$query .= " group by subklasifikasi
+				) t2 on t1.subklasifikasi=t2.subklasifikasi 
+			left join 
+			( 
+				select subklasifikasi, count(*) as cnt 
+				from desk_tickets 
+				WHERE tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
+				AND info='I' ";
+
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender);
+
+			if ($form_type == "YANBLIK") {
+				$query .= " and subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
+				//$query .= " and klasifikasi = 'Layanan Publik' ";
+			}
+			if ($form_type == "PPID") {
+				$query .= " and jenis = 'PPID' ";
+			}
+			if ($form_type == "GENDER") {
+				if ($jenis == 'LAYANAN')
+					$query .= " and jenis = '' ";
+				elseif ($jenis == 'LAYANAN_SP4N')
+					$query .= " and jenis IN ('','SP4N') ";
+			}
+
+			$query .= " group by subklasifikasi ) t3 on t1.subklasifikasi=t3.subklasifikasi ";
+
+			if ($form_type == "YANBLIK") {
+				$query .= " WHERE t1.subklasifikasi IN ('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
+			} else {
+				$query .= " WHERE t1.klasifikasi='Penandaan' ";
+			}
+
+			$query .= " order by t1.id";
+		}
 
 		$results = $this->db->query($query);
+
+		// echo "<pre>";
+		// print_r($query);
+		// exit;
+
 		return $results->result_array();
 	}
 
 	public function get_data_kelompok_info_lain_produk($sheet, $form_type, $inputTgl1, $inputTgl2, $inputKota, $kategori, $jenis, $gender)
 	{
+		if ($gender == 'ALL') {
+			$query = "SELECT 
+				t1.subklasifikasi AS name,
+				t2.cnt AS cnt_pl,
+				t4.cnt AS cnt_pp,
+				t3.cnt AS cnt_il,
+				t5.cnt AS cnt_ip 
+			FROM 
+				desk_subklasifikasi t1 
+			LEFT JOIN 
+			( 
+				SELECT subklasifikasi, count(*) as cnt 
+				FROM desk_tickets 
+				WHERE 
+					tglpengaduan  BETWEEN '$inputTgl1' AND '$inputTgl2' 
+					AND info='P' 
+				";
 
-		$query = "select t1.subklasifikasi as name, t2.cnt as cnt_p, t3.cnt as cnt_i 
-		from desk_subklasifikasi t1 left join 
-		( 
-			select subklasifikasi, count(*) as cnt 
-			from desk_tickets 
-			WHERE tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
-			AND info='P' ";
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "L");
 
-		$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender);
+			if ($form_type == "YANBLIK") {
+				$query .= " AND subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
+				//$query .= " and klasifikasi = 'Layanan Publik' ";
+			}
 
-		if ($form_type == "YANBLIK") {
-			$query .= " and subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
-			//$query .= " and klasifikasi = 'Layanan Publik' ";
+			if ($form_type == "PPID") {
+				$query .= " AND jenis = 'PPID' ";
+			}
+			if ($form_type == "GENDER") {
+				if ($jenis == 'LAYANAN')
+					$query .= " and jenis = '' ";
+				elseif ($jenis == 'LAYANAN_SP4N')
+					$query .= " and jenis IN ('','SP4N') ";
+			}
+
+			$query .= " GROUP BY subklasifikasi ) t2 on t1.subklasifikasi=t2.subklasifikasi 
+			LEFT JOIN
+			( 
+				SELECT 
+					subklasifikasi, COUNT(*) AS cnt
+				FROM
+					desk_tickets
+				WHERE
+					tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
+					AND info='P' ";
+
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "P");
+			if ($form_type == "YANBLIK") {
+				$query .= " AND subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
+				//$query .= " and klasifikasi = 'Layanan Publik' ";
+			}
+			if ($form_type == "PPID") {
+				$query .= " AND jenis = 'PPID' ";
+			}
+			if ($form_type == "GENDER") {
+				if ($jenis == 'LAYANAN')
+					$query .= " AND jenis = '' ";
+				elseif ($jenis == 'LAYANAN_SP4N')
+					$query .= " AND jenis IN ('','SP4N') ";
+			}
+			$query .= " GROUP BY subklasifikasi) t4 on t1.subklasifikasi=t4.subklasifikasi 
+				LEFT JOIN
+				( 
+					SELECT 
+						subklasifikasi, COUNT(*) AS cnt
+					FROM
+						desk_tickets
+					WHERE
+						tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
+						AND info='I' ";
+
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "L");
+			if ($form_type == "YANBLIK") {
+				$query .= " AND subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
+				//$query .= " and klasifikasi = 'Layanan Publik' ";
+			}
+			if ($form_type == "PPID") {
+				$query .= " AND jenis = 'PPID' ";
+			}
+			if ($form_type == "GENDER") {
+				if ($jenis == 'LAYANAN')
+					$query .= " AND jenis = '' ";
+				elseif ($jenis == 'LAYANAN_SP4N')
+					$query .= " AND jenis IN ('','SP4N') ";
+			}
+
+			$query .= " GROUP BY subklasifikasi) t3 on t1.subklasifikasi=t3.subklasifikasi 
+				LEFT JOIN
+				( 
+					SELECT 
+						subklasifikasi, COUNT(*) AS cnt
+					FROM
+						desk_tickets
+					WHERE
+						tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
+						AND info='I' ";
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "P");
+			if ($form_type == "YANBLIK") {
+				$query .= " AND subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
+				//$query .= " and klasifikasi = 'Layanan Publik' ";
+			}
+			if ($form_type == "PPID") {
+				$query .= " AND jenis = 'PPID' ";
+			}
+			if ($form_type == "GENDER") {
+				if ($jenis == 'LAYANAN')
+					$query .= " AND jenis = '' ";
+				elseif ($jenis == 'LAYANAN_SP4N')
+					$query .= " AND jenis IN ('','SP4N') ";
+			}
+
+			$query .= " GROUP BY subklasifikasi) t5 on t1.subklasifikasi=t5.subklasifikasi 
+				WHERE t1.klasifikasi='Informasi lain ttg produk' 
+				order by t1.id";
+		} else {
+			$query = "SELECT t1.subklasifikasi as name, t2.cnt as cnt_p, t3.cnt as cnt_i 
+			FROM desk_subklasifikasi t1 left join 
+			( 
+				SELECT subklasifikasi, count(*) as cnt 
+				from desk_tickets 
+				WHERE tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
+				AND info='P' ";
+
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender);
+
+			if ($form_type == "YANBLIK") {
+				$query .= " and subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
+				//$query .= " and klasifikasi = 'Layanan Publik' ";
+			}
+			if ($form_type == "PPID") {
+				$query .= " and jenis = 'PPID' ";
+			}
+			if ($form_type == "GENDER") {
+				if ($jenis == 'LAYANAN')
+					$query .= " and jenis = '' ";
+				elseif ($jenis == 'LAYANAN_SP4N')
+					$query .= " and jenis IN ('','SP4N') ";
+			}
+
+			$query .= " group by subklasifikasi
+					) t2 on t1.subklasifikasi=t2.subklasifikasi 
+				left join 
+				( 
+					SELECT subklasifikasi, count(*) as cnt 
+					from desk_tickets WHERE tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
+					AND info='I' ";
+
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender);
+
+			if ($form_type == "YANBLIK") {
+				$query .= " and subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
+				//$query .= " and klasifikasi = 'Layanan Publik' ";
+			}
+			if ($form_type == "PPID") {
+				$query .= " and jenis = 'PPID' ";
+			}
+			if ($form_type == "GENDER") {
+				if ($jenis == 'LAYANAN')
+					$query .= " and jenis = '' ";
+				elseif ($jenis == 'LAYANAN_SP4N')
+					$query .= " and jenis IN ('','SP4N') ";
+			}
+
+			$query .= " group by subklasifikasi
+					) t3 on t1.subklasifikasi=t3.subklasifikasi 
+				WHERE t1.klasifikasi='Informasi lain ttg produk' 
+				order by t1.id";
 		}
-		if ($form_type == "PPID") {
-			$query .= " and jenis = 'PPID' ";
-		}
-		if ($form_type == "GENDER") {
-			if ($jenis == 'LAYANAN')
-				$query .= " and jenis = '' ";
-			elseif ($jenis == 'LAYANAN_SP4N')
-				$query .= " and jenis IN ('','SP4N') ";
-			else
-				$query .= " and jenis = '" . $jenis . "' ";
-		}
-
-		$query .= " group by subklasifikasi
-			) t2 on t1.subklasifikasi=t2.subklasifikasi 
-		left join 
-		( 
-			select subklasifikasi, count(*) as cnt 
-			from desk_tickets WHERE tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
-			AND info='I' ";
-
-		$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender);
-
-		if ($form_type == "YANBLIK") {
-			$query .= " and subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
-			//$query .= " and klasifikasi = 'Layanan Publik' ";
-		}
-		if ($form_type == "PPID") {
-			$query .= " and jenis = 'PPID' ";
-		}
-		if ($form_type == "GENDER") {
-			if ($jenis == 'LAYANAN')
-				$query .= " and jenis = '' ";
-			elseif ($jenis == 'LAYANAN_SP4N')
-				$query .= " and jenis IN ('','SP4N') ";
-			else
-				$query .= " and jenis = '" . $jenis . "' ";
-		}
-
-		$query .= " group by subklasifikasi
-			) t3 on t1.subklasifikasi=t3.subklasifikasi 
-		WHERE t1.klasifikasi='Informasi lain ttg produk' 
-		order by t1.id";
 
 		$results = $this->db->query($query);
+
+		// echo "<pre>";
+		// print_r($query);
+		// exit;
+
 		return $results->result_array();
 	}
 
 	public function get_data_kelompok_info_umum($sheet, $form_type, $inputTgl1, $inputTgl2, $inputKota, $kategori, $jenis, $gender)
 	{
+		if ($gender == 'ALL') {
+			$query = "SELECT 
+				t1.subklasifikasi AS name,
+				t2.cnt AS cnt_pl,
+				t4.cnt AS cnt_pp,
+				t3.cnt AS cnt_il,
+				t5.cnt AS cnt_ip 
+			FROM 
+				desk_subklasifikasi t1 
+			LEFT JOIN 
+			( 
+				SELECT subklasifikasi, count(*) as cnt 
+				FROM desk_tickets 
+				WHERE 
+					tglpengaduan  BETWEEN '$inputTgl1' AND '$inputTgl2' 
+					AND info='P' 
+				";
 
-		$query = "select t1.subklasifikasi as name, t2.cnt as cnt_p, t3.cnt as cnt_i 
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "L");
+
+			if ($form_type == "YANBLIK") {
+				$query .= " AND subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
+				//$query .= " and klasifikasi = 'Layanan Publik' ";
+			}
+
+			if ($form_type == "PPID") {
+				$query .= " AND jenis = 'PPID' ";
+			}
+			if ($form_type == "GENDER") {
+				if ($jenis == 'LAYANAN')
+					$query .= " and jenis = '' ";
+				elseif ($jenis == 'LAYANAN_SP4N')
+					$query .= " and jenis IN ('','SP4N') ";
+			}
+
+			$query .= " GROUP BY subklasifikasi ) t2 on t1.subklasifikasi=t2.subklasifikasi 
+			LEFT JOIN
+			( 
+				SELECT 
+					subklasifikasi, COUNT(*) AS cnt
+				FROM
+					desk_tickets
+				WHERE
+					tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
+					AND info='P' ";
+
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "P");
+			if ($form_type == "YANBLIK") {
+				$query .= " AND subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
+				//$query .= " and klasifikasi = 'Layanan Publik' ";
+			}
+			if ($form_type == "PPID") {
+				$query .= " AND jenis = 'PPID' ";
+			}
+			if ($form_type == "GENDER") {
+				if ($jenis == 'LAYANAN')
+					$query .= " AND jenis = '' ";
+				elseif ($jenis == 'LAYANAN_SP4N')
+					$query .= " AND jenis IN ('','SP4N') ";
+			}
+			$query .= " GROUP BY subklasifikasi) t4 on t1.subklasifikasi=t4.subklasifikasi 
+				LEFT JOIN
+				( 
+					SELECT 
+						subklasifikasi, COUNT(*) AS cnt
+					FROM
+						desk_tickets
+					WHERE
+						tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
+						AND info='I' ";
+
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "L");
+			if ($form_type == "YANBLIK") {
+				$query .= " AND subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
+				//$query .= " and klasifikasi = 'Layanan Publik' ";
+			}
+			if ($form_type == "PPID") {
+				$query .= " AND jenis = 'PPID' ";
+			}
+			if ($form_type == "GENDER") {
+				if ($jenis == 'LAYANAN')
+					$query .= " AND jenis = '' ";
+				elseif ($jenis == 'LAYANAN_SP4N')
+					$query .= " AND jenis IN ('','SP4N') ";
+			}
+
+			$query .= " GROUP BY subklasifikasi) t3 on t1.subklasifikasi=t3.subklasifikasi 
+				LEFT JOIN
+				( 
+					SELECT 
+						subklasifikasi, COUNT(*) AS cnt
+					FROM
+						desk_tickets
+					WHERE
+						tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
+						AND info='I' ";
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "P");
+			if ($form_type == "YANBLIK") {
+				$query .= " AND subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
+				//$query .= " and klasifikasi = 'Layanan Publik' ";
+			}
+			if ($form_type == "PPID") {
+				$query .= " AND jenis = 'PPID' ";
+			}
+			if ($form_type == "GENDER") {
+				if ($jenis == 'LAYANAN')
+					$query .= " AND jenis = '' ";
+				elseif ($jenis == 'LAYANAN_SP4N')
+					$query .= " AND jenis IN ('','SP4N') ";
+			}
+
+			$query .= " GROUP BY subklasifikasi) t5 on t1.subklasifikasi=t5.subklasifikasi ";
+			if ($form_type == "YANBLIK") {
+				$query .= " WHERE t1.subklasifikasi = 'Petugas Yanblik' ";
+			} else {
+				$query .= " WHERE t1.klasifikasi='Info Umum' ";
+			}
+
+			$query .= " order by t1.id ";
+		} else {
+			$query = "select t1.subklasifikasi as name, t2.cnt as cnt_p, t3.cnt as cnt_i 
 		from desk_subklasifikasi t1 
 		left join 
 		( 
@@ -1272,25 +1859,23 @@ class Report extends CI_Model
 			WHERE tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
 			AND info='P' ";
 
-		$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender);
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender);
 
-		if ($form_type == "YANBLIK") {
-			$query .= " and subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
-			//$query .= " and klasifikasi = 'Layanan Publik' ";
-		}
-		if ($form_type == "PPID") {
-			$query .= " and jenis = 'PPID' ";
-		}
-		if ($form_type == "GENDER") {
-			if ($jenis == 'LAYANAN')
-				$query .= " and jenis = '' ";
-			elseif ($jenis == 'LAYANAN_SP4N')
-				$query .= " and jenis IN ('','SP4N') ";
-			else
-				$query .= " and jenis = '" . $jenis . "' ";
-		}
+			if ($form_type == "YANBLIK") {
+				$query .= " and subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
+				//$query .= " and klasifikasi = 'Layanan Publik' ";
+			}
+			if ($form_type == "PPID") {
+				$query .= " and jenis = 'PPID' ";
+			}
+			if ($form_type == "GENDER") {
+				if ($jenis == 'LAYANAN')
+					$query .= " and jenis = '' ";
+				elseif ($jenis == 'LAYANAN_SP4N')
+					$query .= " and jenis IN ('','SP4N') ";
+			}
 
-		$query .= " group by subklasifikasi
+			$query .= " group by subklasifikasi
 			) t2 on t1.subklasifikasi=t2.subklasifikasi 
 		left join 
 		( 
@@ -1299,44 +1884,48 @@ class Report extends CI_Model
 			WHERE tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
 			AND info='I' ";
 
-		$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender);
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender);
 
-		if ($form_type == "YANBLIK") {
-			$query .= " and subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
-			//$query .= " and klasifikasi = 'Layanan Publik' ";
-		}
-		if ($form_type == "PPID") {
-			$query .= " and jenis = 'PPID' ";
-		}
-		if ($form_type == "GENDER") {
-			if ($jenis == 'LAYANAN')
-				$query .= " and jenis = '' ";
-			elseif ($jenis == 'LAYANAN_SP4N')
-				$query .= " and jenis IN ('','SP4N') ";
-			else
-				$query .= " and jenis = '" . $jenis . "' ";
-		}
+			if ($form_type == "YANBLIK") {
+				$query .= " and subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
+				//$query .= " and klasifikasi = 'Layanan Publik' ";
+			}
+			if ($form_type == "PPID") {
+				$query .= " and jenis = 'PPID' ";
+			}
+			if ($form_type == "GENDER") {
+				if ($jenis == 'LAYANAN')
+					$query .= " and jenis = '' ";
+				elseif ($jenis == 'LAYANAN_SP4N')
+					$query .= " and jenis IN ('','SP4N') ";
+			}
 
-		$query .= " group by subklasifikasi
+			$query .= " group by subklasifikasi
 			) t3 on t1.subklasifikasi=t3.subklasifikasi ";
 
-		if ($form_type == "YANBLIK") {
-			$query .= " WHERE t1.subklasifikasi = 'Petugas Yanblik' ";
-		} else {
-			$query .= " WHERE t1.klasifikasi='Info Umum' ";
+			if ($form_type == "YANBLIK") {
+				$query .= " WHERE t1.subklasifikasi = 'Petugas Yanblik' ";
+			} else {
+				$query .= " WHERE t1.klasifikasi='Info Umum' ";
+			}
+
+			$query .= " order by t1.id ";
 		}
 
-		$query .= " order by t1.id ";
-
 		$results = $this->db->query($query);
+
+		// echo "<pre>";
+		// print_r($query);
+		// exit;
+
 		return $results->result_array();
 	}
 
 	public function get_total_data_($sheet, $form_type, $inputTgl1, $inputTgl2, $inputKota, $kategori, $jenis, $gender)
 	{
 
-		$query = "select count(*) as total 
-			from desk_tickets 
+		$query = "SELECT count(*) as total 
+			FROM desk_tickets 
 			WHERE tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' ";
 
 		if ($form_type == "YANBLIK") {
