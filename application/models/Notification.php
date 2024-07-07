@@ -35,7 +35,30 @@ class Notification extends CI_Model
 		return ($this->db->get()->num_rows() == 1);
 	}
 
-	
+	public function get_by_ticketid($ticket_id, $ignore_deleted = FALSE, $deleted = FALSE)
+	{
+		$this->db->select('id, title, message,ticket_id,user_id');
+		$this->db->from('desk_notifikasi');
+		$this->db->where('ticket_id', $ticket_id);
+
+		return $this->db->get();
+	}
+
+	public function get_user_need_notified($ticket_id, $list_directorate){
+		$serializedListDirectorate = implode(',', $list_directorate); 
+		$serializedListDirectorate = "(" . $this->db->escape_str($serializedListDirectorate) . ")";
+
+		$sql = "SELECT a.id as id FROM desk_users a 
+				WHERE 
+					a.is_active = '1' 
+					AND a.direktoratid IN " .$serializedListDirectorate. "
+					AND a.id NOT IN (
+						SELECT b.user_id FROM desk_notifikasi b WHERE b.ticket_id = ?
+					)
+				"; 
+				
+		return $this->db->query($sql, $ticket_id);
+	}
 
 	/*
 	Gets total of rows
