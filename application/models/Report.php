@@ -2017,7 +2017,7 @@ class Report extends CI_Model
 		return $results->result_array();
 	}
 
-	public function get_data_lapsing($sheet, $form_type, $inputTgl1, $inputTgl2, $inputKota, $kategori, $jenis, $gender)
+	public function get_data_lapsing($sheet, $form_type, $inputTgl1, $inputTgl2, $inputKota, $kategori, $jenis, $gender, $inputdirektorat = '')
 	{
 
 		$query = "SELECT 
@@ -2030,12 +2030,17 @@ class Report extends CI_Model
 			$query .= " AND jenis = 'PPID' ";
 		}
 		if ($form_type == "LAPSING_RUJUKAN_MASUK") {
-			//$query .= " AND is_rujuk = 'PPID' ";
+			// rujukan masuk, jika is_rujuk = '1' namun direktorat berbeda dengan owner_dir
+			$query .= " AND is_rujuk = '1' ";
+			if ($inputdirektorat != '') {
+				$query .= " AND direktorat = '" . $inputdirektorat . "' AND owner_dir != '" . $inputdirektorat . "'";
+			}
 		}
 		if ($form_type == "LAPSING_RUJUKAN_KELUAR") {
 			$query .= " AND is_rujuk = '1' ";
-			//Dicari ini
-			//owner_dir
+			if ($inputdirektorat != '') {
+				$query .= " AND direktorat = '" . $inputdirektorat . "'";
+			}
 		}
 
 		if (!empty($jenis) && $jenis != 'ALL') {
@@ -2046,6 +2051,9 @@ class Report extends CI_Model
 		}
 
 		$results = $this->db->query($query);
+		// echo "<pre>";
+		// print_r($query);
+		// exit;
 		$item_data = $results->result_array();
 
 		$num_of_rows = count($item_data);

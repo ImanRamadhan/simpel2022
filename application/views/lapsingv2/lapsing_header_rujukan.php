@@ -3,13 +3,20 @@
 	</div>
 	<div class="col-sm-6 col-lg-6 border-0">
 
-		<?php echo form_open($controller_name . '/lapsing_data/' . $lapsing_type, array('id' => 'lapsing_form', 'class' => 'form-horizontal')); ?>
+		<?php echo form_open($controller_name . '/lapsing_data', array('id' => 'lapsing_form', 'class' => 'form-horizontal')); ?>
 		<?php if ($this->session->city == 'PUSAT') : ?>
 			<div class="form-group form-group-sm row">
 				<?php echo form_label('Pilih Kota', 'label_kota', array('class' => 'required col-form-label col-sm-4')); ?>
 				<div class='col-sm-8'>
 					<?php
 					echo form_dropdown('kota', $cities, '', 'class="form-control form-control-sm" id="kota"'); ?>
+				</div>
+			</div>
+			<div class="form-group form-group-sm row">
+				<?php echo form_label('Pilih Direktorat', 'label_direktorat', array('class' => 'required col-form-label col-sm-4')); ?>
+				<div class='col-sm-8'>
+					<?php
+					echo form_dropdown('direktorat',  $direktorat, '', 'class="form-control form-control-sm" id="direktorat"'); ?>
 				</div>
 			</div>
 			<div class="form-group form-group-sm row">
@@ -20,6 +27,14 @@
 				</div>
 			</div>
 		<?php endif; ?>
+		<?php echo form_input(
+			array(
+				'name' => 'formType',
+				'id' => 'formType',
+				'type' => 'hidden',
+				'value' => $lapsing_type
+			)
+		); ?>
 		<div class="form-group form-group-sm row">
 			<?php echo form_label('Pilih Tanggal', 'label_tgl', array('class' => 'required col-form-label col-sm-4')); ?>
 			<div class='col-sm-8'>
@@ -60,3 +75,26 @@
 		</div>
 	</div>
 </div>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('#kota').on('change', function() {
+
+			if ($(this).val() == '') {
+				$('#direktorat').empty();
+				return;
+			}
+
+			$.getJSON("<?php echo site_url('lapsingv2/get_direktorat/'); ?>" + $(this).val(), function(data) {
+				if (data) {
+					$('#direktorat').empty();
+					$('#direktorat').append($('<option></option>').attr('value', '').text('ALL'));
+					$.each(data, function(key, entry) {
+						$('#direktorat').append($('<option></option>').attr('value', entry.id).text(entry.name));
+					})
+				}
+			});
+		});
+
+	})
+</script>

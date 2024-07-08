@@ -61,6 +61,13 @@ class Lapsingv2 extends Secure_Controller
 		}
 		$data['categories'] = $categories_array;
 
+		$direktorat = $this->Dept->get_direktorat('');
+		$direktorat_array = array('ALL' => 'ALL');
+		foreach ($direktorat->result() as $dir) {
+			$direktorat_array[$dir->id] = $dir->name;
+		}
+		$data['direktorat'] = $direktorat_array;
+
 		$gender_array =  array(
 			'ALL' => 'ALL',
 			'L' => 'LAKI-LAKI',
@@ -125,6 +132,15 @@ class Lapsingv2 extends Secure_Controller
 		$this->load->view('lapsingv2/form_lapsing', $data);
 	}
 
+	public function get_direktorat($kota = '')
+	{
+
+		$kla = $this->xss_clean($kota);
+		$direktorat = $this->Dept->get_direktorat($kla)->result();
+
+		echo json_encode($direktorat);
+	}
+
 	public function lapsing_rujukan_keluar()
 	{
 		$data['title'] = 'Laporan Singkat Rujukan Keluar';
@@ -174,23 +190,32 @@ class Lapsingv2 extends Secure_Controller
 		$this->load->view('lapsing/form_lapsing', $data);
 	}
 
-	public function lapsing_data($type_lapsing)
+	public function lapsing_data()
 	{
+		$formType  		= $this->input->post('formType');
 		$data['filters'] = array();
 		$data['status_filter'] = '';
-		$data['title'] = $type_lapsing;
-		$data['breadcrumb'] = $type_lapsing;
+		$data['title'] = $formType;
+		$data['breadcrumb'] = $formType;
 
 		$this->setup_search($data);
 
-		$formType  		= $type_lapsing; //$this->input->post('formType');
+
 		$inputTgl1  	= $this->input->post('tgl1');
 		$inputTgl2 		= $this->input->post('tgl2');
 		$inputJenis		= $this->input->post('jenis');
+		$inputdirektorat  	= $this->input->post('direktorat');
 
 		$data['lapsing_type'] = $formType;
 
 		$inputKota 		= $this->input->post('kota');
+
+		$direktorat = $this->Dept->get_direktorat($inputKota);
+		$direktorat_array = array('ALL' => 'ALL');
+		foreach ($direktorat->result() as $dir) {
+			$direktorat_array[$dir->id] = $dir->name;
+		}
+		$data['direktorat'] = $direktorat_array;
 
 		if (empty($inputKota))
 			$inputKota		= $this->session->city;
@@ -206,7 +231,7 @@ class Lapsingv2 extends Secure_Controller
 
 		$data['products'] = $this->Report->get_products();
 		$data['profesi'] = $this->Report->get_profesi();
-		$raw_data = $this->Report->get_data_lapsing($sheet, $formType, $inputTgl1_, $inputTgl2_, $inputKota, $kategori, $jenis, $gender);
+		$raw_data = $this->Report->get_data_lapsing($sheet, $formType, $inputTgl1_, $inputTgl2_, $inputKota, $kategori, $jenis, $gender, $inputdirektorat);
 
 		$data['data_lapsing'] = $raw_data;
 		$data['tgl1'] = $inputTgl1;

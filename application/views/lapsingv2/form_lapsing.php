@@ -79,9 +79,13 @@
 			<div class="card-body">
 				<div id="title_bar" class="btn-toolbar float-right"></div>
 				<?php
-
-				$this->load->view("lapsingv2/lapsing_header");
-
+				if ($lapsing_type == 'LAPSING_RUJUKAN_MASUK') {
+					$this->load->view("lapsingv2/lapsing_header_rujukan");
+				} else if ($lapsing_type == 'LAPSING_RUJUKAN_KELUAR') {
+					$this->load->view("lapsingv2/lapsing_header_rujukan");
+				} else {
+					$this->load->view("lapsingv2/lapsing_header");
+				}
 				?>
 				<br />
 				<?php if (!empty($kota)) : ?>
@@ -751,6 +755,13 @@
 			}) != null)
 			$('#kota').val($.remember({
 				name: 'lapsing.kota'
+			}));
+
+		if ($.remember({
+				name: 'lapsing.direktorat'
+			}) != null)
+			$('#kota').val($.remember({
+				name: 'lapsing.direktorat'
 			}));
 
 		if ($.remember({
