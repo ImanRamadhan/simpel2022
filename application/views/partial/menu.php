@@ -58,13 +58,14 @@
 					<li><a href="<?php echo site_url('lapsingv2/lapsing') ?>">Lapsing</a></li>
 					<li><a href="<?php echo site_url('lapsingv2/lapsing_komoditas') ?>">Lapsing Komoditas</a></li>
 					<li><a href="<?php echo site_url('lapsing/lapsing_sp4n') ?>">Lapsing SP4N</a></li>
-
+					<li><a href="<?php echo site_url('lapsingv2/lapsing_rujukan_masuk') ?>">Lapsing Rujukan Masuk</a></li>
+					<li><a href="<?php echo site_url('lapsingv2/lapsing_rujukan_keluar') ?>">Lapsing Rujukan Keluar</a></li>
 				</ul>
 			</li>
 			<li>
 				<ul>
 					<li><a href="<?php echo site_url('lapsing/lapsing_ppid') ?>">Lapsing PPID</a></li>
-					<li><a href="<?php echo site_url('lapsingv2/lapsing_ppid') ?>">Lapsing PPID (new)</a></li>
+					<!-- <li><a href="<?php echo site_url('lapsingv2/lapsing_ppid') ?>">Lapsing PPID (new)</a></li> -->
 					<li><a href="<?php echo site_url('lapsing/lapsing_yanblik') ?>">Lapsing Yanblik</a></li>
 					<li><a href="<?php echo site_url('lapsing/lapsing_gender') ?>">Lapsing Gender</a></li>
 

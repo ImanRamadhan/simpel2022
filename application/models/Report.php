@@ -2020,20 +2020,29 @@ class Report extends CI_Model
 	public function get_data_lapsing($sheet, $form_type, $inputTgl1, $inputTgl2, $inputKota, $kategori, $jenis, $gender)
 	{
 
-		$query = "select kategori, klasifikasi, subklasifikasi, info, submited_via, iden_profesi from desk_tickets WHERE tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' ";
+		$query = "SELECT 
+			kategori, klasifikasi, subklasifikasi, info, submited_via, iden_profesi 
+			FROM desk_tickets 
+			WHERE tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' ";
 		$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender);
 
 		if ($form_type == "PPID") {
-			$query .= " and jenis = 'PPID' ";
+			$query .= " AND jenis = 'PPID' ";
+		}
+		if ($form_type == "LAPSING_RUJUKAN_MASUK") {
+			//$query .= " AND is_rujuk = 'PPID' ";
+		}
+		if ($form_type == "LAPSING_RUJUKAN_KELUAR") {
+			$query .= " AND is_rujuk = '1' ";
+			//Dicari ini
+			//owner_dir
 		}
 
 		if (!empty($jenis) && $jenis != 'ALL') {
 			if ($jenis == 'LAYANAN')
-				$query .= " and jenis = '' ";
+				$query .= " AND jenis = '' ";
 			elseif ($jenis == 'LAYANAN_SP4N')
-				$query .= " and jenis IN ('','SP4N') ";
-			else
-				$query .= " and jenis = '" . $jenis . "' ";
+				$query .= " AND jenis IN ('','SP4N') ";
 		}
 
 		$results = $this->db->query($query);
