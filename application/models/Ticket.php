@@ -1461,8 +1461,8 @@ class Ticket extends CI_Model
 
 		$info = $this->get_info($item_id);
 		$status = $info->status;
-		if ($status != '3')
-			$status = '2';
+
+		$status = 0;
 
 		$item_data = array(
 			'lastreplier' => '1',
