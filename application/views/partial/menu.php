@@ -119,10 +119,8 @@
 	<li class="has-submenu">
 		<a href="#"><i class="mdi mdi-buffer"></i>Grafik</a>
 		<ul class="submenu">
-
 			<li><a href="<?php echo site_url('graphs/layanan') ?>">Grafik Layanan</a></li>
 			<li><a href="<?php echo site_url('graphs_ppid/ppid') ?>">Grafik PPID</a></li>
-
 		</ul>
 	</li>
 
@@ -154,6 +152,9 @@
 				<li>
 					<a href="<?php echo site_url('slas'); ?>">Pengaturan SLA</a>
 				</li>
+        <li>
+          <a href="<?php echo site_url('categories'); ?>">Pengaturan Komoditi</a>
+        </li>	
 			</ul>
 		</li>
 	<?php endif; ?>

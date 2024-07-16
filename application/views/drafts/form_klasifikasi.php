@@ -17,13 +17,30 @@
 						<label class="custom-control-label" for="pengaduanradio">Pengaduan</label>
 					</div>
 				</div>
-				
+				<div class="form-check-inline my-1">
+					<div class="custom-control custom-radio">
+						<input type="radio" id="saranradio" name="info" class="custom-control-input" value="S" <?php echo ($item_info->info == 'S'?'checked':'')?>>
+						<label class="custom-control-label" for="saranradio">Saran</label>
+					</div>
+				</div>
 			</div>
 		</div>
 		<div class="form-group form-group-sm row">
 			<?php echo form_label('Jenis Komoditi <span class="text-danger">*</span>', 'kategori', array('class'=>'required col-form-label col-sm-4')); ?>
 			<div class='col-sm-6'>
 				<?php echo form_dropdown('kategori', $products, $item_info->kategori, 'class="form-control form-control-sm" id="kategori" ');?>
+			</div>
+		</div>
+		<div id="div-lainnya" class="form-group form-group-sm row">
+			<?php echo form_label('', 'kategori_lainnya', array('class'=>' col-form-label col-sm-4')); ?>
+			<div class='col-sm-6'>
+				<?php echo form_input(array(
+					'name'=>'kategori_lainnya',
+					'id'=>'kategori_lainnya',
+					
+					'class'=>'form-control form-control-sm',
+					'value'=>$item_info->kategori_lainnya)
+					);?>
 			</div>
 		</div>
 		<div class="form-group form-group-sm row">

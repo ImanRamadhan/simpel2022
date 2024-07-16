@@ -1249,6 +1249,7 @@ function get_jobs_manage_table_headers()
 	$headers = array(
 		array('id' => 'ID', 'visible' => false, 'width' => '80px'),
 		array('no' => 'No.', 'sortable' => false, 'width' => '80px'),
+		array('ID' => 'ID/ Kode Database', 'align' => 'center', 'width' => '120px'),
 		array('name' => 'Nama Profesi', 'align' => 'left'),
 		
 		
@@ -1275,6 +1276,7 @@ function get_job_data_row($item, $no)
 	$data = array (
 		'id' => $item->id,
 		'no' => $no.'.',
+		'ID' => $item->id,
 		'name' => $item->name,
 		'edit' => anchor($controller_name."/view/$item->id", '<i class="fa fa-edit" aria-hidden="true"></i>',
 			array('class'=>'', 'data-btn-submit' => $CI->lang->line('common_submit'), 'title'=>$CI->lang->line($controller_name.'_update')))
@@ -1844,6 +1846,54 @@ function get_drafts_rujukan_data_row($item, $no)
 		
 	
 		
+	return $data;
+}
+
+function get_categories_manage_table_headers()
+{
+	$CI =& get_instance();
+
+	$headers = array(
+		array('no' => 'No.', 'sortable' => false, 'width' => '80px'),
+		array('name' => 'Nama', 'align' => 'left'),
+		array('desc' => 'Deskripsi', 'align' => 'left'),
+		array('deleted' => 'Status', 'align' => 'center'),
+		
+	);
+	
+	
+
+	if($CI->User->has_grant('messages', $CI->session->userdata('user_id')))
+	{
+		$headers[] = array('messages' => '', 'sortable' => FALSE);
+	}
+
+	
+	return transform_headers($headers);
+}
+
+
+function get_categories_data_row($item, $no)
+{
+	$CI =& get_instance();
+	$controller_name = strtolower(get_class($CI));
+	
+	
+	$data = array (
+		'id' => $item->id,
+		'no' => $no.'.',
+		'name' => $item->name,
+		'desc' => $item->desc,
+		'edit' => anchor($controller_name."/view/$item->id", '<i class="fa fa-edit" aria-hidden="true"></i>',
+			array('class'=>'', 'data-btn-submit' => $CI->lang->line('common_submit'), 'title'=>$CI->lang->line($controller_name.'_update')))
+		);
+	
+	if($item->deleted)
+		$data['deleted'] = 'Disabled';
+	else
+		$data['deleted'] = 'Enabled';
+		
+			
 	return $data;
 }
 

@@ -1,0 +1,1 @@
+ALTER TABLE `desk_categories` DROP `deleted`;

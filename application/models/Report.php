@@ -2498,6 +2498,8 @@ class Report extends CI_Model
 	public function get_products()
 	{
 		$this->db->from('desk_categories');
+		$this->db->where('deleted', 0);
+		
 		//$this->db->where('mode', $mode);
 
 		return $this->db->get();
