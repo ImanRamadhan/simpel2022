@@ -8,7 +8,7 @@
 			<div class="form-group form-group-sm row">
 				<?php echo form_label('Jenis Produk', 'iden_instansi', array('class'=>'required col-form-label col-sm-3')); ?>
 				<div class='col-sm-4'>
-					<p class="form-control-plaintext"><?php echo $item_info->jenis_produk; ?></p>
+					<p class="form-control-plaintext"><?php echo $item_info->jenis_produk; ?><span id="txtLainnya"><?php echo ($item_info->jenis_produk == "Lainnya" ? " - ".$item_info->kategori_lainnya : ''); ?></span></p>
 				</div>
 			</div>
 			<div class="form-group form-group-sm row">

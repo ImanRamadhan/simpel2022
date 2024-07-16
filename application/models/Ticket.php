@@ -2274,6 +2274,7 @@ class Ticket extends CI_Model
 	{
 		$this->db->select('*');
 		$this->db->from('desk_categories');
+		$this->db->where('deleted', 0);
 		$this->db->order_by('desc', 'asc');
 
 		return $this->db->get();

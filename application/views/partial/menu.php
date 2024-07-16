@@ -152,6 +152,9 @@
 			</li>	
 			<li>
 				<a href="<?php echo site_url('slas'); ?>">Pengaturan SLA</a>
+			</li>
+			<li>
+				<a href="<?php echo site_url('categories'); ?>">Pengaturan Komoditi</a>
 			</li>	
 		</ul>
 	</li>
