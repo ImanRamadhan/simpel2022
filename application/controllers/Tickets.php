@@ -708,16 +708,13 @@ class Tickets extends Secure_Controller
 	}
 	
 	public function save($item_id = -1)
-	{
-		
-		
+	{	
 		$item_info = $this->Ticket->get_info($item_id);
+
 		foreach(get_object_vars($item_info) as $property => $value)
 		{
 			$item_info->$property = $this->xss_clean($value);
 		}
-		
-		
 		
 		$old_date = explode('-',$item_info->tglpengaduan);
 		$today = explode('/',date('d/m/Y'));
@@ -788,15 +785,6 @@ class Tickets extends Secure_Controller
 		$klasifikasi =  $this->input->post('klasifikasi');
 		$subklasifikasi = $this->input->post('subklasifikasi');
 		
-		//$klasifikasi_id =  $this->input->post('klasifikasi_id');
-		//$subklasifikasi_id = $this->input->post('subklasifikasi_id');
-		
-		/*$kla_info = $this->Klasifikasi->get_info($klasifikasi_id);
-		$klasifikasi = $kla_info->nama;
-		
-		$subkla_info = $this->Subklasifikasi->get_info($subklasifikasi_id);
-		$subklasifikasi = $subkla_info->subklasifikasi;*/
-		
 		$sla = $this->input->post('sla');
 		
 		$is_rujuk =  $this->input->post('is_rujuk');
@@ -836,9 +824,6 @@ class Tickets extends Secure_Controller
 			$sla = 1;
 		}
 		
-		
-		
-		
 		$jawaban =  $this->input->post('jawaban');
 		$keterangan =  $this->input->post('keterangan');
 		$petugas_entry =  $this->input->post('petugas_entry');
@@ -851,7 +836,6 @@ class Tickets extends Secure_Controller
 		
 		if($jenis == 'PPID')
 		{
-		
 			//ppid data
 			$tgl_diterima = $this->input->post('tgl_diterima');
 			if(!empty($tgl_diterima))
@@ -926,7 +910,6 @@ class Tickets extends Secure_Controller
 			
 			$keputusan = $this->input->post('keputusan');
 			
-			//$no_reg_keberatan = $this->input->post('no_reg_keberatan');
 			$kuasa_nama = $this->input->post('kuasa_nama');
 			$kuasa_alamat = $this->input->post('kuasa_alamat');
 			$kuasa_telp = $this->input->post('kuasa_telp');
@@ -957,50 +940,8 @@ class Tickets extends Secure_Controller
 		
 		}
 		
-		
-		//get sla
-		/*if($jenis == 'PPID')
-		{
-			//$sla = 14;
-			if($info == 'I')
-				$sla = 17;
-			if(!empty($kuasa_nama))
-				$sla = 30;
-		}
-		else
-		{
-			//$sla = $this->Sla->get_sla($kategori, $info, $klasifikasi_id, $subklasifikasi_id);
-			$sla = 7;
-		}*/
-		
-		/*$sla = 5; //default
-		if($item_info->category == '1') //Layanan
-		{
-			if($item_info->is_rujuk == '1')
-			{
-				//$sla = max($rujukan_info->sla1, $rujukan_info->sla2, $rujukan_info->sla3, $rujukan_info->sla4, $rujukan_info->sla5);
-			}
-			else
-			{
-				$sla = 5;
-			}
-		}
-		elseif($item_info->category == '2') //PPID
-		{
-			$sla = 17;
-		}
-		elseif($item_info->category == '3') //Keberatan
-		{
-			$sla = 30;
-		}
-		elseif($item_info->category == '4') //Sengketa
-		{
-			$sla = 30;
-		}*/
-		
 		if($jenis == 'PPID')
 		{
-		
 			$ppid_data = array(
 				'tgl_diterima' => $tgl_diterima,
 				'diterima_via' => $diterima_via,
@@ -1042,7 +983,6 @@ class Tickets extends Secure_Controller
 				'tt_pejabat' => $tt_pejabat,
 				'keputusan' => $keputusan,
 				'nama_pejabat_ppid' => $nama_pejabat_ppid,
-				//'no_reg_keberatan' => $no_reg_keberatan,
 				'kuasa_nama' => $kuasa_nama,
 				'kuasa_alamat' => $kuasa_alamat,
 				'kuasa_telp' => $kuasa_telp,
@@ -1059,7 +999,6 @@ class Tickets extends Secure_Controller
 				'keberatan_nama_pejabat' => $keberatan_nama_pejabat
 			);
 		}
-		
 		
 		//Save item data
 		$item_data = array(
@@ -1100,8 +1039,6 @@ class Tickets extends Secure_Controller
 			'shift' => $shift,
 			'klasifikasi' => $klasifikasi,
 			'subklasifikasi' => $subklasifikasi,
-			//'klasifikasi_id' => $klasifikasi_id,
-			//'subklasifikasi_id' => $subklasifikasi_id,
 			'sla' => $sla,
 			'is_rujuk' => $is_rujuk,
 			
@@ -1132,110 +1069,76 @@ class Tickets extends Secure_Controller
 			$item_info->$property = $this->xss_clean($value);
 		}
 		
-		//$item_data['history'] = $item_info->history;
-		//$item_data['history'] .= '<li class="smaller">Pada '.date('Y-m-d H:i:s').' layanan diubah oleh '.$this->session->name.'</li>';
-		
-		//$oldarrayticket = (array) $this->Ticket->get_info_ticket($item_id);
-		//$oldarrayppid = (array) $this->Ticket->get_info_ppid($item_id);
-		
 		if($this->Ticket->save($item_data, $item_id))
 		{
 			$item_info2 = $this->Ticket->get_info($item_id);		
 			log_layanan($item_info, $item_info2);
-			/*$success = TRUE;
+			$message = 'Data berhasil disimpan';
+			if($jenis == 'PPID')
+				$this->Ticket->save_ppid($ppid_data, $item_id);
 			
-			if($item_id == -1)
+			if($is_rujuk == '1')
 			{
-				$message = $this->xss_clean($this->lang->line('items_successful_adding') . ' ' . $item_id);
-
-				echo json_encode(array('success' => TRUE, 'message' => $message, 'id' => $item_id));
+				$rujukan_data = array(
+					'rid' => $item_id
+				);
+				$this->Ticket->save_rujukan($rujukan_data, $item_id);
 			}
 			else
-			{*/
-				$message = 'Data berhasil disimpan';
-				if($jenis == 'PPID')
-					$this->Ticket->save_ppid($ppid_data, $item_id);
-				
-				//logChangesTicket($oldarrayticket,$item_id);
-				
-				if($is_rujuk == '1')
-				{
-					$rujukan_data = array(
-						'rid' => $item_id
-					);
-					$this->Ticket->save_rujukan($rujukan_data, $item_id);
-					
-					/*
-					//rujukan 1
-					if($dir1 != $item_info->direktorat)
-						$this->Ticket->update_rujukan($new_data, $dir1, $sla1, 1);
-					else
-					{
-						if($sla1 != $item_info->d1_prioritas)
-						{
-							$this->Ticket->update_rujukan_sla($item_id, $dir1, 1, $sla1);
-						}
-					}
-					
-					//rujukan 2
-					if($dir2 != $item_info->direktorat2)
-						$this->Ticket->update_rujukan($new_data, $dir2, $sla2, 2);
-					else
-					{
-						if($sla2 != $item_info->d2_prioritas)
-							$this->Ticket->update_rujukan_sla($item_id, $dir2, 2, $sla2);
-					}
-					
-					//rujukan 3
-					if($dir3 != $item_info->direktorat3)
-						$this->Ticket->update_rujukan($new_data, $dir3, $sla3, 3);
-					else
-					{
-						if($sla3 != $item_info->d3_prioritas)
-							$this->Ticket->update_rujukan_sla($item_id, $dir3, 3, $sla3);
-					}
-					
-					//rujukan 4
-					if($dir4 != $item_info->direktorat4)
-						$this->Ticket->update_rujukan($new_data, $dir4, $sla4, 4);
-					else
-					{
-						if($sla4 != $item_info->d4_prioritas)
-							$this->Ticket->update_rujukan_sla($item_id, $dir4, 4, $sla4);
-					}
-					
-					//rujukan 5
-					if($dir5 != $item_info->direktorat5)
-						$this->Ticket->update_rujukan($new_data, $dir5, $sla5, 5);
-					else
-					{
-						if($sla5 != $item_info->d5_prioritas)
-							$this->Ticket->update_rujukan_sla($item_id, $dir5, 5, $sla5);
-					}
-					*/
-					
-					
-					
-					
-				}
-				else
-				{
-					//remove from rujukan from layanan
-					/*if($item_info->direktorat) $this->Ticket->delete_rujukan($item_id, $item_info->direktorat, 1);
-					if($item_info->direktorat2) $this->Ticket->delete_rujukan($item_id, $item_info->direktorat2, 2);
-					if($item_info->direktorat3) $this->Ticket->delete_rujukan($item_id, $item_info->direktorat3, 3);
-					if($item_info->direktorat4) $this->Ticket->delete_rujukan($item_id, $item_info->direktorat4, 4);
-					if($item_info->direktorat5) $this->Ticket->delete_rujukan($item_id, $item_info->direktorat5, 5);*/
-				}
+			{
+				//remove from rujukan from layanan
+			}
 
-				echo json_encode(array('success' => TRUE, 'message' => $message, 'id' => $item_id));
-			//}
+			// handle current notifs, is exist any
+			$this->handleNotifikasi($item_info);
+			
+			echo json_encode(array('success' => TRUE, 'message' => $message, 'id' => $item_id));	
 		}
 		else // failure
 		{
 			$message = 'Data gagal disimpan';
 			
 			echo json_encode(array('success' => FALSE, 'message' => $message, 'id' => -1));
+		}
+	}
+
+	private function handleNotifikasi($item_info){
+		$exist_trackid = $this->Notification->get_by_ticketid($item_info->trackid);
+
+		// extract list of notif need to be sent to new assigned user
+		foreach($exist_trackid->result() as $notif) {
+			$notif_candidate[$notif->message] = $notif;
+		}
+		
+		$list_directorate = [];
+
+		$dir1 =  $this->input->post('dir1');
+		$dir2 =  $this->input->post('dir2');
+		$dir3 =  $this->input->post('dir3');
+		$dir4 =  $this->input->post('dir4');
+		$dir5 =  $this->input->post('dir5');
+
+		if(!empty($dir1)) array_push($list_directorate, $dir1);
+		if(!empty($dir2)) array_push($list_directorate, $dir2);
+		if(!empty($dir3)) array_push($list_directorate, $dir3);
+		if(!empty($dir4)) array_push($list_directorate, $dir4);
+		if(!empty($dir5)) array_push($list_directorate, $dir5);
+
+		// extract list of user eligible to be sent by notif
+		$user_need_notified = $this->Notification->get_user_need_notified($item_info->trackid, $list_directorate);
+
+		// save notif to eligible user
+		foreach($user_need_notified->result() as $user){
+			foreach($notif_candidate as $notif){
+				$data = array(
+					"title" => $notif->title,
+					"message" => $notif->message,
+					"ticket_id" => $notif->ticket_id,
+					"user_id" => $user->id,
+					"created_date" => date('Y-m-d H:i:s')
+				);
+				$this->Notification->save($data);
+			}
 		}
 	}
 

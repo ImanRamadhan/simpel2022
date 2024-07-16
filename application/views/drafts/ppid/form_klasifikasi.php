@@ -7,14 +7,14 @@
 			<div class="col-sm-8">
 				<div class="form-check-inline my-1">
 					<div class="custom-control custom-radio">
-						<input type="radio" id="pengaduanradio" name="info" class="custom-control-input" value="P" disabled />
-						<label class="custom-control-label" for="pengaduanradio">Pengaduan</label>
+						<input type="radio" id="informasiradio" name="info" class="custom-control-input" value="I" checked />
+						<label class="custom-control-label" for="informasiradio">Permintaan Informasi</label>
 					</div>
 				</div>
 				<div class="form-check-inline my-1">
 					<div class="custom-control custom-radio">
-						<input type="radio" id="informasiradio" name="info" class="custom-control-input" value="I" checked />
-						<label class="custom-control-label" for="informasiradio">Permintaan Informasi</label>
+						<input type="radio" id="pengaduanradio" name="info" class="custom-control-input" value="P" disabled />
+						<label class="custom-control-label" for="pengaduanradio">Pengaduan</label>
 					</div>
 				</div>
 			</div>
