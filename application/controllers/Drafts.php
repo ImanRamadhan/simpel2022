@@ -208,6 +208,9 @@ class Drafts extends Secure_Controller
 		
 		$data['profesi'] = get_profesi();
 		$data['products'] = get_products();
+
+		$data['range_age'] = get_range_age();
+
 		$data['sumberdata'] = array('' => '','SP4N' => 'SP4N','PPID'=>'PPID');
 		
 		//$data['klasifikasi'] = get_klasifikasi_sla($item_info->kategori, $item_info->info);
@@ -465,6 +468,8 @@ class Drafts extends Secure_Controller
 		
 		$data['products'] = get_products();
 		//$data['products'] = get_products_sla('P');
+
+		$data['range_age'] = get_range_age();
 		
 		
 		$data['sumberdata'] = array('' => '','SP4N' => 'SP4N' /*,'PPID'=>'PPID'*/);
