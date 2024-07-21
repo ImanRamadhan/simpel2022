@@ -401,6 +401,9 @@ class Tickets extends Secure_Controller
 		$data['provinces2'] = get_provinces();
 		$data['profesi'] = get_profesi();
 		$data['products'] = get_products();
+
+		$data['range_age'] = get_range_age();
+
 		//$data['products'] = get_products_sla($item_info->info);
 		$data['sumberdata'] = array('' => '','SP4N' => 'SP4N','PPID'=>'PPID');
 		
@@ -1082,6 +1085,25 @@ class Tickets extends Secure_Controller
 				$rujukan_data = array(
 					'rid' => $item_id
 				);
+
+				if(isset($item_data['direktorat']) && $item_data['direktorat'] != "" && $item_data['direktorat'] != 0){
+					$rujukan_data['tgl_rujuk1'] = date("Y-m-d H:i:s");
+				} 
+
+				if(isset($item_data['direktorat2']) && $item_data['direktorat2'] != "" && $item_data['direktorat2'] != 0){
+					$rujukan_data['tgl_rujuk2'] = date("Y-m-d H:i:s");
+				}
+				if(isset($item_data['direktorat3']) && $item_data['direktorat3'] != "" && $item_data['direktorat3'] != 0) {
+					$rujukan_data['tgl_rujuk3'] = date("Y-m-d H:i:s");
+				}
+				if(isset($item_data['direktorat4']) && $item_data['direktorat4'] != "" && $item_data['direktorat4'] != 0) {
+					$rujukan_data['tgl_rujuk4'] = date("Y-m-d H:i:s");
+				}
+				if(isset($item_data['direktorat5']) && $item_data['direktorat5'] != "" && $item_data['direktorat5'] != 0) {
+					$rujukan_data['tgl_rujuk5'] = date("Y-m-d H:i:s");
+				}
+
+				
 				$this->Ticket->save_rujukan($rujukan_data, $item_id);
 			}
 			else

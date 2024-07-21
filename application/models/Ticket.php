@@ -2008,6 +2008,15 @@ class Ticket extends CI_Model
 		return $this->db->get();
 	}
 
+	public function get_range_age()
+	{
+		$this->db->select('*');
+		$this->db->from('desk_ages');
+		$this->db->order_by('id', 'asc');
+
+		return $this->db->get();
+	}
+	
 	public function get_mekanisme()
 	{
 		$this->db->select('*');
@@ -2150,8 +2159,9 @@ class Ticket extends CI_Model
 		$this->db->from('desk_direktorat');
 		$this->db->where('is_rujukan', 1);
 		$this->db->where('deleted', 0);
-
-		if (!empty($cities))
+		$this->db->where('dir_status', 1);
+		
+		if(!empty($cities))
 			$this->db->where_in('kota', $cities);
 
 		$this->db->order_by('kota, name', 'asc');
