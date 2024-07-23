@@ -364,6 +364,8 @@ class Ppid extends Secure_Controller
 		
 		$data['sla'] = get_sla(); //7
 		$data['kabs'] = get_cities($item_info->iden_provinsi);
+
+		$data['range_age'] = get_range_age();
 		/*
 		if(!empty($item_info->klasifikasi))
 		{

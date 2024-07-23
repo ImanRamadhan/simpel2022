@@ -312,6 +312,7 @@ class Drafts extends Secure_Controller
 		
 		$data['profesi'] = get_profesi();
 		
+		$data['range_age'] = get_range_age();
 		
 		$data['products'] = get_products();
 		//$data['products'] = get_products_sla('P');
@@ -1706,14 +1707,7 @@ class Drafts extends Secure_Controller
 			'keberatan_perihal' => $keberatan_perihal,
 			'keberatan_isi_surat' => $keberatan_isi_surat,
 			'keberatan_nama_pejabat' => $keberatan_nama_pejabat,*/
-			
-			
-			
 		);
-		
-		
-		
-		
 		$tipe_medsos =  $this->input->post('tipe_medsos');
 		if(!empty($submited_via) && $submited_via != 'Medsos')
 			$tipe_medsos = '';
@@ -1838,7 +1832,6 @@ class Drafts extends Secure_Controller
 			
 		if($this->Draft->save($item_data, $item_id))
 		{
-			
 			$message = 'Data berhasil disimpan';	
 			
 			$ppid_data['id'] = $item_data['id'];
