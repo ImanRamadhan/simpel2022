@@ -210,12 +210,11 @@
 							<td valign="top">:</td>
 							<td valign="top" style="padding :0px 0px 10px 0px">
 								<?php if($item_info->is_rujuk == 1) : ?>
-								
-								<?php echo strlen($item_info->rujukan1) > 0 ? "$item_info->rujukan1 <strong>[$item_info->rujukan_hk1 HK] </strong>" : "" ?>
-								<?php echo strlen($item_info->rujukan2) > 0 ? "<br> $item_info->rujukan2 <strong>[$item_info->rujukan_hk2 HK] </strong> " : "" ?>
-								<?php echo strlen($item_info->rujukan3) > 0 ? "<br> $item_info->rujukan3 <strong>[$item_info->rujukan_hk3 HK] </strong> " : "" ?>
-								<?php echo strlen($item_info->rujukan4) > 0 ? "<br> $item_info->rujukan4 <strong>[$item_info->rujukan_hk4 HK] </strong> " : "" ?>
-								<?php echo strlen($item_info->rujukan5) > 0 ? "<br> $item_info->rujukan5 <strong>[$item_info->rujukan_hk5 HK] </strong> " : "" ?>
+									<?php echo strlen($item_info->rujukan1) > 0 ? "$item_info->rujukan1 <strong>[$item_info->rujukan_hk1 HK] </strong>" : "" ?>
+									<?php echo strlen($item_info->rujukan2) > 0 ? "<br> $item_info->rujukan2 <strong>[$item_info->rujukan_hk2 HK] </strong> " : "" ?>
+									<?php echo strlen($item_info->rujukan3) > 0 ? "<br> $item_info->rujukan3 <strong>[$item_info->rujukan_hk3 HK] </strong> " : "" ?>
+									<?php echo strlen($item_info->rujukan4) > 0 ? "<br> $item_info->rujukan4 <strong>[$item_info->rujukan_hk4 HK] </strong> " : "" ?>
+									<?php echo strlen($item_info->rujukan5) > 0 ? "<br> $item_info->rujukan5 <strong>[$item_info->rujukan_hk5 HK] </strong> " : "" ?>
 								<?php else : ?>
 									Tidak Dirujuk
 								<?php endif ?>

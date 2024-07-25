@@ -2435,10 +2435,6 @@ class Tickets extends Secure_Controller
 		$data['item_info'] = $item_info;
 		
 		$ppid_info = $this->Ticket->get_ppid_info($item_id);
-		// echo '<pre>';
-		// var_dump($item_info);
-		// echo '<pre>';
-		// die;
 		foreach(get_object_vars($ppid_info) as $property => $value)
 		{
 			$ppid_info->$property = $this->xss_clean($value);
