@@ -29,7 +29,7 @@
 		}
 
 		.kop {
-			font-size: 14pt;
+			font-size: 11pt;
 			font-weight: bold;
 		}
 
@@ -68,22 +68,23 @@
 	</div>
 	<div class="header">
 		<table border="1" width="100%" cellpadding="0" cellspacing="0">
-			<tr>
-				<td colspan="2" align="center">&nbsp;
+			<tr >
+				<td style="border-bottom: none" colspan="2" align="center" >&nbsp;
 					<table border="1" cellspacing="0" cellpadding="0" width="70%" align="center">
 						<tr>
 							<td align="center">
-								<span class="kop">FORMULIR LAYANAN PENGADUAN MASYARAKAT DAN INFORMASI <br />OBAT DAN MAKANAN
-								</span>
+								<span class="kop">FORMULIR LAYANAN PENGADUAN MASYARAKAT DAN INFORMASI OBAT DAN MAKANAN</span>
 							</td>
 						</tr>
 					</table>
 					(Catatan Identitas Pelapor Akan Dirahasiakan)
-
 				</td>
 			</tr>
+			<tr >
+				<td style="padding-bottom: 3em;border-top: none;" colspan="2" ></td>
+			</tr>
 			<tr>
-				<th colspan="2" align="center" height="30">IDENTITAS PELAPOR</th>
+				<th colspan="2" align="center" height="25">IDENTITAS PELAPOR</th>
 			</tr>
 			<tr>
 				<td colspan="2">
@@ -150,7 +151,7 @@
 				</td>
 			</tr>
 			<tr>
-				<th colspan="2" align="center" height="30">IDENTITAS PRODUK</th>
+				<th colspan="2" align="center"  height="25">IDENTITAS PRODUK</th>
 			</tr>
 			<tr>
 				<td colspan="2">
@@ -187,7 +188,7 @@
 				</td>
 			</tr>
 			<tr>
-				<td colspan="2">
+				<td colspan="2"  height="25">
 					<div align="center"><b>ISI PERTANYAAN / PENGADUAN</b></div>
 				</td>
 			</tr>
@@ -198,7 +199,7 @@
 			</tr>
 
 			<tr>
-				<td colspan="2">
+				<td colspan="2"  height="25">
 					<div valign="center" align="center"><b>TINDAK LANJUT</b></div>
 				</td>
 			</tr>
@@ -227,16 +228,17 @@
 							<td width="88%" valign="top"><?php echo  $item_info->jawaban; ?></td>
 						</tr>
 						
-						<tr height="30"></tr>
 						<tr>
-							<td colspan="3"  valign="top"> <strong> Keterangan </strong></td>
+							<td >  Keterangan </td>
+							<td>:</td>
+							<td><?php echo  $item_info->keterangan; ?></td>
 						</tr>
 					</table>
 				</td>
 			</tr>
 			<tr>
-				<td width="50%" align="center"><b>Pelapor</b> </td>
-				<td align="center"><b>Petugas</b></td>
+				<td width="50%"  height="25" align="center"><b>Pelapor</b> </td>
+				<td  height="25" align="center"><b>Petugas</b></td>
 			</tr>
 			<tr>
 				<td width="50%" valign="bottom" align="center" height="100"><?php echo $item_info->iden_nama; ?> </td>
