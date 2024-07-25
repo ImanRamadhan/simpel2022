@@ -2427,6 +2427,7 @@ class Tickets extends Secure_Controller
 		$item_id = (int)$item_id;
 		
 		$item_info = $this->Ticket->get_info($item_id);
+	
 		foreach(get_object_vars($item_info) as $property => $value)
 		{
 			$item_info->$property = $this->xss_clean($value);
@@ -2442,7 +2443,7 @@ class Tickets extends Secure_Controller
 		
 		$this->load->helper(array('dompdf', 'file'));
 		
-		$html = $this->load->view('tickets/print_pdf', $data, TRUE);
+		$html = $this->load->view('tickets/print_pdf', $data,TRUE);
 		$filename = rand(0,1000);
 		pdf_create($html, $filename);
 		

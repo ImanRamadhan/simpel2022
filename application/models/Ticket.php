@@ -1220,13 +1220,30 @@ class Ticket extends CI_Model
 		$sql .= ", date_format(a.fb_date,'%d/%m/%Y') as fb_date_fmt";
 		$sql .= ", date_format(a.closed_date,'%d/%m/%Y') as closed_date_fmt";
 		$sql .= ", date_format(a.verified_date,'%d/%m/%Y') as verified_date_fmt";
-		//$sql .= ", date_format(a.dt,'%d/%m/%Y') as dt_fmt";
+		// Begin select table direktorat
+		for ($i = 1; $i <= 5; $i++) {
+			$sql .= ", dd$i.name as rujukan$i";
+			$sql .= ", d$i"."_prioritas as rujukan_hk$i";
+		}
+		// ehd join table direktorat
+		$sql .= ", date_format(a.dt,'%d/%m/%Y') as dt_fmt";
 		$sql .= ", b.desc as jenis_produk";
 		$sql .= ", c.name as profesi";
 		$sql .= ", d.name as created_by";
 		$sql .= ", e.name as verified_by";
+		$sql .= ", a.is_rujuk";
 		$sql .= ", f.name as last_replier";
 		$sql .= " FROM (SELECT * FROM desk_tickets WHERE id=$item_id) a";
+		// Begin join table direktorat
+		for ($i = 1; $i <= 5; $i++) {
+			if ($i == 1) {
+				$sql .= " LEFT JOIN desk_direktorat dd$i ON dd$i.id = a.direktorat";
+			} else {
+				$sql .= " LEFT JOIN desk_direktorat dd$i ON dd$i.id = a.direktorat$i";
+			}
+		}
+		// ehd join table direktorat
+
 		$sql .= " LEFT JOIN desk_categories b ON a.kategori = b.id";
 		$sql .= " LEFT JOIN desk_profesi c ON a.iden_profesi = c.id";
 		$sql .= " LEFT JOIN desk_users d ON a.owner = d.id";
