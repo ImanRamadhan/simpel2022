@@ -2,8 +2,8 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 $config['upload_setting'] = array(
-	//'upload_path' => './uploads/files/',
-	'upload_path' => 'C:/Apache24/htdocs/simpellpk/attachments/',
+	'upload_path' => getenv('UPLOAD_PATH_ATTACHMENT'),
+	//'upload_path' => 'C:/Apache24/htdocs/simpellpk/attachments/',
 	'allowed_types' => 'gif|jpg|png|pdf|doc|docx|zip|rar|txt|csv|jpeg',
 	'max_size' => '20480',
 	'max_size_mb' => '20MB',

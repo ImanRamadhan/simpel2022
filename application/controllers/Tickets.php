@@ -365,6 +365,11 @@ class Tickets extends Secure_Controller
 			$this->Notification->mark_as_read($item_info->id, $this->session->id);
 		
 		$data['upload_config'] = $this->config->item('upload_setting');
+
+		if($item_info->jenis == 'PPID'){
+			$attachments_ppidtl = $this->Ticket->get_attachments_ppidtl($item_info->trackid,0);
+			$data["att_ppidtl"] = $attachments_ppidtl->row();
+		}
 		
 		$this->load->view('tickets/view', $data);
 	}
@@ -664,6 +669,55 @@ class Tickets extends Secure_Controller
 				$this->session->set_flashdata('flash', $flash_msg);
 			}
 			redirect('tickets/view/'.$item_id);
+		}
+	}
+
+	public function confirm_upload_signed_formulir($id, $ticketid)
+	{
+		$data['url_post'] = site_url('tickets/save_signed_formulir/'.$id.'/'.$ticketid);
+		$data['message'] = 'Silakan upload bukti formulir PPID yang sudah ditandatangani';
+		$data['upload_url'] = site_url('tickets/upload_signed_formulir/'.$id.'/'.$ticketid);
+		$data['id'] = $id;
+		$data['ticketid'] = $ticketid;
+		$this->load->view('tickets/confirm_upload_signed_formulir', $data);
+	}
+
+	public function upload_signed_formulir($id, $ticket_id){
+		$this->load->library('upload', $this->config->item('upload_setting'));
+		
+		$files = $_FILES;
+		$cpt = count($_FILES ['file'] ['name']);
+
+		for ($i = 0; $i < $cpt; $i++)
+		{
+			$name = $files ['file'] ['name'] [$i];
+			$_FILES ['file'] ['name'] = $name;
+			$_FILES ['file'] ['type'] = $files ['file'] ['type'] [$i];
+			$_FILES ['file'] ['tmp_name'] = $files ['file'] ['tmp_name'] [$i];
+			$_FILES ['file'] ['error'] = $files ['file'] ['error'] [$i];
+			$_FILES ['file'] ['size'] = $files ['file'] ['size'] [$i];
+		
+			if($this->upload->do_upload('file'))
+			{
+				$data = $this->upload->data();
+				$att_data = array(
+					'saved_name' => $data['file_name'],
+					'real_name' => $data['orig_name'],
+					'size' => $files ['file'] ['size'] [$i],
+					'ticket_id' => $ticket_id,
+					'mode' => $this->input->post('mode')
+				);
+				
+				if($this->Ticket->save_attachment_ppidtl($att_data))
+				{
+					$id = $att_data['id'];
+					echo json_encode(array('id' => $id, 'url' => base_url().'uploads/files/'.$att_data['saved_name'], 'error'=>0,'message'=>''));
+				}
+			}
+			else
+			{
+				echo json_encode(array('error' => 1, 'message' => $this->upload->display_errors()));
+			}
 		}
 	}
 	

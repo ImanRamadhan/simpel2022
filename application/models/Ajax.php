@@ -641,6 +641,19 @@ class Ajax extends CI_Model
 		return $query->row()->cnt;
 	}
 
+	public function ppid_need_action()
+	{
+		
+		$this->db->select('COUNT(a.id) as cnt');
+		$this->db->from('desk_tickets a');
+		$this->db->where('jenis', 'PPID');
+		$this->db->where('owner_dir', $this->session->direktoratid);
+		$this->db->where("NOT EXISTS(SELECT b.ticket_id FROM desk_attachments_ppidtl b WHERE b.ticket_id = a.trackid)", '', FALSE);
+
+		$query = $this->db->get();
+		return $query->row()->cnt;
+	}
+
 	public function belum_tl_red($date1, $date2)
 	{
 		if (is_pusat()) {

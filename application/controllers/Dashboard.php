@@ -307,4 +307,10 @@ class Dashboard extends Secure_Controller
 		$cnt = $this->Ajax->rujukan_masuk_not_closed($this->session->dashboard_date1, $this->session->dashboard_date2);
 		echo json_encode($cnt);
 	}
+
+	public function ppid_need_action()
+	{
+		$cnt = $this->Ajax->ppid_need_action();
+		echo json_encode($cnt);
+	}
 }
