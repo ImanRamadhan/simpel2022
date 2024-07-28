@@ -2286,6 +2286,14 @@ class Ticket extends CI_Model
 		return $this->db->get();
 	}
 
+	public function get_attachments_ppidtl($item_id, $mode)
+	{
+		$this->db->from('desk_attachments_ppidtl');
+		$this->db->where('ticket_id', $item_id);
+		$this->db->where('mode', $mode);
+		return $this->db->get();
+	}
+
 	public function delete_attachments($att_id, $ticket_id, $mode)
 	{
 		//Run these queries as a transaction, we want to make sure we do all or nothing
@@ -2332,6 +2340,16 @@ class Ticket extends CI_Model
 		if ($this->db->insert('desk_attachments', $item_data)) {
 			$item_data['id'] = $this->db->insert_id();
 
+			return TRUE;
+		}
+
+		return FALSE;
+	}
+
+	public function save_attachment_ppidtl(&$item_data)
+	{
+		if ($this->db->insert('desk_attachments_ppidtl', $item_data)) {
+			$item_data['id'] = $this->db->insert_id();
 			return TRUE;
 		}
 
