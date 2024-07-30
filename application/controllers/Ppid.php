@@ -1839,6 +1839,116 @@ class Ppid extends Secure_Controller
 		
 	}
 
+	public function ppid_word10($item_id = -1)
+	{
+		$item_id = (int)$item_id;
+
+		$ppid_setting = $this->config->item('ppid_setting');
+		$template_path = $ppid_setting['template_path'];
+		
+		$templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor($template_path.'FORM10.docx');
+
+
+		header("Content-Disposition: attachment; filename=Formulir_Elektronik_Daftar_Informasi_Publik.docx");
+
+		$templateProcessor->saveAs('php://output');
+		
+		
+	}
+	public function ppid_word11($item_id = -1)
+	{
+		$item_id = (int)$item_id;
+
+		$item_info = $this->Ticket->get_info($item_id);
+		$this->cleanXss($item_info);
+
+		$ppid_info = $this->Ticket->get_ppid_info($item_id);
+		$this->cleanXss($ppid_info);
+		
+		$balai_info = $this->Balai->get_address($this->session->city);
+		$this->cleanXss($balai_info);
+
+		$ppid_setting = $this->config->item('ppid_setting');
+		$template_path = $ppid_setting['template_path'];
+		
+		$templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor($template_path.'FORM11.docx');
+
+
+		$templateProcessor->setValue('nomor',$item_info->trackid);
+		$templateProcessor->setValue('nama', $ppid_info->nama_pejabat_ppid);
+
+		header("Content-Disposition: attachment; filename=Maklumat_Pelayanan_Informasi_Publik_$item_info->trackid.docx");
+
+		$templateProcessor->saveAs('php://output');
+		
+	}
+
+	public function ppid_word12($item_id = -1)
+	{
+		$item_id = (int)$item_id;
+
+		$item_info = $this->Ticket->get_info($item_id);
+		$this->cleanXss($item_info);
+
+		$ppid_info = $this->Ticket->get_ppid_info($item_id);
+		$this->cleanXss($ppid_info);
+		
+		$balai_info = $this->Balai->get_address($this->session->city);
+		$this->cleanXss($balai_info);
+
+		$ppid_setting = $this->config->item('ppid_setting');
+		$template_path = $ppid_setting['template_path'];
+		
+		$templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor($template_path.'FORM12.docx');
+
+		// echo '<pre>';
+		// var_dump($ppid_info);
+		// echo '<pre>';
+		// die;
+		$templateProcessor->setValue('nomor',$item_info->trackid);
+		$templateProcessor->setValue('tgl',convert_date1($ppid_info->tgl_diterima));
+
+		$templateProcessor->setValue('nama', $ppid_info->nama_pejabat_ppid);
+		$templateProcessor->setValue('alamat',$item_info->iden_alamat);
+		$templateProcessor->setValue('kontak',$item_info->iden_telp);
+		$templateProcessor->setValue('pekerjaan',$item_info->profesi);
+		$templateProcessor->setValue('informasi',$ppid_info->rincian);
+		$templateProcessor->setValue('tujuan',$ppid_info->tujuan);	
+		if($ppid_info->penguasaan_kami){
+			$templateProcessor->setValue('dp1','√');	
+			$templateProcessor->setValue('dp2','');	
+			$templateProcessor->setValue('dokumentasi','');	
+		}else{
+			$templateProcessor->setValue('dp1','');	
+			$templateProcessor->setValue('dp2','√');	
+			$templateProcessor->setValue('dokumentasi',$ppid_info->nama_badan_lain);	
+		}
+		$templateProcessor->setValue('bi1',(int)$ppid_info->bentuk_fisik == 1 ? '√' : '');
+		$templateProcessor->setValue('bi2',(int)$ppid_info->bentuk_fisik == 2 ? '√' : '');	
+
+		$templateProcessor->setValue('jp1',(int)$ppid_info->cara_memperoleh_info == 1 ? '√' : '');	
+		$templateProcessor->setValue('jp2',(int)$ppid_info->cara_memperoleh_info == 2 ? '√' : '');	
+		
+		$templateProcessor->setValue('penolakan',$ppid_info->alasan_keberatan);	
+
+		$templateProcessor->setValue('day1',convert_date1($ppid_info->tgl_pemberitahuan_tertulis));	
+		$templateProcessor->setValue('day2',strlen($ppid_info->keberatan_tgl_fmt) > 0 ? convert_date1($ppid_info->keberatan_tgl_fmt) : '');	
+
+
+		$templateProcessor->setValue('biaya', $ppid_info->biaya_total);	
+		$templateProcessor->setValue('bayar', '');	
+		
+		$templateProcessor->setValue('keputusan',$ppid_info->keputusan);
+
+		
+		$this->setKopSurat($templateProcessor,$balai_info);
+
+		header("Content-Disposition: attachment; filename=Register_Permintaan_Informasi_Publik_$item_info->trackid.docx");
+
+		$templateProcessor->saveAs('php://output');
+		
+	}
+
 	private function cleanXss($item){
 		foreach(get_object_vars($item) as $property => $value)
 		{
