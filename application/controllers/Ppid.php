@@ -1740,6 +1740,113 @@ class Ppid extends Secure_Controller
 		$templateProcessor->setValue('g',array_key_exists('g',$alasan_array) ? 'X'  : '     ');
 
 		
+		$this->setKopSurat($templateProcessor,$balai_info);
+	
+
+		header("Content-Disposition: attachment; filename=Formulir_Register_keberatan_$item_info->trackid.docx");
+
+		$templateProcessor->saveAs('php://output');
+		
+		
+	}
+	public function ppid_word8($item_id = -1)
+	{
+		$item_id = (int)$item_id;
+
+		$item_info = $this->Ticket->get_info($item_id);
+		$this->cleanXss($item_info);
+
+		$ppid_info = $this->Ticket->get_ppid_info($item_id);
+		$this->cleanXss($ppid_info);
+
+		$balai_info = $this->Balai->get_address($this->session->city);
+		$this->cleanXss($balai_info);
+
+		
+		$ppid_setting = $this->config->item('ppid_setting');
+		$template_path = $ppid_setting['template_path'];
+		
+		$templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor($template_path.'FORM8.docx');
+
+
+		$tgl1 = date("j");
+		$tgl2 = date("n");
+		$tgl3 = date("Y");
+		$hari = to_day(date("N"));
+
+		$templateProcessor->setValue('nomor',$item_info->trackid);
+		$templateProcessor->setValue('tahun',$tgl3);
+		$templateProcessor->setValue('tempat', get_city_location());
+		$templateProcessor->setValue('atasan', $ppid_info->nama_pejabat_ppid);
+
+		$templateProcessor->setValue('hari',$hari);
+		$templateProcessor->setValue('tgl1',$tgl1);
+		$templateProcessor->setValue('tgl2',$tgl2);
+		$templateProcessor->setValue('tgl3',$tgl3);
+		
+		$this->setKopSurat($templateProcessor,$balai_info);
+
+
+
+		header("Content-Disposition: attachment; filename=Formulir_Pengujian_Konsekuensi$item_info->trackid.docx");
+
+		$templateProcessor->saveAs('php://output');
+		
+		
+	}
+
+	public function ppid_word9($item_id = -1)
+	{
+		$item_id = (int)$item_id;
+
+		$item_info = $this->Ticket->get_info($item_id);
+		$this->cleanXss($item_info);
+
+		$ppid_info = $this->Ticket->get_ppid_info($item_id);
+		$this->cleanXss($ppid_info);
+
+		$balai_info = $this->Balai->get_address($this->session->city);
+		$this->cleanXss($balai_info);
+
+		
+		$ppid_setting = $this->config->item('ppid_setting');
+		$template_path = $ppid_setting['template_path'];
+		
+		$templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor($template_path.'FORM9.docx');
+
+		$tgl1 = date("j");
+		$tgl2 = date("n");
+		$tgl3 = date("Y");
+		$hari = to_day(date("N"));
+
+		$templateProcessor->setValue('nomor',$item_info->trackid);
+		$templateProcessor->setValue('tahun',$tgl3);
+		$templateProcessor->setValue('tempat', get_city_location());
+		$templateProcessor->setValue('atasan', $ppid_info->nama_pejabat_ppid);
+		$templateProcessor->setValue('hari',$hari);
+		$templateProcessor->setValue('tgl1',$tgl1);
+		$templateProcessor->setValue('tgl2',$tgl2);
+		$templateProcessor->setValue('tgl3',$tgl3);
+		
+		$this->setKopSurat($templateProcessor,$balai_info);
+
+
+
+		header("Content-Disposition: attachment; filename=Formulir_Pengujian_Konsekuensi_Dikecualikan$item_info->trackid.docx");
+
+		$templateProcessor->saveAs('php://output');
+		
+		
+	}
+
+	private function cleanXss($item){
+		foreach(get_object_vars($item) as $property => $value)
+		{
+			$item->$property = $this->xss_clean($value);
+		}
+	}
+
+	private function setKopSurat($templateProcessor,$balai_info){
 		if($this->session->city == 'PUSAT' || $this->session->city == 'UNIT TEKNIS')
 		{
 			$templateProcessor->setValue('kop_nama','BADAN PENGAWAS OBAT DAN MAKANAN');
@@ -1757,12 +1864,6 @@ class Ppid extends Secure_Controller
 			$templateProcessor->setValue('kop_faq',$balai_info->no_faq);
 		}
 	
-
-		header("Content-Disposition: attachment; filename=Formulir_Register_keberatan_$item_info->trackid.docx");
-
-		$templateProcessor->saveAs('php://output');
-		
-		
 	}
 
 	public function print_ppid_word1($item_id = -1)
