@@ -42,7 +42,8 @@
 						<li>Formulir Ketidaklengkapan &nbsp; <a class="" target="_blank" href="<?php echo site_url('ppid/ppid_word3/'.$item_info->id.'?r='.$r)?>"><i class="fa fa-file-word"></i> *docx*</a></li>
 						<li>Surat Keputusan ttg Penolakan &nbsp; <a class="" target="_blank" href="<?php echo site_url('ppid/ppid_word5/'.$item_info->id.'?r='.$r)?>"><i class="fa fa-file-word"></i> *docx*</a></li>
 						<li>Formulir Keberatan &nbsp; <a class="" target="_blank" href="<?php echo site_url('ppid/ppid_word6/'.$item_info->id.'?r='.$r)?>"><i class="fa fa-file-word"></i> *docx*</a></li>
-						
+						<li>Formulir Registrasi Keberatan <a class="" target="_blank" href="<?php echo site_url('ppid/ppid_word7/'.$item_info->id.'?r='.$r)?>"><i class="fa fa-file-word"></i> docx</a>&nbsp; </li>
+
 					</ol>
 				</div>
 			</div>
