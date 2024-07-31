@@ -11,3 +11,5 @@ CREATE TABLE `desk_userwa` (
   `is_saved` tinyint DEFAULT '1',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0;
+
+INSERT INTO desk_userwa (phone, status, webhook_url, user_code, created_on, is_auto_gdrive, gdrive_folder, file_pattern, is_saved) VALUES('083892110929', '1', NULL, '1', '2024-07-30 08:57:49', 0, NULL, NULL, 1);
