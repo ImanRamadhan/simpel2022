@@ -936,12 +936,31 @@ class Ppid extends Secure_Controller
 			$balai_info->$property = $this->xss_clean($value);
 		}
 		$data['balai_info'] = $balai_info;
+
+		$cara_mendapat_salinan = $ppid_info->cara_mendapat_salinan;
+        $cara_salinan_array = [];
+        if (!empty($cara_mendapat_salinan)) {
+            $cara = explode(',', $cara_mendapat_salinan);
+            foreach ($cara as $obj) {
+                $cara_salinan_array[$obj] = $obj;
+            }
+        }
+
+        $cara_mendapat_array = [
+            '1' => 'Mengambil langsung',
+            '2' => 'Kurir',
+            '3' => 'Pos',
+            '4' => 'Email',
+            '5' => 'Faksimili',
+        ];
 		
-		
-		
-		
+		$data['cara_row_1'] = $this->generateCheckboxes($cara_mendapat_array, $cara_salinan_array, [1, 4]);
+    	$data['cara_row_2'] = $this->generateCheckboxes($cara_mendapat_array, $cara_salinan_array, [2, 5]);
+		$data['cara_row_3'] = $this->generateCheckboxes($cara_mendapat_array, $cara_salinan_array, [3]);
+
 		$this->load->helper(array('dompdf', 'file'));
-		
+		// $html = $this->load->view('ppid/print_ppid_form1', $data);
+		// return;
 		$html = $this->load->view('ppid/print_ppid_form1', $data, TRUE);
 		$filename = rand(0,1000);
 		pdf_create($html, $filename);
@@ -949,6 +968,18 @@ class Ppid extends Secure_Controller
 		//$this->load->view('ppid/print_ppid_form1', $data);
 	}
 	
+	private function generateCheckboxes($dapatArray,$salinanArray, $filter) {
+        $html = '';
+        foreach ($dapatArray as $key => $value) {
+            if (in_array($key, $filter)) {
+                $html .= '<div style="display:inline-block;width:180px">';
+                $html .= trim($key) . ' <input type="checkbox" ' . (array_key_exists($key,$salinanArray) ? 'checked' : '') . ' />' . $value;
+                $html .= '</div>';
+            }
+        }
+        return $html;
+    }
+
 	public function print_ppid_form2($item_id = -1)
 	{
 		$item_id = (int)$item_id;
