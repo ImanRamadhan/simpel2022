@@ -30,9 +30,12 @@
 					<ul>
 						
 						<li>Formulir Permintaan Informasi Publik <a class="" target="_blank" href="<?php echo site_url('ppid/print_ppid_form1/'.$item_info->id.'?r='.$r)?>"><i class="fa fa-file-pdf"></i> pdf</a>&nbsp; <a class="" target="_blank" href="<?php echo site_url('ppid/print_ppid_word1/'.$item_info->id.'?r='.$r)?>"><i class="fa fa-file-word"></i> docx</a>&nbsp; <a class="" target="_blank" href="<?php echo site_url('ppid/ppid_word1/'.$item_info->id.'?r='.$r)?>"><i class="fa fa-file-word"></i> *docx*</a></li>
-						<!--<li>Formulir Tanda Terima Permohonan Informasi PPID <a class="" target="_blank" href="<?php echo site_url('ppid/print_ppid_form2/'.$item_info->id.'?r='.$r)?>"> <i class="fa fa-file-pdf"></i> pdf</a>&nbsp; <a class="" target="_blank" href="<?php echo site_url('ppid/print_ppid_word2/'.$item_info->id.'?r='.$r)?>"><i class="fa fa-file-word"></i> docx</a></li>-->
-						
+					
+						<li>Register Permintaan Informasi Publik <a class="" target="_blank" href="<?php echo site_url('ppid/ppid_word12/'.$item_info->id.'?r='.$r)?>"><i class="fa fa-file-word"></i> docx</a>&nbsp;
+
 						<li>Formulir Pemberitahuan Tertulis PPID <a class="" target="_blank" href="<?php echo site_url('ppid/print_ppid_form4/'.$item_info->id.'?r='.$r)?>"> <i class="fa fa-file-pdf"></i> pdf</a>&nbsp; <a class="" target="_blank" href="<?php echo site_url('ppid/print_ppid_word4/'.$item_info->id.'?r='.$r)?>"><i class="fa fa-file-word"></i> docx</a>&nbsp; <a class="" target="_blank" href="<?php echo site_url('ppid/ppid_word4/'.$item_info->id.'?r='.$r)?>"><i class="fa fa-file-word"></i> *docx*</a></li>
+						
+						
 						<li>Tanggapan Tertulis <a class="" target="_blank" href="<?php echo site_url('ppid/print_ppid_form5/'.$item_info->id.'?r='.$r)?>"> <i class="fa fa-file-pdf"></i> pdf</a>&nbsp; <a class="" target="_blank" href="<?php echo site_url('ppid/print_ppid_word5/'.$item_info->id.'?r='.$r)?>"><i class="fa fa-file-word"></i> docx</a>&nbsp; </li>
 						
 						<?php if(!empty($ppid_info->pengecualian_pasal17) || !empty($ppid_info->pengecualian_pasal_lain) ):?>
@@ -42,6 +45,11 @@
 						<li>Formulir Ketidaklengkapan &nbsp; <a class="" target="_blank" href="<?php echo site_url('ppid/ppid_word3/'.$item_info->id.'?r='.$r)?>"><i class="fa fa-file-word"></i> *docx*</a></li>
 						<li>Surat Keputusan ttg Penolakan &nbsp; <a class="" target="_blank" href="<?php echo site_url('ppid/ppid_word5/'.$item_info->id.'?r='.$r)?>"><i class="fa fa-file-word"></i> *docx*</a></li>
 						<li>Formulir Keberatan &nbsp; <a class="" target="_blank" href="<?php echo site_url('ppid/ppid_word6/'.$item_info->id.'?r='.$r)?>"><i class="fa fa-file-word"></i> *docx*</a></li>
+						<li>Formulir Registrasi Keberatan <a class="" target="_blank" href="<?php echo site_url('ppid/ppid_word7/'.$item_info->id.'?r='.$r)?>"><i class="fa fa-file-word"></i> docx</a>&nbsp; </li>
+						<li>Formulir Lembar Pengujian Konsekuensi <a class="" target="_blank" href="<?php echo site_url('ppid/ppid_word8/'.$item_info->id.'?r='.$r)?>"><i class="fa fa-file-word"></i> docx</a>&nbsp; </li>
+						<li>Formulir Lembar Pengujian Konsekuensi Pengubahan Klasifikasi Informasi <a class="" target="_blank" href="<?php echo site_url('ppid/ppid_word9/'.$item_info->id.'?r='.$r)?>"><i class="fa fa-file-word"></i> docx</a>&nbsp; </li>
+						<li>Formulir Elektronik Daftar Informasi Publik <a class="" target="_blank" href="<?php echo site_url('ppid/ppid_word10/'.$item_info->id.'?r='.$r)?>"><i class="fa fa-file-word"></i> docx</a>&nbsp; </li>
+						<li>Maklumat Pelayanan Informasi Publik <a class="" target="_blank" href="<?php echo site_url('ppid/ppid_word11/'.$item_info->id.'?r='.$r)?>"><i class="fa fa-file-word"></i> docx</a>&nbsp; </li>
 						
 					</ol>
 				</div>
