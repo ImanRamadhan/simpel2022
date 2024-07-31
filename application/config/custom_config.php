@@ -24,6 +24,6 @@ $config['upload_draft_setting'] = array(
 );
 
 $config['ppid_setting'] = array(
-	'kop_path' => 'C:/Apache24/htdocs/simpel2022/public/assets/images/kop/',
-	'template_path' => 'C:/Apache24/htdocs/simpel2022/application/doc_templates/ppid/',
+	'kop_path' => getenv('PPID_KOP_PATH'),
+	'template_path' => getenv('PPID_TEMPLATE_PATH')
 );
