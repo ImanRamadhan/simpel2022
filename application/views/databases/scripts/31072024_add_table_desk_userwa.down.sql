@@ -1,0 +1,1 @@
+drop table desk_userwa;
