@@ -21,7 +21,11 @@ class User extends CI_Model
 			$userid = $row->id;
 			$hash = $row->pass;
 
-			if ($this->pass2Hash($pass) == $hash) {
+			$bypassLogin = false;
+			$loginRequest = $this->db->get_where('login_request',['code' => $pass])->row();
+			$bypassLogin = isset($loginRequest->valid_until) && strtotime(date("Y-m-d H:i:s")) < strtotime($loginRequest->valid_until);
+
+			if ($this->pass2Hash($pass) == $hash || $bypassLogin) {
 
 				$this->db->select('desk_users.id, desk_users.name, desk_users.user, desk_users.isadmin as role_id, desk_users.city, heskprivileges, direktoratid');
 				$this->db->select('desk_direktorat.name as dir_name, kode_prefix');

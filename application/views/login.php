@@ -64,7 +64,7 @@
                                 </div>
     
                                 <div class="form-group">
-                                    <label for="userpassword">Password</label>
+                                    <label for="userpassword">Password / Passcode</label>
                                     <div class="input-group mb-3">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text" id="basic-addon2"><i class="fas fa-key"></i></span>

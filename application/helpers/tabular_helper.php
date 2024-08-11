@@ -1025,7 +1025,60 @@ function get_my_tickets_manage_table_headers()
 	
 	return transform_headers($headers);
 }
+function get_request_access_manage_table_headers()
+{
+	$CI =& get_instance();
 
+	$headers = array(
+		
+		array('no' => 'No.', 'align' => 'center', 'sortable' => false),
+		array('id' => 'ID', 'visible' => false),
+		array('nama' => 'Request ke Petugas'),
+		array('valid_until' => 'Berlaku Sampai', 'align' => 'center'),
+		array('code' => 'Pass Code', 'visible' => is_administrator() ? false : true),
+		array('status' => 'Status', 'align' => 'center'),
+	);
+	
+	
+	return transform_headers($headers);
+}
+
+function get_request_access_data_row($item, $no)
+{
+	$CI =& get_instance();
+	$controller_name = strtolower(get_class($CI));
+	$status = '<span class="badge badge-dark badge-pill py-2 px-4"> Waiting Approval </span>';
+	$dateNow = date("Y-m-d H:i:s");
+	$dateItem = $item->valid_until; 
+
+	$timestampNow = strtotime($dateNow);
+	$timestampItem = strtotime($dateItem);
+	$isActive = true;
+	if ($timestampNow > $timestampItem && !is_null($item->valid_until)) {
+		$status = '<span class="badge badge-warning badge-pill py-2 px-4"> Rejected / Expired </span>';
+		$isActive = false;
+	} elseif ($timestampNow < $timestampItem && !is_null($item->valid_until)) {
+		$status = '<span class="badge badge-success badge-pill py-2 px-4">Active</span>';
+		$isActive = true;
+	}
+	$buttonApprove = anchor('request_access/#', '<i class="fa fa-check-square"> </i>',array( 'data-id' => $item->id ,'class'=>'btn btn-sm btn-success data-btn-approve'));
+	$buttonReject = anchor('request_access/#', '<i class="fa fa-times-circle"> </i>',array( 'data-id' => $item->id ,'class'=>'btn mx-1 btn-sm btn-warning data-btn-reject'));
+
+	if(!is_null($item->valid_until))
+		$buttonApprove = '';
+
+	$data = array (
+		'no' => $no.'.',
+		'id' => $item->id,
+		'nama' => $item->nama,
+		'valid_until' => $item->valid_until,
+		'code' => $item->code,
+		'status' => $status,
+		'edit' => $isActive ?  $buttonApprove . $buttonReject : '' ,
+	);
+	if(is_administrator()) unset($data['edit']);
+	return $data;
+}
 function get_my_ticket_data_row($item, $no)
 {
 	$CI =& get_instance();
