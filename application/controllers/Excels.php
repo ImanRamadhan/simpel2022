@@ -2438,31 +2438,40 @@ class Excels extends CI_Controller {
             $data['petugas_entry'] = $workSheet->getCell('AY'.$column)->getValue() == '' ? '' :  $workSheet->getCell('AY'.$column)->getValue();
             $data['penjawab'] = $workSheet->getCell('AZ'.$column)->getValue() == '' ? '' :  $workSheet->getCell('AZ'.$column)->getValue();
             $data['answered_via'] = $workSheet->getCell('BA'.$column)->getValue() == '' ? '' :  $workSheet->getCell('BA'.$column)->getValue();
-    
             //default
-            $data['trackid'] = '';
             $data['owner'] = $this->session->id;
             $data['kota'] = $this->session->city;
             $data['dt'] = $dt;
             $data['tglpengaduan'] = date('Y-m-d');
+            
+            if($this->session->city == 'PUSAT')
+			    $prefix = 'PST';
+            else
+			    $prefix = $this->Balai->get_prefix($this->session->city);
+
+            $data['trackid'] = (int)$this->input->post('type') == 2 ? $this->Draft->generate_ticketid($this->session->city,$prefix,date('Y-m-d')) : '' ;
             $data['waktu'] = date('H:i:s');
             $data['owner_dir'] = $this->session->direktoratid;
 			$data['tipe_medsos'] = '';
+			$data['is_sent'] = (int)$this->input->post('type') == 2 ? 1 : 0 ;
 
             $data_bulk[] = $data;
             $column++;
         }
+        try {
+            
+            $this->Draft->save_bulk($data_bulk);
 
-        
-        
-        if($this->Draft->save_bulk($data_bulk)){
-            $msg = array('status' => 'S', 'msg' => "Upload Sukses!");
-        } else {
+            if((int)$this->input->post("type") == 2){
+                $this->Ticket->save_bulk($data_bulk);
+            }
+
+            $msg = array('status' => 'S', 'msg' => "Berhasil mengirim upload file!");
+
+        } catch (\Throwable $th) {
             $msg = array('status' => 'F', 'msg' => "Upload Gagal!");
         }
-		
-		
-
+    
         echo json_encode($msg);
     }
 	

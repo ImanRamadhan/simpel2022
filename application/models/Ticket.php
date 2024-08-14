@@ -2560,4 +2560,33 @@ class Ticket extends CI_Model
 
 		return $query->row();
 	}
+
+	public function save_bulk($data){
+		//return $this->db->insert_batch('desk_drafts',$data);
+		$this->db->trans_start(); 
+		$this->db->trans_strict(FALSE); 
+
+		for($i =0; $i< count($data); $i++){
+			$this->db->insert('desk_tickets', $data[$i]);  
+			$insert_id = $this->db->insert_id();
+
+			if($data[$i]['is_rujuk'] == '1'){
+				$datarujukan = array();
+				$datarujukan['rid'] = $insert_id;
+				
+				$this->db->insert('desk_rujukan', $datarujukan);  
+			}
+		}
+
+		$this->db->trans_complete(); 
+		
+		if ($this->db->trans_status() === FALSE) {
+			$this->db->trans_rollback();
+			return FALSE;
+		} 
+		else {
+			$this->db->trans_commit();
+			return TRUE;
+		}
+	}
 }
