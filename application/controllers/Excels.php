@@ -2449,21 +2449,29 @@ class Excels extends CI_Controller {
             else
 			    $prefix = $this->Balai->get_prefix($this->session->city);
 
-            $data['trackid'] = (int)$this->input->post('type') == 2 ? $this->Draft->generate_ticketid($this->session->city,$prefix,date('Y-m-d')) : '' ;
+            $data['trackid'] = '';
             $data['waktu'] = date('H:i:s');
             $data['owner_dir'] = $this->session->direktoratid;
 			$data['tipe_medsos'] = '';
-			$data['is_sent'] = (int)$this->input->post('type') == 2 ? 1 : 0 ;
+			$data['is_sent'] = 0;
 
             $data_bulk[] = $data;
             $column++;
         }
+
         try {
             
             $this->Draft->save_bulk($data_bulk);
 
             if((int)$this->input->post("type") == 2){
-                $this->Ticket->save_bulk($data_bulk);
+
+                $item_save = array_map(function($item) {
+                    $item['is_sent'] = 1;
+                    $item['trackid'] = $this->Draft->generate_ticketid($this->session->city,$prefix,date('Y-m-d'));
+                    return $item;
+                }, $data_bulk);
+
+                $this->Ticket->save_bulk($item_save);
             }
 
             $msg = array('status' => 'S', 'msg' => "Berhasil mengirim upload file!");
