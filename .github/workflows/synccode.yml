@@ -1,0 +1,22 @@
+name: sync-code
+on:
+  push:
+    branches: 
+    - 'dev'
+  
+jobs:
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+    - name: executing remote ssh commands using password
+      uses: appleboy/ssh-action@master
+      with:
+        host: 45.77.47.79
+        username: bdt
+        password: Bre@kthrough2312!
+        port: 22
+        script: |
+          cd /home/bdt/app/simpel2022
+          git pull origin dev
