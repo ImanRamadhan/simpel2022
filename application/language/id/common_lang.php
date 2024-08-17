@@ -10,6 +10,7 @@ $lang["common_confirm_search"] = "Anda telah memilih satu atau lebih baris, ini 
 $lang["common_country"] = "Negara";
 $lang["common_date"] = "Tanggal";
 $lang["common_delete"] = "Hapus";
+$lang["common_send"] = "Kirim";
 $lang["common_det"] = "Detail";
 $lang["common_download_import_template"] = "Download atau Import format Excel (CSV)";
 $lang["common_edit"] = "Ubah";

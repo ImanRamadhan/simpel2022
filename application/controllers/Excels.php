@@ -2431,7 +2431,26 @@ class Excels extends CI_Controller {
     
             //tindak lanjut
             $data['is_rujuk'] = $workSheet->getCell('AL'.$column)->getValue() == 'Ya' ? '1' :  '0';
-    
+            if($data['is_rujuk'] == '1'){
+                $columns = ['AM', 'AO', 'AQ', 'AS', 'AU'];
+                $priorities = ['AN', 'AP', 'AR', 'AT', 'AV'];
+            
+                foreach ($columns as $index => $col) {
+                    $direktoratKey = $index == 0 ? 'direktorat' : 'direktorat' . ($index + 1);
+                    $data[$direktoratKey] = $workSheet->getCell($col . $column)->getValue() != '' 
+                        ? $this->get_direktorat_id($workSheet->getCell($col . $column)->getValue()) 
+                        : '0';
+                }
+            
+                foreach ($priorities as $index => $col) {
+                    $priorityKey = 'd' . ($index + 1) . '_prioritas';
+                    $data[$priorityKey] = $workSheet->getCell($col . $column)->getValue() != '' 
+                        ? explode(' ', $workSheet->getCell($col . $column)->getValue())[0] 
+                        : '0';
+                }
+            }
+            
+
             //Jawaban
             $data['jawaban'] = $workSheet->getCell('AW'.$column)->getValue() == '' ? '' :  $workSheet->getCell('AW'.$column)->getValue();
             $data['keterangan'] = $workSheet->getCell('AX'.$column)->getValue() == '' ? '' :  $workSheet->getCell('AX'.$column)->getValue();
@@ -2444,29 +2463,28 @@ class Excels extends CI_Controller {
             $data['dt'] = $dt;
             $data['tglpengaduan'] = date('Y-m-d');
             
-            if($this->session->city == 'PUSAT')
-			    $prefix = 'PST';
-            else
-			    $prefix = $this->Balai->get_prefix($this->session->city);
-
             $data['trackid'] = '';
             $data['waktu'] = date('H:i:s');
             $data['owner_dir'] = $this->session->direktoratid;
 			$data['tipe_medsos'] = '';
-			$data['is_sent'] = 0;
+			$data['is_sent'] = '0';
 
             $data_bulk[] = $data;
             $column++;
         }
-
+      
+        
         try {
-            
+            $prefix = 'PST';
+            if($this->session->city != 'PUSAT')
+                $prefix = $this->Balai->get_prefix($this->session->city);
+
             $this->Draft->save_bulk($data_bulk);
 
             if((int)$this->input->post("type") == 2){
 
-                $item_save = array_map(function($item) {
-                    $item['is_sent'] = 1;
+                $item_save = array_map(function($item) use($prefix) {
+                    $item['is_sent'] = '1';
                     $item['trackid'] = $this->Draft->generate_ticketid($this->session->city,$prefix,date('Y-m-d'));
                     return $item;
                 }, $data_bulk);
@@ -2483,7 +2501,10 @@ class Excels extends CI_Controller {
         echo json_encode($msg);
     }
 	
-	
+	private function get_direktorat_id($name){
+        return $this->db->get_where("desk_direktorat",["name" => $name])->row()->id;
+    }
+
 	public function download_template_upload()
     {
         $inputTgl1  	= $this->input->post('tgl1');
@@ -2870,6 +2891,4 @@ class Excels extends CI_Controller {
 		header('Cache-Control: max-age=0');
         $writer->save('php://output');
     }
-	
-	
 }

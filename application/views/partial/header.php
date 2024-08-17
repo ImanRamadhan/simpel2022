@@ -54,7 +54,7 @@
 		<script src="<?php echo base_url()?>assets/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.id.js"></script>
 
 		
-		<script type="text/javascript" src="<?php echo base_url()?>js/manage_tables.js?v=1.0"></script>
+		<script type="text/javascript" src="<?php echo base_url()?>js/manage_tables.js?v=1.1"></script>
 
       
 		
