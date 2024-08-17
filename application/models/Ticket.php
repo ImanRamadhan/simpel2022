@@ -233,6 +233,10 @@ class Ticket extends CI_Model
 			$this->db->where('tglpengaduan >=', $filters['tgl1']);
 			$this->db->where('tglpengaduan <=', $filters['tgl2']);
 		}
+		if (!empty($filters['is_lengkap'])) {
+			$is_lengkap = str_replace("_", " ", $filters['is_lengkap']);
+			$this->db->where('is_lengkap =', $is_lengkap);
+		}
 
 		if ($this->session->city == 'PUSAT') {
 			if (!empty($filters['kota'])) {
@@ -287,7 +291,9 @@ class Ticket extends CI_Model
 		if ($rows > 0) {
 			$this->db->limit($rows, $limit_from);
 		}
-
+		// $this->db->get();
+		// print_r($this->db->last_query());
+		// die;
 		//echo $this->db->get_compiled_select();
 		//exit;
 
