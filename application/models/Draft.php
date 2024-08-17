@@ -316,7 +316,7 @@ class Draft extends CI_Model
 			$item_obj->lastchange_fmt = '';
 			$item_obj->is_rujuk = '0';
 			$item_obj->shift = '1';
-			$item_obj->info = 'P';
+			$item_obj->info = 'I';
 
 			return $item_obj;
 		}
