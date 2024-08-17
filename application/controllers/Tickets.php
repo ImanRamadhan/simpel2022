@@ -1179,13 +1179,6 @@ class Tickets extends Secure_Controller
 	}
 
 	private function handleNotifikasi($item_info){
-		$exist_trackid = $this->Notification->get_by_ticketid($item_info->trackid);
-
-		// extract list of notif need to be sent to new assigned user
-		foreach($exist_trackid->result() as $notif) {
-			$notif_candidate[$notif->message] = $notif;
-		}
-		
 		$list_directorate = [];
 
 		$dir1 =  $this->input->post('dir1');
@@ -1194,26 +1187,61 @@ class Tickets extends Secure_Controller
 		$dir4 =  $this->input->post('dir4');
 		$dir5 =  $this->input->post('dir5');
 
-		if(!empty($dir1)) array_push($list_directorate, $dir1);
-		if(!empty($dir2)) array_push($list_directorate, $dir2);
-		if(!empty($dir3)) array_push($list_directorate, $dir3);
-		if(!empty($dir4)) array_push($list_directorate, $dir4);
-		if(!empty($dir5)) array_push($list_directorate, $dir5);
+		if(!empty($dir1) && $dir1 != $item_info->direktorat){
+			array_push($list_directorate, $dir1);
+		} 
+		
+		if(!empty($dir2) && $dir2 != $item_info->direktorat2){
+			array_push($list_directorate, $dir2);
+		} 
+		if(!empty($dir3) && $dir3 != $item_info->direktorat3){
+			array_push($list_directorate, $dir3);
+		} 
+		if(!empty($dir4) && $dir4 != $item_info->direktorat4){
+			array_push($list_directorate, $dir4);
+		} 
+		if(!empty($dir5) && $dir5 != $item_info->direktorat5) {
+			array_push($list_directorate, $dir5);
+		} 
+
+		if(count($list_directorate) == 0){
+			return;
+		}
 
 		// extract list of user eligible to be sent by notif
-		$user_need_notified = $this->Notification->get_user_need_notified($item_info->trackid, $list_directorate);
+		$user_need_notified = $this->User->get_users_in_dir($list_directorate);
 
+		// echo json_encode($user_need_notified->result());
+
+		$timestamp = date('Y-m-d H:i:s');
 		// save notif to eligible user
 		foreach($user_need_notified->result() as $user){
-			foreach($notif_candidate as $notif){
-				$data = array(
-					"title" => $notif->title,
-					"message" => $notif->message,
-					"ticket_id" => $notif->ticket_id,
-					"user_id" => $user->id,
-					"created_date" => date('Y-m-d H:i:s')
+			$data = array(
+				'trackid' => $item_info->trackid,
+				'isu_topik' => $item_info->isu_topik
+			);
+			$email_body = $this->load->view('mail/ticket_assigned_to_you', $data, TRUE);
+			$data = array(
+				"title" => 'Rujukan',
+				"message" => $email_body,
+				"ticket_id" => $item_info->trackid,
+				"user_id" => $user->id,
+				"created_date" => date('Y-m-d H:i:s')
+			);
+			$this->Notification->save($data);
+
+			if(strlen($user->no_hp)>=10)
+			{
+				//insert sms
+				$konten = '[SIMPELLPK]Yth. Bpk/Ibu '.$user->name.', Terdapat rujukan untuk Anda dengan ID '.$item_info->trackid;
+				$sms_data = array(
+					'no_tujuan' => $user->no_hp,
+					'konten' => $konten,
+					'created_date' => $timestamp,
+					'ticket_id' => $item_info->trackid,
+					'is_sent' => 0
 				);
-				$this->Notification->save($data);
+				$this->Draft->insert_sms($sms_data);
 			}
 		}
 	}

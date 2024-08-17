@@ -618,6 +618,7 @@ function get_rujukanmasuk_tickets_manage_table_headers()
 		array('trackid' => 'ID Layanan', 'class' => 'text-nowrap', 'titleTooltip' => 'aaa'),
 		
 		array('tglpengaduan' => 'Tgl Layanan', 'align' => 'center'),
+		array('tgldirujuk' => 'Tgl Dirujuk', 'align' => 'center', 'sortable' => false),
 		array('lastchange' => 'Update Terakhir', 'align' => 'center'),
 		array('iden_nama' => 'Nama Konsumen','align' => 'left'),
 		//array('outstanding' => 'Outstanding','align' => 'center'),
@@ -663,12 +664,36 @@ function get_rujukanmasuk_ticket_data_row($item, $no)
 		//'trackid' => anchor("rujukan/view/$item->id?ref=rujukan_masuk&r=".rand(1000,9999), $item->trackid),
 		'trackid' => anchor("rujukan/view/$item->id?ref=rujukan_masuk&r=".rand(1000,9999), $item->trackid, array('title' => $problem)),
 		'tglpengaduan' => $item->tglpengaduan,
+		// 'tgldirujuk' => '2024-01-01',
 		'lastchange' => time_since($item->lastchange),
 		'iden_nama' => $item->iden_nama,
 		'edit' => $view_link.' '.$edit_link. ' '.$pdf_link. ' '.$copy_link
-		);
+	);
+
+	switch($CI->session->direktoratid){
+		case $item->direktorat:
+			$data['tgldirujuk'] = $item->tgl_rujuk1;
+		
+		case $item->direktorat2:
+			$data['tgldirujuk'] = $item->tgl_rujuk2;
+
+		case $item->direktorat3:
+			$data['tgldirujuk'] = $item->tgl_rujuk3;
 	
-	$data['status'] = get_status($item->status); 
+		case $item->direktorat4:
+			$data['tgldirujuk'] = $item->tgl_rujuk4;
+
+		case $item->direktorat5:
+			$data['tgldirujuk'] = $item->tgl_rujuk5;
+	}
+
+	$data['status'] = get_status($item->status);
+	
+	// $data['status'] = get_status(5); 
+
+	if($item->status == '2' && $CI->session->userdata('user_id') != $item->owner){
+		$data['status'] = get_status(0); 
+	}
 	
 	$data['tl'] = ($item->tl == 1)?'Y':'N';
 	$data['fb'] = ($item->fb == 1)?'Y':'N';

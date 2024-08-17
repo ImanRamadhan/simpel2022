@@ -654,12 +654,13 @@ class Ticket extends CI_Model
 			$this->db->select('COUNT(desk_tickets.id) as count');
 		} else {
 
-			$this->db->select('desk_tickets.*');
+			$this->db->select('desk_tickets.*, desk_rujukan.*');
 
 			$this->db->select("date_format(tglpengaduan,'%d/%m/%Y') as tglpengaduan");
 		}
 
 		$this->db->from('desk_tickets');
+		$this->db->join('desk_rujukan', 'desk_rujukan.rid = desk_tickets.id', 'LEFT');
 
 
 		if (!empty($filters['tgl1']) && !empty($filters['tgl2'])) {
