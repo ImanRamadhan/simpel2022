@@ -475,8 +475,7 @@ class Excels extends CI_Controller
         if ($reportType == '1') {
             $data_pengaduan_konsumen    = $this->DatabaseM->get_data_pengaduan_konsumen($inputTgl1, $inputTgl2, $inputKota, $inputKategori, $inputDatasource, '', '', '');
 
-            //$this->build_databases_body($worksheet, "A", 10, $data_pengaduan_konsumen);
-
+            $this->build_databases_body($worksheet, "A", 10, $data_pengaduan_konsumen);
         } else if ($reportType == '4') {
             $data_pengaduan_konsumen    = $this->DatabaseM->get_data_yanblik($inputTgl1, $inputTgl2, $inputKota, $inputKategori, $inputDatasource, '', '', '');
 
@@ -826,9 +825,11 @@ class Excels extends CI_Controller
 
     public function build_databases_body(&$worksheet, $start_coll_default, $start_index, $raw_data)
     {
+        // print_r($raw_data);
+        // die;
         for ($i = 0; $i < count($raw_data); $i++) {
             $start_coll         = $start_coll_default;
-            for ($loop = 0; $loop <= 33; $loop++) {
+            for ($loop = 0; $loop <= 34; $loop++) {
 
                 if ($loop == 0) {
                     $printed  = ($i + 1);
@@ -843,7 +844,7 @@ class Excels extends CI_Controller
                     $worksheet->getCell($start_coll . $start_index)->setValue($printed);
                 }
                 if ($loop == 3) {
-                    $printed  = ($raw_data[$i]['iden_nama'] == '' ? '' : $raw_data[$i]['iden_alamat']);
+                    $printed  = ($raw_data[$i]['iden_alamat'] == '' ? '' : $raw_data[$i]['iden_alamat']);
                     $worksheet->getCell($start_coll . $start_index)->setValue($printed);
                 }
                 if ($loop == 4) {
@@ -855,24 +856,16 @@ class Excels extends CI_Controller
                     $worksheet->getCell($start_coll . $start_index)->setValue($printed);
                 }
                 if ($loop == 6) {
-                    if ($raw_data[$i]['info'] == "I") {
-                        $printed  = ($raw_data[$i]['detail_laporan'] == '' ? '' : $raw_data[$i]['detail_laporan']);
-                    } elseif ($raw_data[$i]['info'] == "P") {
-                        $printed  = "";
-                    }
+                    $printed  = ($raw_data[$i]['name'] == '' ? '' : $raw_data[$i]['name']); //pekerjaan
                     $worksheet->getCell($start_coll . $start_index)->setValue($printed);
                 }
                 if ($loop == 7) {
-                    if ($raw_data[$i]['info'] == "I") {
-                        $printed  = "";
-                    } elseif ($raw_data[$i]['info'] == "P") {
-                        $printed  = ($raw_data[$i]['detail_laporan'] == '' ? '' : $raw_data[$i]['detail_laporan']);
-                    }
+                    $printed  = ($raw_data[$i]['iden_jk'] == '' ? '' : $raw_data[$i]['iden_jk']);
                     $worksheet->getCell($start_coll . $start_index)->setValue($printed);
                 }
                 if ($loop == 8) {
                     if ($raw_data[$i]['info'] == "I") {
-                        $printed  = ($raw_data[$i]['jawaban'] == '' ? '' : $raw_data[$i]['jawaban']);
+                        $printed  = ($raw_data[$i]['detail_laporan'] == '' ? '' : $raw_data[$i]['detail_laporan']);
                     } elseif ($raw_data[$i]['info'] == "P") {
                         $printed  = "";
                     }
@@ -887,46 +880,50 @@ class Excels extends CI_Controller
                     $worksheet->getCell($start_coll . $start_index)->setValue($printed);
                 }
                 if ($loop == 10) {
-                    $printed  = ($raw_data[$i]['keterangan'] == '' ? '' : $raw_data[$i]['keterangan']);
+                    $printed  = ($raw_data[$i]['jenis'] == '' ? '' : $raw_data[$i]['jenis']);
                     $worksheet->getCell($start_coll . $start_index)->setValue($printed);
                 }
                 if ($loop == 11) {
-                    $printed  = ($raw_data[$i]['jenis_komoditi'] == '' ? '' : $raw_data[$i]['jenis_komoditi']);
+                    $printed  = ($raw_data[$i]['keterangan'] == '' ? '' : $raw_data[$i]['keterangan']);
                     $worksheet->getCell($start_coll . $start_index)->setValue($printed);
                 }
                 if ($loop == 12) {
-                    $printed  = ($raw_data[$i]['penerima'] == '' ? '' : $raw_data[$i]['penerima']);
+                    $printed  = ($raw_data[$i]['jenis_komoditi'] == '' ? '' : $raw_data[$i]['jenis_komoditi']);
                     $worksheet->getCell($start_coll . $start_index)->setValue($printed);
                 }
                 if ($loop == 13) {
-                    $printed  = ($raw_data[$i]['isu_topik'] == '' ? '' : $raw_data[$i]['isu_topik']);
+                    $printed  = ($raw_data[$i]['jenis'] == '' ? '' : $raw_data[$i]['jenis']);
                     $worksheet->getCell($start_coll . $start_index)->setValue($printed);
                 }
                 if ($loop == 14) {
-                    $printed  = ($raw_data[$i]['klasifikasi'] == '' ? '' : $raw_data[$i]['klasifikasi']);
+                    $printed  = ($raw_data[$i]['penerima'] == '' ? '' : $raw_data[$i]['penerima']);
                     $worksheet->getCell($start_coll . $start_index)->setValue($printed);
                 }
                 if ($loop == 15) {
-                    $printed  = ($raw_data[$i]['subklasifikasi'] == '' ? '' : $raw_data[$i]['subklasifikasi']);
+                    $printed  = ($raw_data[$i]['isu_topik'] == '' ? '' : $raw_data[$i]['isu_topik']);
                     $worksheet->getCell($start_coll . $start_index)->setValue($printed);
                 }
                 if ($loop == 16) {
-                    $printed  = ($raw_data[$i]['pekerjaan'] == '' ? '' : $raw_data[$i]['pekerjaan']);
+                    $printed  = ($raw_data[$i]['klasifikasi'] == '' ? '' : $raw_data[$i]['klasifikasi']);
                     $worksheet->getCell($start_coll . $start_index)->setValue($printed);
                 }
                 if ($loop == 17) {
-                    $printed  = ($raw_data[$i]['sarana'] == '' ? '' : $raw_data[$i]['sarana']);
+                    $printed  = ($raw_data[$i]['subklasifikasi'] == '' ? '' : $raw_data[$i]['subklasifikasi']);
                     $worksheet->getCell($start_coll . $start_index)->setValue($printed);
                 }
                 if ($loop == 18) {
-                    $printed  = ($raw_data[$i]['waktu'] == '' ? '' : $raw_data[$i]['waktu']);
+                    $printed  = ($raw_data[$i]['sarana'] == '' ? '' : $raw_data[$i]['sarana']);
                     $worksheet->getCell($start_coll . $start_index)->setValue($printed);
                 }
                 if ($loop == 19) {
-                    $printed  = ($raw_data[$i]['shift'] == '' ? '' : $raw_data[$i]['shift']);
+                    $printed  = ($raw_data[$i]['waktu'] == '' ? '' : $raw_data[$i]['waktu']);
                     $worksheet->getCell($start_coll . $start_index)->setValue($printed);
                 }
                 if ($loop == 20) {
+                    $printed  = ($raw_data[$i]['shift'] == '' ? '' : $raw_data[$i]['shift']);
+                    $worksheet->getCell($start_coll . $start_index)->setValue($printed);
+                }
+                if ($loop == 21) {
                     $printed  = ($raw_data[$i]['petugas_entry'] == '' ? '' : $raw_data[$i]['petugas_entry']);
                     $worksheet->getCell($start_coll . $start_index)->setValue($printed);
                 }
@@ -954,7 +951,7 @@ class Excels extends CI_Controller
                     }
                     $worksheet->getCell($start_coll.$start_index)->setValue($printed);
                 }*/
-                if ($loop == 21) {
+                if ($loop == 22) {
                     if ($raw_data[$i]['tl']) {
                         $printed  = 'Sudah';
                     } else {
@@ -962,36 +959,32 @@ class Excels extends CI_Controller
                     }
                     $worksheet->getCell($start_coll . $start_index)->setValue($printed);
                 }
-                if ($loop == 22) {
-                    $printed  = ($raw_data[$i]['tl_date'] == '' ? '' : $raw_data[$i]['tl_date']);
+                if ($loop == 23) {
+                    $printed  = ($raw_data[$i]['verified_date'] == '' ? '' : $raw_data[$i]['verified_date']);
                     $worksheet->getCell($start_coll . $start_index)->setValue($printed);
                 }
-                if ($loop == 23) {
-                    if ($raw_data[$i]['is_verified']) {
+                if ($loop == 24) {
+                    $printed  = ($raw_data[$i]['verificator_name'] == '' ? '' : $raw_data[$i]['verificator_name']);
+                    $worksheet->getCell($start_coll . $start_index)->setValue($printed);
+                }
+                if ($loop == 25) {
+                    $printed  = ($raw_data[$i]['tglpengaduan'] == '' ? '' : $raw_data[$i]['tglpengaduan']);
+                    $worksheet->getCell($start_coll . $start_index)->setValue($printed);
+                }
+                if ($loop == 26) {
+                    $printed  = ($raw_data[$i]['closed_date'] == '' ? '' : $raw_data[$i]['closed_date']);
+                    $worksheet->getCell($start_coll . $start_index)->setValue($printed);
+                }
+                if ($loop == 27) {
+                    if ($raw_data[$i]['is_rujuk']) {
                         $printed  = 'Sudah';
                     } else {
                         $printed  = 'Belum';
                     }
                     $worksheet->getCell($start_coll . $start_index)->setValue($printed);
                 }
-                if ($loop == 24) {
-                    $printed  = ($raw_data[$i]['verified_date'] == '' ? '' : $raw_data[$i]['verified_date']);
-                    $worksheet->getCell($start_coll . $start_index)->setValue($printed);
-                }
-                if ($loop == 25) {
-                    $printed  = ($raw_data[$i]['verificator_name'] == '' ? '' : $raw_data[$i]['verificator_name']);
-                    $worksheet->getCell($start_coll . $start_index)->setValue($printed);
-                }
-                if ($loop == 26) {
-                    $printed  = ($raw_data[$i]['tglpengaduan'] == '' ? '' : $raw_data[$i]['tglpengaduan']);
-                    $worksheet->getCell($start_coll . $start_index)->setValue($printed);
-                }
-                if ($loop == 27) {
-                    $printed  = ($raw_data[$i]['closed_date'] == '' ? '' : $raw_data[$i]['closed_date']);
-                    $worksheet->getCell($start_coll . $start_index)->setValue($printed);
-                }
                 if ($loop == 28) {
-                    if ($raw_data[$i]['fb']) {
+                    if ($raw_data[$i]['tl']) {
                         $printed  = 'Sudah';
                     } else {
                         $printed  = 'Belum';
@@ -999,19 +992,22 @@ class Excels extends CI_Controller
                     $worksheet->getCell($start_coll . $start_index)->setValue($printed);
                 }
                 if ($loop == 29) {
-                    $printed  = ($raw_data[$i]['fb_date'] == '' ? '' : $raw_data[$i]['fb_date']);
+                    $printed  = $raw_data[$i]['tl_date'];
+
                     $worksheet->getCell($start_coll . $start_index)->setValue($printed);
                 }
                 if ($loop == 30) {
-                    $printed  = $raw_data[$i]['waktu_layanan'];
+                    if ($raw_data[$i]['fb']) {
+                        $printed  = 'Sudah';
+                    } else {
+                        $printed  = 'Belum';
+                    }
 
                     $worksheet->getCell($start_coll . $start_index)->setValue($printed);
                 }
                 if ($loop == 31) {
-                    if ($raw_data[$i]['hk'] <= $raw_data[$i]['sla'])
-                        $printed  = "Y";
-                    else
-                        $printed  = "N";
+                    $printed  = $raw_data[$i]['fb_date'];
+
                     $worksheet->getCell($start_coll . $start_index)->setValue($printed);
                 }
                 if ($loop == 32) {
@@ -1020,10 +1016,31 @@ class Excels extends CI_Controller
                     $worksheet->getCell($start_coll . $start_index)->setValue($printed);
                 }
                 if ($loop == 33) {
-                    $printed  = $raw_data[$i]['iden_jk'];
+                    // if ($raw_data[$i]['hk'] <= $raw_data[$i]['sla'])
+                    //     $printed  = "Y";
+                    // else
+                    //     $printed  = "N";
+                    //target penyelesaian
+                    $printed  = $raw_data[$i]['sla'];
+                    $worksheet->getCell($start_coll . $start_index)->setValue($printed);
+                }
+
+                if ($loop == 34) {
+                    $printed  = $raw_data[$i]['waktu_layanan'];
 
                     $worksheet->getCell($start_coll . $start_index)->setValue($printed);
                 }
+                // if ($loop == 34) {
+                //     //
+                //     $printed  = $raw_data[$i]['waktu_layanan'];
+
+                //     $worksheet->getCell($start_coll . $start_index)->setValue($printed);
+                // }
+                // if ($loop == 34) {
+                //     $printed  = $raw_data[$i]['waktu_layanan'];
+
+                //     $worksheet->getCell($start_coll . $start_index)->setValue($printed);
+                // }
                 $start_coll++;
             }
             $start_index++;
