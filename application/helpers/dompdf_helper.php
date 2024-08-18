@@ -33,8 +33,8 @@ function pdf_create($html, $filename = '')
 
     if($filename != '')
     {
-		ob_end_clean();//new 19/05/22
-        //$dompdf->stream($filename . '.pdf');
+		// ob_end_clean();//new 19/05/22
+        // $dompdf->stream($filename . '.pdf');
 		$dompdf->stream($filename, array("Attachment" => false));
     }
     else

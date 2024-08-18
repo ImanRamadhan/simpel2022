@@ -79,20 +79,21 @@
 	<li class="has-submenu">
 		<a href="#"><i class="mdi mdi-buffer"></i>Database</a>
 		<ul class="submenu">
-			<li><a href="<?php echo site_url('databases'); ?>">Database</a></li>
-			<li><a href="<?php echo site_url('databasesv2'); ?>">Database (New)</a></li>
-			<li><a href="<?php echo site_url('databases/rujukan'); ?>">Database Rujukan</a></li>
-			<li><a href="<?php echo site_url('databasesv2/rujukan'); ?>">Database Rujukan (New)</a></li>
-			<li><a href="<?php echo site_url('databases/resume'); ?>">Resume Harian</a></li>
-			<li><a href="<?php echo site_url('databasesv2/yanblik'); ?>">Database Yanblik (New)</a></li>
-			<li><a href="<?php echo site_url('monitorings/monbalai'); ?>">Monitoring Balai</a></li>
+			<li><a href="<?php echo site_url('databases');?>">Database</a></li>
+			<li><a href="<?php echo site_url('databasesv2');?>">Database (New)</a></li>
+			<li><a href="<?php echo site_url('databases/rujukan');?>">Database Rujukan</a></li>
+			<li><a href="<?php echo site_url('databasesv2/rujukan');?>">Database Rujukan (New)</a></li>
+			<li><a href="<?php echo site_url('databases/resume');?>">Resume Harian</a></li>
+			<li><a href="<?php echo site_url('databasesv2/yanblik');?>">Database Yanblik (New)</a></li>
+			<li><a href="<?php echo site_url('monitorings/monbalai');?>">Monitoring Balai</a></li>
+			<li><a href="<?php echo site_url('databasesv2/sla');?>">Database SLA</a></li>
 		</ul>
 	</li>
 
 
 
 	<li class="has-submenu">
-		<a href="#"><i class="mdi mdi-buffer"></i>PPID</a>
+		<a href="#"><i class="mdi mdi-buffer"></i>PPID</a><span class="badge badge-danger badge-pill noti-icon-badge" id="ppid_need_action">0</span>
 		<ul class="submenu">
 			<li><a href="<?php echo site_url('ppid/list_all') ?>">Layanan Permintaan Informasi Publik</a></li>
 			<li><a href="<?php echo site_url('ppid/list_keberatan') ?>">Layanan Pengajuan Keberatan</a></li>

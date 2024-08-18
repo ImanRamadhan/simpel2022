@@ -446,6 +446,20 @@ function get_products()
 	return $array;
 }
 
+function get_range_age(){
+	$array = array(''=>'');
+	$CI =& get_instance();
+	$CI->load->model('Ticket');
+	$products = $CI->Ticket->get_range_age();
+		
+	foreach($products->result() as $o)
+	{
+		$array[$o->id] = $o->range;
+	}
+	
+	return $array;
+}
+
 function get_products_sla($info)
 {
 	$array = array(''=>'');

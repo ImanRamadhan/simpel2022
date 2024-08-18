@@ -54,6 +54,7 @@ class Ajax extends CI_Model
 		$this->db->where('ws', 0);
 		$this->db->where_in('info', array('P', 'I'));
 
+
 		$query = $this->db->get();
 		return $query->row()->cnt;
 	}
@@ -659,6 +660,19 @@ class Ajax extends CI_Model
 		//$this->db->or_where('direktorat7', $this->session->direktoratid);
 		$this->db->group_end();
 		$this->db->where_in('info', array('P', 'I'));
+    
+    $query = $this->db->get();
+		return $query->row()->cnt;
+	} 
+  
+	public function ppid_need_action()
+	{
+		
+		$this->db->select('COUNT(a.id) as cnt');
+		$this->db->from('desk_tickets a');
+		$this->db->where('jenis', 'PPID');
+		$this->db->where('owner_dir', $this->session->direktoratid);
+		$this->db->where("NOT EXISTS(SELECT b.ticket_id FROM desk_attachments_ppidtl b WHERE b.ticket_id = a.trackid)", '', FALSE);
 
 		$query = $this->db->get();
 		return $query->row()->cnt;
@@ -730,5 +744,41 @@ class Ajax extends CI_Model
 
 			return $this->db->query($sql)->row()->jumlah;
 		}
+	}
+
+	public function sla_meet($date1, $date2)
+	{
+			$sql = "
+				SELECT COUNT(1) as jumlah
+				FROM desk_tickets 
+				WHERE 
+					DATEDIFF(date(tl_date), date(tglpengaduan)) <= sla  
+					AND closed_date IS NOT NULL
+					AND kota = 'PUSAT' 
+					AND info in ('P','I')
+					AND tl = 1
+					AND tglpengaduan >= '".$date1."'
+					AND tglpengaduan <= '".$date2."';
+			";
+
+			return $this->db->query($sql)->row()->jumlah;
+	}
+
+	public function sla_notmeet($date1, $date2)
+	{
+			$sql = "
+				SELECT COUNT(1) as jumlah
+				FROM desk_tickets 
+				WHERE 
+					DATEDIFF(date(tl_date), date(tglpengaduan)) > sla  
+					AND closed_date IS NOT NULL
+					AND kota = 'PUSAT' 
+					AND info in ('P','I')
+					AND tl = 1
+					AND tglpengaduan >= '".$date1."'
+					AND tglpengaduan <= '".$date2."';
+			";
+			
+			return $this->db->query($sql)->row()->jumlah;
 	}
 }
