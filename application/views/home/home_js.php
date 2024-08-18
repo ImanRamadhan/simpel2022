@@ -430,4 +430,67 @@
 		});
 
 	});
+	
+	$.getJSON('<?php echo site_url('dashboard/layanan_pusat_fb');?>', function (data) {
+		$('#pusat_sudah_fb').html(data.done);
+		$('#pusat_belum_fb').html(data.notdone);
+		Morris.Donut({
+			element: 'donut-layanan-fb',
+			data: [
+			  {label: "Sudah di-FB", value: data.done},
+			  {label: "Belum di-FB", value: data.notdone}
+			],
+			resize: true,
+			colors:[ '#777edd', '#ff679b'], 
+			labelColor: '#888',
+			backgroundColor: 'transparent',
+			fillOpacity: 0.1,
+			formatter: function (x) { return x + ""}
+		});
+
+	});
+	
+	$.getJSON('<?php echo site_url('dashboard/belum_tl');?>', function (data) {
+		$('#belum_tl_red').html(data.red);
+		$('#belum_tl_orange').html(data.orange);
+		$('#belum_tl_black').html(data.black);
+		$('#belum_tl_green').html(data.green);
+		Morris.Donut({
+			element: 'donut-belum-tl',
+			data: [
+			  {label: "SLA <= 5 HK", value: data.red},
+			  {label: "SLA 5 - 14 HK", value: data.orange},
+			  {label: "SLA 14 - 60 HK", value: data.green},
+			  {label: "Melewati SLA", value: data.black}
+			],
+			resize: true,
+			colors:[ 'red', 'orange', 'green', 'black'], 
+			labelColor: '#888',
+			backgroundColor: 'transparent',
+			fillOpacity: 0.1,
+			formatter: function (x) { return x + ""}
+		});
+
+	});
+
+	$.getJSON('<?php echo site_url('dashboard/performa_sla');?>', function (data) {
+		$('#memenuhi_sla').html(data.meet);
+		$('#tidak_memenuhi_sla').html(data.notmeet);
+		Morris.Donut({
+			element: 'donut-performa-sla',
+			data: [
+			  {label: "Memenuhi SLA", value: data.meet},
+			  {label: "Tidak Memenuhi SLA", value: data.notmeet},
+			],
+			resize: true,
+			colors:[ 'red', 'orange'], 
+			labelColor: '#888',
+			backgroundColor: 'transparent',
+			fillOpacity: 0.1,
+			formatter: function (x) { return x + ""}
+		});
+
+	});
+	
+});
 </script>

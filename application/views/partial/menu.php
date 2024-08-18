@@ -78,13 +78,14 @@
 	<li class="has-submenu">
 		<a href="#"><i class="mdi mdi-buffer"></i>Database</a>
 		<ul class="submenu">
-			<li><a href="<?php echo site_url('databases'); ?>">Database</a></li>
-			<li><a href="<?php echo site_url('databasesv2'); ?>">Database (New)</a></li>
-			<li><a href="<?php echo site_url('databases/rujukan'); ?>">Database Rujukan</a></li>
-			<li><a href="<?php echo site_url('databasesv2/rujukan'); ?>">Database Rujukan (New)</a></li>
-			<li><a href="<?php echo site_url('databases/resume'); ?>">Resume Harian</a></li>
-			<li><a href="<?php echo site_url('databasesv2/yanblik'); ?>">Database Yanblik (New)</a></li>
-			<li><a href="<?php echo site_url('monitorings/monbalai'); ?>">Monitoring Balai</a></li>
+			<li><a href="<?php echo site_url('databases');?>">Database</a></li>
+			<li><a href="<?php echo site_url('databasesv2');?>">Database (New)</a></li>
+			<li><a href="<?php echo site_url('databases/rujukan');?>">Database Rujukan</a></li>
+			<li><a href="<?php echo site_url('databasesv2/rujukan');?>">Database Rujukan (New)</a></li>
+			<li><a href="<?php echo site_url('databases/resume');?>">Resume Harian</a></li>
+			<li><a href="<?php echo site_url('databasesv2/yanblik');?>">Database Yanblik (New)</a></li>
+			<li><a href="<?php echo site_url('monitorings/monbalai');?>">Monitoring Balai</a></li>
+			<li><a href="<?php echo site_url('databasesv2/sla');?>">Database SLA</a></li>
 		</ul>
 	</li>
 
