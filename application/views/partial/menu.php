@@ -84,6 +84,7 @@
 			<li><a href="<?php echo site_url('databases/resume');?>">Resume Harian</a></li>
 			<li><a href="<?php echo site_url('databasesv2/yanblik');?>">Database Yanblik (New)</a></li>
 			<li><a href="<?php echo site_url('monitorings/monbalai');?>">Monitoring Balai</a></li>
+			<li><a href="<?php echo site_url('databasesv2/sla');?>">Database SLA</a></li>
 		</ul>
 	</li>
 	

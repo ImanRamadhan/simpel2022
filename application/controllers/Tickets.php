@@ -185,6 +185,26 @@ class Tickets extends Secure_Controller
 		$this->load->view('tickets/manage_sla', $data);
 	}
 
+	public function list_sla_perform()
+	{
+		$data['title'] = 'Layanan Belum di-TL';
+		$data['table_headers'] = $this->xss_clean(get_my_tickets_manage_table_headers());
+		
+		$data['city_filter'] = $this->input->get('kota');
+		$data['tgl1'] = $this->input->get('tgl1');
+		$data['tgl2'] = $this->input->get('tgl2');
+		
+		$data['tl_filter'] = $this->input->get('tl');
+		//$data['status_filter'] = $this->input->get('status');
+		$data['sla_filter'] = $this->input->get('sla');
+		
+		$data['filters'] = array();
+				
+		$this->setup_search($data);
+		
+		$this->load->view('tickets/manage_sla_perform', $data);
+	}
+
 	/*
 	Returns Items table data rows. This will be called with AJAX.
 	*/

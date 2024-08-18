@@ -284,6 +284,25 @@ $(document).ready(function()
 		});
 
 	});
+
+	$.getJSON('<?php echo site_url('dashboard/performa_sla');?>', function (data) {
+		$('#memenuhi_sla').html(data.meet);
+		$('#tidak_memenuhi_sla').html(data.notmeet);
+		Morris.Donut({
+			element: 'donut-performa-sla',
+			data: [
+			  {label: "Memenuhi SLA", value: data.meet},
+			  {label: "Tidak Memenuhi SLA", value: data.notmeet},
+			],
+			resize: true,
+			colors:[ 'red', 'orange'], 
+			labelColor: '#888',
+			backgroundColor: 'transparent',
+			fillOpacity: 0.1,
+			formatter: function (x) { return x + ""}
+		});
+
+	});
 	
 });
 </script>
