@@ -2499,6 +2499,10 @@ th {
   background-color: #f5fffa;
 }
 
+.unread-mail {
+  background-color: #fff700;
+}
+
 .table thead tr th {
   font-weight: 500;
   color: #6c757d;

@@ -52,7 +52,7 @@ class Rujukan extends Secure_Controller
 		$data['city_filter'] = $this->input->get('kota');
 		$data['tgl1'] = $this->input->get('tgl1');
 		$data['tgl2'] = $this->input->get('tgl2');
-		$data['status'] = $this->input->get('status');
+		$data['status'] = $this->input->get('status') == null ? '0' : $this->input->get('status');
 
 		$data['status_filter'] = '';
 

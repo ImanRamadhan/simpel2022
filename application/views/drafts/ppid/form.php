@@ -167,6 +167,9 @@
 		$('#iden_provinsi2').hide();
 		$('#iden_kota2').hide();
 		$('#prod_provinsi2').hide();
+    
+    //klasifikasi - Add Iman 18 Agustus 2024
+	  $('#div-lainnya').hide();
 
 		<?php if (!$item_info->is_rujuk): ?>
 			/*$('#dir1').hide();$('#sla1').hide();
@@ -273,6 +276,16 @@
 			});
 		});
 
+    $('#kategori').on('change', function(){
+		let kategori = $('#kategori option:selected').text();
+		if (kategori == 'Lainnya') {
+        $('#div-lainnya').show();
+        $('#kategori_lainnya').val('');
+      } else {
+        $('#div-lainnya').hide();
+        $('#kategori_lainnya').val('');
+      }
+    });
 
 		$('#iden_nama').focus();
 

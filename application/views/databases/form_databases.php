@@ -140,6 +140,7 @@
 								<th style="vertical-align : middle;text-align:center;">Tanggal Verifikasi</th>
 								<th style="vertical-align : middle;text-align:center;">Verifikator</th>
 								<th style="vertical-align : middle;text-align:center;">Tgl Layanan</th>
+								<th style="vertical-align : middle;text-align:center;">Jumlah SLA</th>
 								<th style="vertical-align : middle;text-align:center;">Tgl Closed</th>
 								<th style="vertical-align : middle;text-align:center;">Status FB</th>
 								<th style="vertical-align : middle;text-align:center;">Tanggal FB</th>
@@ -202,32 +203,34 @@
 								echo ($row['rujuk_tl_hr'] > 3)?'Ya':'Tidak'; 
 							else
 								echo 'Tidak';*/
-											?></td>-->
-									<td><?php echo $row['tl'] ? 'Sudah' : 'Belum'; ?></td>
-									<td><?php echo $row['tl_date']; ?></td>
-									<td><?php echo $row['is_verified'] ? 'Sudah' : 'Belum'; ?></td>
-									<td><?php echo $row['verified_date']; ?></td>
-									<td><?php echo $row['verificator_name']; ?></td>
-
-									<td><?php echo $row['tglpengaduan']; ?></td>
-									<td><?php echo $row['closed_date']; ?></td>
-									<td><?php echo $row['fb'] ? 'Sudah' : 'Belum'; ?></td>
-									<td><?php echo $row['fb_date']; ?></td>
-									<td align="center"><?php echo $row['hk']; ?></td>
-									<td align="center"><?php
-
-														if ($row['hk'] <= $row['sla']) {
-															echo 'Y';
-														} else
-															echo 'N';
-
-														?></td>
-									<td align="center"><?php echo $row['kota']; ?></td>
-								</tr>
-							<?php endforeach; ?>
-						</tbody>
-					</table>
-
+							?></td>-->
+							<td><?php echo $row['tl']?'Sudah':'Belum'; ?></td>
+							<td><?php echo $row['tl_date']; ?></td>
+							<td><?php echo $row['is_verified']?'Sudah':'Belum'; ?></td>
+							<td><?php echo $row['verified_date']; ?></td>
+							<td><?php echo $row['verificator_name']; ?></td>
+							
+							<td><?php echo $row['tglpengaduan']; ?></td>
+							<td><?php echo $row['sla']; ?></td>
+							<td><?php echo $row['closed_date']; ?></td>
+							<td><?php echo $row['fb']?'Sudah':'Belum'; ?></td>
+							<td><?php echo $row['fb_date']; ?></td>
+							<td align="center"><?php echo $row['hk']; ?></td>
+							<td align="center"><?php 
+								
+								if($row['hk'] <= $row['sla'] && $row['tl'])
+								{
+									echo 'Y';
+								}
+								else
+									echo 'N';
+									
+								?></td>
+							<td align="center"><?php echo $row['kota']; ?></td>
+						</tr>
+						<?php endforeach;?>
+            </tbody>
+          </table>
 				</div>
 			</div>
 		</div>

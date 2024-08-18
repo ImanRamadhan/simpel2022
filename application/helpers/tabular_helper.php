@@ -1551,13 +1551,16 @@ function get_notifikasi_data_row($item, $no)
 		'created_date' => $item->created_date,
 		'lastchange' => time_since($item->created_date),
 		'ticket_id' => $item->ticket_id,
-		'edit' => anchor(
-			$controller_name . "/view/$item->id",
-			'<i class="fa fa-search-plus" aria-hidden="true"></i>',
-			array('class' => '', 'data-btn-submit' => $CI->lang->line('common_submit'), 'title' => $CI->lang->line($controller_name . '_view'))
-		)
-	);
-	$data['is_read'] = ($item->is_read) ? "<i class='fa fa-envelope-open'></i>" : "<i class='fa fa-envelope'></i>";
+		'edit' => anchor($controller_name."/view/$item->id", '<i class="fa fa-search-plus" aria-hidden="true"></i>',
+			array('class'=>'', 'data-btn-submit' => $CI->lang->line('common_submit'), 'title'=>$CI->lang->line($controller_name.'_view')))
+		);
+	if ($item->is_read) {
+		$data['is_read'] = anchor($controller_name."/view/$item->id", '<i class="fa fa-envelope-open" style="color: black"></i>',
+		array('class'=>'', 'data-btn-submit' => $CI->lang->line('common_submit'), 'title'=>$CI->lang->line($controller_name.'_view')));
+	} else {
+		$data['is_read'] = anchor($controller_name."/view/$item->id", '<div class="unread-mail"><i class="fa fa-envelope"></i><div>',
+		array('class'=>'', 'data-btn-submit' => $CI->lang->line('common_submit'), 'title'=>$CI->lang->line($controller_name.'_view')));
+	}
 	return $data;
 }
 
@@ -1709,12 +1712,11 @@ function get_database_data_row($item, $no)
 		'hk' => $item->hk,
 		'sla' => (($item->hk <= $item->sla) ? 'Y' : 'N'),
 		'closed_date' => $item->closed_date,
-	);
-
-	$data['status'] = get_status($item->status);
-
-
-
+		'jumlahsla' => $item->sla,
+		);
+	
+	$data['status'] = get_status($item->status); 
+	
 	return $data;
 }
 

@@ -321,7 +321,15 @@ class Dashboard extends Secure_Controller
 		$cnt = $this->Ajax->rujukan_masuk_not_closed($this->session->dashboard_date1, $this->session->dashboard_date2);
 		echo json_encode($cnt);
 	}
-
+  
+	public function rujukan_masuk_not_closed_menu()
+	{
+		$dateStartFilter = date('Y-01-01');
+		$dateEndFilter = date('Y-m-d');
+		$cnt = $this->Ajax->rujukan_masuk_not_closed_menu($dateStartFilter, $dateEndFilter);
+    echo json_encode($cnt);
+	}
+  
 	public function ppid_need_action()
 	{
 		$cnt = $this->Ajax->ppid_need_action();
