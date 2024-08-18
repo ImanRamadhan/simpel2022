@@ -72,7 +72,7 @@ class Databasesv2 extends Secure_Controller
 		
 	}
     
-    public function index()
+  public function index()
 	{
         $data['title'] = 'Database Layanan';
         $data['filters'] = array(
@@ -84,6 +84,19 @@ class Databasesv2 extends Secure_Controller
 		$data['layanan'] = array();
 		
 		$this->load->view('databases2/manage_layanan', $data);
+	}
+
+	public function sla()
+	{
+  	$data['title'] = 'Database SLA';
+    $data['filters'] = array();
+    $data['status_filter'] = '';
+        
+		$this->setup_search($data);
+		
+		$data['layanan'] = array();
+		
+		$this->load->view('databases2/manage_sla', $data);
 	}
 	
 	public function yanblik()

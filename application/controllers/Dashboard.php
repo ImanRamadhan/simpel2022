@@ -295,6 +295,20 @@ class Dashboard extends Secure_Controller
 		);
 	}
 
+	public function performa_sla()
+	{
+		$meet = $this->Ajax->sla_meet($this->session->dashboard_date1, $this->session->dashboard_date2);
+		$notmeet = $this->Ajax->sla_notmeet($this->session->dashboard_date1, $this->session->dashboard_date2);
+		
+		echo json_encode(
+			array(
+				'meet' => $meet,
+				'notmeet' => $notmeet,
+			)
+		);
+		
+	}
+	
 	//footer
 	public function rujukan_keluar_replied()
 	{

@@ -721,4 +721,40 @@ class Ajax extends CI_Model
 			return $this->db->query($sql)->row()->jumlah;
 		}
 	}
+
+	public function sla_meet($date1, $date2)
+	{
+			$sql = "
+				SELECT COUNT(1) as jumlah
+				FROM desk_tickets 
+				WHERE 
+					DATEDIFF(date(tl_date), date(tglpengaduan)) <= sla  
+					AND closed_date IS NOT NULL
+					AND kota = 'PUSAT' 
+					AND info in ('P','I')
+					AND tl = 1
+					AND tglpengaduan >= '".$date1."'
+					AND tglpengaduan <= '".$date2."';
+			";
+
+			return $this->db->query($sql)->row()->jumlah;
+	}
+
+	public function sla_notmeet($date1, $date2)
+	{
+			$sql = "
+				SELECT COUNT(1) as jumlah
+				FROM desk_tickets 
+				WHERE 
+					DATEDIFF(date(tl_date), date(tglpengaduan)) > sla  
+					AND closed_date IS NOT NULL
+					AND kota = 'PUSAT' 
+					AND info in ('P','I')
+					AND tl = 1
+					AND tglpengaduan >= '".$date1."'
+					AND tglpengaduan <= '".$date2."';
+			";
+			
+			return $this->db->query($sql)->row()->jumlah;
+	}
 }
