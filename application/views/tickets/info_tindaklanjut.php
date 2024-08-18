@@ -21,9 +21,10 @@
 							<tr>
 								<th>Nama Unit Rujukan</th>
 								<th class="text-center">SLA Unit Teknis (HK)</th>
+								<th class="text-center">Tanggal Dirujuk</th>
 								<th class="text-center">Status Rujukan</th>
 								<th class="text-center">Waktu Penyelesaian (HK)</th>
-								<?php if($item_info->owner == $this->session->id): ?>
+								<?php if($item_info->owner == $this->session->id || $this->session->role_id == 1): ?>
 								<th class="text-center"></th>
 								<?php endif; ?>
 							</tr>
@@ -33,6 +34,7 @@
 								<tr>
 									<td><?php echo print_dir_rujukan($item_info->direktorat); ?></td>
 									<td align="center"><?php echo $item_info->d1_prioritas;?></td>
+									<td align="center"><?php echo isset($rujukan_info->tgl_rujuk1) ? date("Y-m-d", strtotime($rujukan_info->tgl_rujuk1)) : ""?></td>
 									<td align="center">
 									<?php /*echo ($rujukan_info->status_rujuk1)?'Sudah TL':'Belum TL';*/ ?>
 									<?php
@@ -47,8 +49,8 @@
 									
 									?>
 									</td>
-									<td align="center"><?php echo (($item_info->direktorat)?$rujukan_info->hk_rujukan1:'')?></td>
-									<?php if($item_info->owner == $this->session->id): ?>
+									<td align="center"><?php echo (($item_info->direktorat) ? $rujukan_info->hk_rujukan1:'')?></td>
+									<?php if($item_info->owner == $this->session->id || $this->session->role_id == 1): ?>
 									<td align="center">
 									<?php
 									if($rujukan_info->status_rujuk1)
@@ -75,6 +77,7 @@
 								<tr>
 									<td><?php echo print_dir_rujukan($item_info->direktorat2); ?></td>
 									<td align="center"><?php echo $item_info->d2_prioritas;?></td>
+									<td align="center"><?php echo isset($rujukan_info->tgl_rujuk2) ? date("Y-m-d", strtotime($rujukan_info->tgl_rujuk2)) : ""?></td>
 									<td align="center">
 									<?php /*echo ($rujukan_info->status_rujuk1)?'Sudah TL':'Belum TL';*/ ?>
 									<?php
@@ -90,7 +93,7 @@
 									?>
 									</td>
 									<td align="center"><?php echo (($item_info->direktorat2)?$rujukan_info->hk_rujukan2:'')?></td>
-									<?php if($item_info->owner == $this->session->id): ?>
+									<?php if($item_info->owner == $this->session->id || $this->session->role_id == 1): ?>
 									<td align="center">
 									<?php
 									if($rujukan_info->status_rujuk2)
@@ -115,6 +118,7 @@
 								<tr>
 									<td><?php echo print_dir_rujukan($item_info->direktorat3); ?></td>
 									<td align="center"><?php echo $item_info->d3_prioritas;?></td>
+									<td align="center"><?php echo isset($rujukan_info->tgl_rujuk3) ? date("Y-m-d", strtotime($rujukan_info->tgl_rujuk3)) : ""?></td>
 									<td align="center">
 									<?php /*echo ($rujukan_info->status_rujuk1)?'Sudah TL':'Belum TL';*/ ?>
 									<?php
@@ -130,7 +134,7 @@
 									?>
 									</td>
 									<td align="center"><?php echo (($item_info->direktorat3)?$rujukan_info->hk_rujukan3:'')?></td>
-									<?php if($item_info->owner == $this->session->id): ?>
+									<?php if($item_info->owner == $this->session->id || $this->session->role_id == 1): ?>
 									<td align="center">
 									<?php
 									if($rujukan_info->status_rujuk3)
@@ -155,6 +159,7 @@
 								<tr>
 									<td><?php echo print_dir_rujukan($item_info->direktorat4); ?></td>
 									<td align="center"><?php echo $item_info->d4_prioritas;?></td>
+									<td align="center"><?php echo isset($rujukan_info->tgl_rujuk4) ? date("Y-m-d", strtotime($rujukan_info->tgl_rujuk4)) : ""?></td>
 									<td align="center">
 									<?php /*echo ($rujukan_info->status_rujuk1)?'Sudah TL':'Belum TL';*/ ?>
 									<?php
@@ -170,7 +175,7 @@
 									?>
 									</td>
 									<td align="center"><?php echo (($item_info->direktorat4)?$rujukan_info->hk_rujukan4:'')?></td>
-									<?php if($item_info->owner == $this->session->id): ?>
+									<?php if($item_info->owner == $this->session->id || $this->session->role_id == 1): ?>
 									<td align="center">
 									<?php
 									if($rujukan_info->status_rujuk4)
@@ -195,6 +200,7 @@
 								<tr>
 									<td><?php echo print_dir_rujukan($item_info->direktorat5); ?></td>
 									<td align="center"><?php echo $item_info->d5_prioritas;?></td>
+									<td align="center"><?php echo isset($rujukan_info->tgl_rujuk5) ? date("Y-m-d", strtotime($rujukan_info->tgl_rujuk5)) : ""?></td>
 									<td align="center">
 									<?php /*echo ($rujukan_info->status_rujuk1)?'Sudah TL':'Belum TL';*/ ?>
 									<?php
@@ -210,7 +216,7 @@
 									?>
 									</td>
 									<td align="center"><?php echo (($item_info->direktorat5)?$rujukan_info->hk_rujukan5:'')?></td>
-									<?php if($item_info->owner == $this->session->id): ?>
+									<?php if($item_info->owner == $this->session->id || $this->session->role_id == 1): ?>
 									<td align="center">
 									<?php
 									if($rujukan_info->status_rujuk5)

@@ -208,6 +208,9 @@ class Drafts extends Secure_Controller
 		
 		$data['profesi'] = get_profesi();
 		$data['products'] = get_products();
+
+		$data['range_age'] = get_range_age();
+
 		$data['sumberdata'] = array('' => '','SP4N' => 'SP4N','PPID'=>'PPID');
 		
 		//$data['klasifikasi'] = get_klasifikasi_sla($item_info->kategori, $item_info->info);
@@ -309,6 +312,7 @@ class Drafts extends Secure_Controller
 		
 		$data['profesi'] = get_profesi();
 		
+		$data['range_age'] = get_range_age();
 		
 		$data['products'] = get_products();
 		//$data['products'] = get_products_sla('P');
@@ -387,7 +391,8 @@ class Drafts extends Secure_Controller
 		
 		$data['products'] = get_products();
 		//$data['products'] = get_products_sla('P');
-		
+
+		$data['range_age'] = get_range_age();
 		
 		$data['sumberdata'] = array('' => '','SP4N' => 'SP4N','PPID'=>'PPID');
 		
@@ -465,6 +470,8 @@ class Drafts extends Secure_Controller
 		
 		$data['products'] = get_products();
 		//$data['products'] = get_products_sla('P');
+
+		$data['range_age'] = get_range_age();
 		
 		
 		$data['sumberdata'] = array('' => '','SP4N' => 'SP4N' /*,'PPID'=>'PPID'*/);
@@ -602,6 +609,7 @@ class Drafts extends Secure_Controller
 		$info =  $this->input->post('info');
 		$penerima =  $this->input->post('penerima');
 		$kategori =  $this->input->post('kategori');
+		$kategori_lainnya = $this->input->post('kategori_lainnya');
 		$submited_via =  $this->input->post('submited_via');
 		$jenis =  $this->input->post('jenis');
 		$shift =  $this->input->post('shift');
@@ -874,6 +882,7 @@ class Drafts extends Secure_Controller
 			'info' => $info,
 			'penerima' => $penerima,
 			'kategori' => $kategori,
+			'kategori_lainnya' => $kategori_lainnya,
 			'submited_via' => $submited_via,
 			'jenis' => $jenis,
 			'shift' => $shift,
@@ -1699,14 +1708,7 @@ class Drafts extends Secure_Controller
 			'keberatan_perihal' => $keberatan_perihal,
 			'keberatan_isi_surat' => $keberatan_isi_surat,
 			'keberatan_nama_pejabat' => $keberatan_nama_pejabat,*/
-			
-			
-			
 		);
-		
-		
-		
-		
 		$tipe_medsos =  $this->input->post('tipe_medsos');
 		if(!empty($submited_via) && $submited_via != 'Medsos')
 			$tipe_medsos = '';
@@ -1831,7 +1833,6 @@ class Drafts extends Secure_Controller
 			
 		if($this->Draft->save($item_data, $item_id))
 		{
-			
 			$message = 'Data berhasil disimpan';	
 			
 			$ppid_data['id'] = $item_data['id'];

@@ -50,6 +50,10 @@
 					$('#rujukan_masuk_not_closed').html(data);
 				});
 				<?php endif; ?>
+
+				$.getJSON('<?php echo site_url('dashboard/ppid_need_action');?>', function (data) {
+					$('#ppid_need_action').html(data);
+				});
 				
 			});
 		</script>

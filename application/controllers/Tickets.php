@@ -185,6 +185,26 @@ class Tickets extends Secure_Controller
 		$this->load->view('tickets/manage_sla', $data);
 	}
 
+	public function list_sla_perform()
+	{
+		$data['title'] = 'Layanan Belum di-TL';
+		$data['table_headers'] = $this->xss_clean(get_my_tickets_manage_table_headers());
+		
+		$data['city_filter'] = $this->input->get('kota');
+		$data['tgl1'] = $this->input->get('tgl1');
+		$data['tgl2'] = $this->input->get('tgl2');
+		
+		$data['tl_filter'] = $this->input->get('tl');
+		//$data['status_filter'] = $this->input->get('status');
+		$data['sla_filter'] = $this->input->get('sla');
+		
+		$data['filters'] = array();
+				
+		$this->setup_search($data);
+		
+		$this->load->view('tickets/manage_sla_perform', $data);
+	}
+
 	/*
 	Returns Items table data rows. This will be called with AJAX.
 	*/
@@ -365,6 +385,11 @@ class Tickets extends Secure_Controller
 			$this->Notification->mark_as_read($item_info->id, $this->session->id);
 		
 		$data['upload_config'] = $this->config->item('upload_setting');
+
+		if($item_info->jenis == 'PPID'){
+			$attachments_ppidtl = $this->Ticket->get_attachments_ppidtl($item_info->trackid,0);
+			$data["att_ppidtl"] = $attachments_ppidtl->row();
+		}
 		
 		$this->load->view('tickets/view', $data);
 	}
@@ -401,6 +426,9 @@ class Tickets extends Secure_Controller
 		$data['provinces2'] = get_provinces();
 		$data['profesi'] = get_profesi();
 		$data['products'] = get_products();
+
+		$data['range_age'] = get_range_age();
+
 		//$data['products'] = get_products_sla($item_info->info);
 		$data['sumberdata'] = array('' => '','SP4N' => 'SP4N','PPID'=>'PPID');
 		
@@ -661,6 +689,55 @@ class Tickets extends Secure_Controller
 				$this->session->set_flashdata('flash', $flash_msg);
 			}
 			redirect('tickets/view/'.$item_id);
+		}
+	}
+
+	public function confirm_upload_signed_formulir($id, $ticketid)
+	{
+		$data['url_post'] = site_url('tickets/save_signed_formulir/'.$id.'/'.$ticketid);
+		$data['message'] = 'Silakan upload bukti formulir PPID yang sudah ditandatangani';
+		$data['upload_url'] = site_url('tickets/upload_signed_formulir/'.$id.'/'.$ticketid);
+		$data['id'] = $id;
+		$data['ticketid'] = $ticketid;
+		$this->load->view('tickets/confirm_upload_signed_formulir', $data);
+	}
+
+	public function upload_signed_formulir($id, $ticket_id){
+		$this->load->library('upload', $this->config->item('upload_setting'));
+		
+		$files = $_FILES;
+		$cpt = count($_FILES ['file'] ['name']);
+
+		for ($i = 0; $i < $cpt; $i++)
+		{
+			$name = $files ['file'] ['name'] [$i];
+			$_FILES ['file'] ['name'] = $name;
+			$_FILES ['file'] ['type'] = $files ['file'] ['type'] [$i];
+			$_FILES ['file'] ['tmp_name'] = $files ['file'] ['tmp_name'] [$i];
+			$_FILES ['file'] ['error'] = $files ['file'] ['error'] [$i];
+			$_FILES ['file'] ['size'] = $files ['file'] ['size'] [$i];
+		
+			if($this->upload->do_upload('file'))
+			{
+				$data = $this->upload->data();
+				$att_data = array(
+					'saved_name' => $data['file_name'],
+					'real_name' => $data['orig_name'],
+					'size' => $files ['file'] ['size'] [$i],
+					'ticket_id' => $ticket_id,
+					'mode' => $this->input->post('mode')
+				);
+				
+				if($this->Ticket->save_attachment_ppidtl($att_data))
+				{
+					$id = $att_data['id'];
+					echo json_encode(array('id' => $id, 'url' => base_url().'uploads/files/'.$att_data['saved_name'], 'error'=>0,'message'=>''));
+				}
+			}
+			else
+			{
+				echo json_encode(array('error' => 1, 'message' => $this->upload->display_errors()));
+			}
 		}
 	}
 	
@@ -1082,6 +1159,25 @@ class Tickets extends Secure_Controller
 				$rujukan_data = array(
 					'rid' => $item_id
 				);
+
+				if(isset($item_data['direktorat']) && $item_data['direktorat'] != "" && $item_data['direktorat'] != 0){
+					$rujukan_data['tgl_rujuk1'] = date("Y-m-d H:i:s");
+				} 
+
+				if(isset($item_data['direktorat2']) && $item_data['direktorat2'] != "" && $item_data['direktorat2'] != 0){
+					$rujukan_data['tgl_rujuk2'] = date("Y-m-d H:i:s");
+				}
+				if(isset($item_data['direktorat3']) && $item_data['direktorat3'] != "" && $item_data['direktorat3'] != 0) {
+					$rujukan_data['tgl_rujuk3'] = date("Y-m-d H:i:s");
+				}
+				if(isset($item_data['direktorat4']) && $item_data['direktorat4'] != "" && $item_data['direktorat4'] != 0) {
+					$rujukan_data['tgl_rujuk4'] = date("Y-m-d H:i:s");
+				}
+				if(isset($item_data['direktorat5']) && $item_data['direktorat5'] != "" && $item_data['direktorat5'] != 0) {
+					$rujukan_data['tgl_rujuk5'] = date("Y-m-d H:i:s");
+				}
+
+				
 				$this->Ticket->save_rujukan($rujukan_data, $item_id);
 			}
 			else
@@ -1103,13 +1199,6 @@ class Tickets extends Secure_Controller
 	}
 
 	private function handleNotifikasi($item_info){
-		$exist_trackid = $this->Notification->get_by_ticketid($item_info->trackid);
-
-		// extract list of notif need to be sent to new assigned user
-		foreach($exist_trackid->result() as $notif) {
-			$notif_candidate[$notif->message] = $notif;
-		}
-		
 		$list_directorate = [];
 
 		$dir1 =  $this->input->post('dir1');
@@ -1118,26 +1207,61 @@ class Tickets extends Secure_Controller
 		$dir4 =  $this->input->post('dir4');
 		$dir5 =  $this->input->post('dir5');
 
-		if(!empty($dir1)) array_push($list_directorate, $dir1);
-		if(!empty($dir2)) array_push($list_directorate, $dir2);
-		if(!empty($dir3)) array_push($list_directorate, $dir3);
-		if(!empty($dir4)) array_push($list_directorate, $dir4);
-		if(!empty($dir5)) array_push($list_directorate, $dir5);
+		if(!empty($dir1) && $dir1 != $item_info->direktorat){
+			array_push($list_directorate, $dir1);
+		} 
+		
+		if(!empty($dir2) && $dir2 != $item_info->direktorat2){
+			array_push($list_directorate, $dir2);
+		} 
+		if(!empty($dir3) && $dir3 != $item_info->direktorat3){
+			array_push($list_directorate, $dir3);
+		} 
+		if(!empty($dir4) && $dir4 != $item_info->direktorat4){
+			array_push($list_directorate, $dir4);
+		} 
+		if(!empty($dir5) && $dir5 != $item_info->direktorat5) {
+			array_push($list_directorate, $dir5);
+		} 
+
+		if(count($list_directorate) == 0){
+			return;
+		}
 
 		// extract list of user eligible to be sent by notif
-		$user_need_notified = $this->Notification->get_user_need_notified($item_info->trackid, $list_directorate);
+		$user_need_notified = $this->User->get_users_in_dir($list_directorate);
 
+		// echo json_encode($user_need_notified->result());
+
+		$timestamp = date('Y-m-d H:i:s');
 		// save notif to eligible user
 		foreach($user_need_notified->result() as $user){
-			foreach($notif_candidate as $notif){
-				$data = array(
-					"title" => $notif->title,
-					"message" => $notif->message,
-					"ticket_id" => $notif->ticket_id,
-					"user_id" => $user->id,
-					"created_date" => date('Y-m-d H:i:s')
+			$data = array(
+				'trackid' => $item_info->trackid,
+				'isu_topik' => $item_info->isu_topik
+			);
+			$email_body = $this->load->view('mail/ticket_assigned_to_you', $data, TRUE);
+			$data = array(
+				"title" => 'Rujukan',
+				"message" => $email_body,
+				"ticket_id" => $item_info->trackid,
+				"user_id" => $user->id,
+				"created_date" => date('Y-m-d H:i:s')
+			);
+			$this->Notification->save($data);
+
+			if(strlen($user->no_hp)>=10)
+			{
+				//insert sms
+				$konten = '[SIMPELLPK]Yth. Bpk/Ibu '.$user->name.', Terdapat rujukan untuk Anda dengan ID '.$item_info->trackid;
+				$sms_data = array(
+					'no_tujuan' => $user->no_hp,
+					'konten' => $konten,
+					'created_date' => $timestamp,
+					'ticket_id' => $item_info->trackid,
+					'is_sent' => 0
 				);
-				$this->Notification->save($data);
+				$this->Draft->insert_sms($sms_data);
 			}
 		}
 	}
@@ -2405,6 +2529,7 @@ class Tickets extends Secure_Controller
 		$item_id = (int)$item_id;
 		
 		$item_info = $this->Ticket->get_info($item_id);
+	
 		foreach(get_object_vars($item_info) as $property => $value)
 		{
 			$item_info->$property = $this->xss_clean($value);
@@ -2420,7 +2545,7 @@ class Tickets extends Secure_Controller
 		
 		$this->load->helper(array('dompdf', 'file'));
 		
-		$html = $this->load->view('tickets/print_pdf', $data, TRUE);
+		$html = $this->load->view('tickets/print_pdf', $data,TRUE);
 		$filename = rand(0,1000);
 		pdf_create($html, $filename);
 		

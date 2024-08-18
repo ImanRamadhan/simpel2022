@@ -141,14 +141,7 @@
 		<div class="form-group form-group-sm row">
 			<?php echo form_label('Usia', 'usia', array('class'=>'required col-form-label col-sm-3')); ?>
 			<div class='col-sm-3'>
-				<?php echo form_input(array(
-					'name'=>'usia',
-					'id'=>'usia',
-					'type'=>'number',
-					'min' => 0,
-					'class'=>'form-control form-control-sm',
-					'value'=>$item_info->usia)
-					);?>
+				<?php echo form_dropdown('usia', $range_age, $item_info->usia, 'class="form-control form-control" id="usia" ');?>
 			</div>
 		</div>
 		

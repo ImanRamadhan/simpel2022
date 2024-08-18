@@ -229,6 +229,194 @@ class Database extends CI_Model
 
 		return $this->db->get();
 	}
+
+	/*
+	Get number of rows SLA
+	*/
+	public function get_sla_found_rows($search, $filters)
+	{
+		return $this->search_sla($search, $filters, 0, 0, 'desk_tickets.id', 'desc', TRUE);
+	}
+
+	/*
+	Database SLA
+	*/
+	public function search_sla($search, $filters, $rows = 0, $limit_from = 0, $sort = 'desk_tickets.id', $order = 'asc', $count_only = FALSE)
+	{
+		// get_found_rows case
+		if($count_only == TRUE)
+		{
+			$this->db->select('COUNT(desk_tickets.id) as count');
+		}
+		else
+		{
+			
+			$this->db->select('desk_tickets.id, trackid, iden_nama, iden_alamat, iden_telp, iden_email');
+			$this->db->select('lastchange, status, prod_masalah as problem, info, jawaban, keterangan, penerima ');
+			$this->db->select('isu_topik, klasifikasi, subklasifikasi, kota, waktu, shift');
+			$this->db->select('submited_via as sarana, petugas_entry, tl, tl_date, verified_date');
+			$this->db->select('is_verified, sla, closed_date, fb, fb_date, jenis');
+			//$this->db->select('status, is_rujuk, tl, fb, is_verified, hk, is_sent, lastchange, prod_masalah as problem');
+			/*$this->db->select("CASE WHEN is_rujuk = '1' AND status = '3' THEN hk WHEN is_rujuk = '1' AND status <> '3' THEN  5 * ((DATEDIFF( NOW() , dt) ) DIV 7) + MID('0123455501234445012333450122234501101234000123450', 7 * WEEKDAY(dt) + WEEKDAY(NOW()) + 1, 1) - (select count(tgl) from desk_holiday where tgl between dt AND NOW()) ELSE 0 END as outstanding");*/
+			$this->db->select('TOTAL_HK(tglpengaduan, tl_date) as hk');
+			$this->db->select("date_format(tglpengaduan,'%d/%m/%Y') as tglpengaduan");
+			$this->db->select("date_format(closed_date,'%d/%m/%Y') as closed_date");
+			$this->db->select("date_format(tl_date,'%d/%m/%Y') as tl_date");
+			$this->db->select("date_format(fb_date,'%d/%m/%Y') as fb_date");
+			$this->db->select("date_format(verified_date,'%d/%m/%Y') as verified_date");
+			$this->db->select('desk_categories.name as jenis_komoditi');
+			$this->db->select('desk_profesi.name as pekerjaan');
+			$this->db->select('desk_users.name as verificator_name');
+		}
+		
+		$this->db->from('desk_tickets');
+		$this->db->join('desk_categories', 'desk_categories.id=desk_tickets.kategori','left');
+		$this->db->join('desk_profesi', 'desk_profesi.id=desk_tickets.iden_profesi','left');
+		$this->db->join('desk_users', 'desk_users.id=desk_tickets.verified_by','left');
+
+		$this->db->where('closed_date IS NOT NULL');
+		$this->db->where('tl', 1);
+		$this->db->where('tl_date IS NOT NULL');
+		
+		if(!empty($filters['tgl1']) && !empty($filters['tgl2']))
+		{
+			$this->db->where('tglpengaduan >=', $filters['tgl1']);
+			$this->db->where('tglpengaduan <=', $filters['tgl2']);
+		}
+		
+		if($this->session->city == 'PUSAT')
+		{
+			if(!empty($filters['kota']))
+			{
+				$this->apply_filter($this->db, $filters['kota']);
+			}
+		}
+		elseif($this->session->city == 'UNIT TEKNIS')
+		{
+			$this->db->where('owner_dir', $this->session->direktoratid);
+		}
+		else
+		{
+			$this->db->where('kota', $this->session->city);
+		}
+		
+		if(!empty($filters['keyword']))
+		{
+			$field = $filters['field'];
+			if($field == 'trackid')
+			{
+				$this->db->where('desk_tickets.trackid', $filters['keyword']);
+			}
+			elseif($field == 'cust_nama')
+			{
+				$this->db->like('desk_tickets.iden_nama', $filters['keyword']);
+			}
+			elseif($field == 'cust_email')
+			{
+				$this->db->like('desk_tickets.iden_email', $filters['keyword']);
+			}
+			elseif($field == 'cust_telp')
+			{
+				$this->db->like('desk_tickets.iden_telp', $filters['keyword']);
+			}
+			elseif($field == 'isu_topik')
+			{
+				$this->db->like('desk_tickets.isu_topik', $filters['keyword']);
+			}
+			elseif($field == 'isi_layanan')
+			{
+				$this->db->like('desk_tickets.prod_masalah', $filters['keyword']);
+			}
+			elseif($field == 'jawaban')
+			{
+				$this->db->like('desk_tickets.jawaban', $filters['keyword']);
+			}
+			elseif($field == 'penerima')
+			{
+				$this->db->like('desk_tickets.penerima', $filters['keyword']);
+			}
+		}
+		
+		if(!empty($filters['jenis']) && $filters['jenis'] != 'ALL')
+		{
+			if($filters['jenis'] == 'LAYANAN')
+				$this->db->where('jenis', '');
+			elseif($filters['jenis'] == 'LAYANAN_SP4N')
+				$this->db->where_in('jenis', array('','SP4N'));
+			else
+				$this->db->where('jenis', $filters['jenis']);
+		}
+		
+		if(!empty($filters['kategori']) && $filters['kategori'] != 'ALL')
+		{
+			$this->db->where('kategori', $filters['kategori']);
+		}
+		
+		if(!empty($filters['status']))
+		{
+			$statuses = array();
+			foreach($filters['status'] as $v)
+			{
+				$statuses[] = "'".$v."'";
+			}
+			$this->db->where_in('status', $statuses, FALSE);
+		}
+		/*if(!empty($filters['is_rujuk']))
+		{
+			$is_rujuks = array();
+			foreach($filters['is_rujuk'] as $v)
+			{
+				$is_rujuks[] = "'".$v."'";
+			}
+			$this->db->where_in('is_rujuk', $is_rujuks, FALSE);
+		}*/
+		/*if(!empty($filters['tl']))
+		{
+			$this->db->where_in('tl',$filters['tl']);
+		}
+		if(!empty($filters['fb']))
+		{
+			$this->db->where_in('fb',$filters['fb']);
+		}*/
+		/*if(!empty($filters['is_verified']))
+		{
+			$this->db->where_in('is_verified',$filters['is_verified']);
+		}*/
+		
+		$this->db->where_in('info', array('P','I'));
+		
+		if(!empty($search))
+		{
+			$this->db->group_start();
+				$this->db->like('desk_tickets.trackid', $search);
+				//$this->db->or_like('custom2', $search);
+			$this->db->group_end();
+		}
+		
+		
+			
+		
+		// get_found_rows case
+		if($count_only == TRUE)
+		{
+			return $this->db->get()->row()->count;
+		}
+
+		
+		//$this->db->group_by('desk_tickets.trackid');
+
+		// order by name of item by default
+		//$this->db->order_by($sort, $order);
+
+		if($rows > 0)
+		{
+			$this->db->limit($rows, $limit_from);
+		}
+		
+		
+
+		return $this->db->get();
+	}
 	
 	public function get_rujukan_found_rows($search, $filters)
 	{

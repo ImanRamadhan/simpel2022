@@ -74,7 +74,6 @@ class Notifications extends Secure_Controller
 
 	public function view($item_id = -1)
 	{
-		
 		$item_info = $this->Notification->get_info($item_id);
 		foreach(get_object_vars($item_info) as $property => $value)
 		{
@@ -83,10 +82,15 @@ class Notifications extends Secure_Controller
 		$data['item_info'] = $item_info;
 		$data['page_title'] = 'Detail Notifikasi';
 		$data['ticket_id'] = $item_info->ticket_id;
+
 		if(!empty($item_info->ticket_id))
 		{
 			$ticket_info = $this->Ticket->get_info_by_trackid($item_info->ticket_id);
 			$data['ticket_id'] = anchor('tickets/view/'.$ticket_info->id.'?ref=notifikasi', $ticket_info->trackid);
+			if($ticket_info->is_rujuk == 1){
+				$data['ticket_id'] = anchor('rujukan/view/'.$ticket_info->id.'?ref=rujukan_masuk', $ticket_info->trackid);
+			}
+			// rujukan/view/464270?ref=rujukan_masuk
 		}
 		
 		if(!$item_info->is_read)

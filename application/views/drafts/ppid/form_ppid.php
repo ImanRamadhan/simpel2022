@@ -484,7 +484,7 @@
 				'name'=>'tt_perihal', 
 				'id'=>'tt_perihal', 
 				'rows'=>4,
-				'value'=>(empty($ppid_info->tt_perihal)?'Tanggapan Permintaan Informasi Publik':'')
+				'value'=>(empty($ppid_info->tt_perihal)?'Tanggapan Permintaan Informasi Publik':$ppid_info->tt_perihal)
 				));?>
 			</div>
 		</div>

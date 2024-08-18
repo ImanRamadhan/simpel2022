@@ -1,0 +1,1 @@
+INSERT INTO `desk_profesi` (`name`, `deleted`) VALUES ('PNS/TNI/POLRI', '0');
