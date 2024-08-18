@@ -116,6 +116,8 @@ class Ticket extends CI_Model
 				$this->db->like('desk_tickets.klasifikasi', $filters['keyword']);
 			} elseif ($field == 'subklasifikasi') {
 				$this->db->like('desk_tickets.subklasifikasi', $filters['keyword']);
+			} elseif ($field == 'perusahaan_instansi') {
+				$this->db->like('desk_tickets.iden_instansi', $filters['keyword']);
 			}
 		}
 
@@ -653,70 +655,58 @@ class Ticket extends CI_Model
 	public function search_sla_tickets_perform($search, $filters, $rows = 0, $limit_from = 0, $sort = 'desk_tickets.id', $order = 'asc', $count_only = FALSE)
 	{
 		// get_found_rows case
-		if($count_only == TRUE)
-		{
+		if ($count_only == TRUE) {
 			$this->db->select('COUNT(desk_tickets.id) as count');
-		}
-		else
-		{
+		} else {
 			$this->db->select('desk_tickets.id, trackid, lastchange, iden_nama, isu_topik, status, is_rujuk, tl, fb, is_verified, hk');
 			$this->db->select('prod_masalah as problem, 0 as outstanding');
 			//$this->db->select("CASE WHEN is_rujuk = '1' AND status = '3' THEN hk WHEN is_rujuk = '1' AND status <> '3' THEN  5 * ((DATEDIFF( NOW() , dt) ) DIV 7) + MID('0123455501234445012333450122234501101234000123450', 7 * WEEKDAY(dt) + WEEKDAY(NOW()) + 1, 1) - (select count(tgl) from desk_holiday where tgl between dt AND NOW()) ELSE 0 END as outstanding");
 			$this->db->select("date_format(tglpengaduan,'%d/%m/%Y') as tglpengaduan");
 		}
-		
+
 		$this->db->from('desk_tickets');
-		
-		if(!empty($filters['tgl1']) && !empty($filters['tgl2']))
-		{
+
+		if (!empty($filters['tgl1']) && !empty($filters['tgl2'])) {
 			$this->db->where('tglpengaduan >=', $filters['tgl1']);
 			$this->db->where('tglpengaduan <=', $filters['tgl2']);
 		}
-		
-		if(!empty($filters['kota']))
-		{
+
+		if (!empty($filters['kota'])) {
 			$this->apply_filter($this->db, $filters['kota']);
 		}
-		
-		$this->db->where('tl',1);
+
+		$this->db->where('tl', 1);
 		$this->db->where('closed_date IS NOT NULL');
-		
-		if(!empty($filters['sla']))
-		{
-			if($filters['sla'] == 'meet')
-			{
+
+		if (!empty($filters['sla'])) {
+			if ($filters['sla'] == 'meet') {
 				$this->db->where('DATEDIFF(date(tl_date), date(tglpengaduan)) <= sla');
-			}
-			elseif($filters['sla'] == 'notmeet')
-			{
+			} elseif ($filters['sla'] == 'notmeet') {
 				$this->db->where('DATEDIFF(date(tl_date), date(tglpengaduan)) > sla');
 			}
 		}
 
-		if(!empty($search))
-		{
+		if (!empty($search)) {
 			$this->db->group_start();
-				$this->db->like('desk_tickets.trackid', $search);
+			$this->db->like('desk_tickets.trackid', $search);
 			$this->db->group_end();
 		}
-		
+
 		// get_found_rows case
-		if($count_only == TRUE)
-		{
+		if ($count_only == TRUE) {
 			return $this->db->get()->row()->count;
 		}
 
 		// order by name of item by default
 		$this->db->order_by($sort, $order);
 
-		if($rows > 0)
-		{
+		if ($rows > 0) {
 			$this->db->limit($rows, $limit_from);
 		}
-		
+
 		return $this->db->get();
 	}
-	
+
 	/*
 	Rujukan Masuk
 	*/
@@ -1302,7 +1292,7 @@ class Ticket extends CI_Model
 		// Begin select table direktorat
 		for ($i = 1; $i <= 5; $i++) {
 			$sql .= ", dd$i.name as rujukan$i";
-			$sql .= ", d$i"."_prioritas as rujukan_hk$i";
+			$sql .= ", d$i" . "_prioritas as rujukan_hk$i";
 		}
 		// ehd join table direktorat
 		$sql .= ", date_format(a.dt,'%d/%m/%Y') as dt_fmt";
@@ -1558,10 +1548,10 @@ class Ticket extends CI_Model
 		$info = $this->get_info($item_id);
 		$status = $info->status;
 
-		if($status != '3')
+		if ($status != '3')
 			$status = '2';
 
-		if($this->session->id == $info->owner){
+		if ($this->session->id == $info->owner) {
 			$status = '0';
 		}
 
@@ -2117,7 +2107,7 @@ class Ticket extends CI_Model
 
 		return $this->db->get();
 	}
-	
+
 	public function get_mekanisme()
 	{
 		$this->db->select('*');
@@ -2261,8 +2251,8 @@ class Ticket extends CI_Model
 		$this->db->where('is_rujukan', 1);
 		$this->db->where('deleted', 0);
 		$this->db->where('dir_status', 1);
-		
-		if(!empty($cities))
+
+		if (!empty($cities))
 			$this->db->where_in('kota', $cities);
 
 		$this->db->order_by('kota, name', 'asc');
