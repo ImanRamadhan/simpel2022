@@ -54,6 +54,7 @@ class Ajax extends CI_Model
 		$this->db->where('ws', 0);
 		$this->db->where_in('info', array('P', 'I'));
 
+
 		$query = $this->db->get();
 		return $query->row()->cnt;
 	}

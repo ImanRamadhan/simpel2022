@@ -46,6 +46,7 @@ class Dashboard extends Secure_Controller
 		$balai = $this->Ajax->layanan_balai($this->session->dashboard_date1, $this->session->dashboard_date2);
 		$total = $pusat + $cc + $balai;
 
+
 		echo json_encode(
 			array(
 				'pusat' => $pusat,
@@ -63,6 +64,7 @@ class Dashboard extends Secure_Controller
 		$balai = $this->Ajax->ppid_sp4n_balai($this->session->dashboard_date1, $this->session->dashboard_date2, $jenis);
 		$total = $pusat + $cc + $balai;
 
+
 		echo json_encode(
 			array(
 				'pusat' => $pusat,
@@ -72,7 +74,6 @@ class Dashboard extends Secure_Controller
 			)
 		);
 	}
-
 
 	public function pusat_pengaduan()
 	{
@@ -306,9 +307,8 @@ class Dashboard extends Secure_Controller
 				'notmeet' => $notmeet,
 			)
 		);
-		
 	}
-	
+
 	//footer
 	public function rujukan_keluar_replied()
 	{

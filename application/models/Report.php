@@ -12,6 +12,14 @@ class Report extends CI_Model
 	public function build_condition($sheet, $inputKota, $kategori, $jenis, $gender)
 	{
 		$query = "";
+		if ($gender == 'ALL') {
+			if ($sheet == 0) {
+				$gender = "L";
+			} else if ($sheet == 1) {
+				$gender = "P";
+			}
+		}
+
 		if (!empty($inputKota)) {
 			if ($inputKota == 'ALL')
 				$filter_cc = '';
@@ -57,9 +65,7 @@ class Report extends CI_Model
 			// }
 		}
 
-		/*if($sheet == 1){
-			$query .= " and submited_via = 'Medsos' ";
-		}*/
+
 
 
 		return $query;
@@ -2024,10 +2030,14 @@ class Report extends CI_Model
 			kategori, klasifikasi, subklasifikasi, info, submited_via, iden_profesi 
 			FROM desk_tickets 
 			WHERE tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' ";
-		$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender);
+
 
 		if ($form_type == "PPID") {
 			$query .= " AND jenis = 'PPID' ";
+		}
+		if ($form_type == "YANBLIK") {
+			$query .= " and subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
+			//$query .= " and klasifikasi = 'Layanan Publik' ";
 		}
 		if ($form_type == "LAPSING_RUJUKAN_MASUK") {
 			// rujukan masuk, jika is_rujuk = '1' namun direktorat berbeda dengan owner_dir
@@ -2042,18 +2052,22 @@ class Report extends CI_Model
 				$query .= " AND direktorat = '" . $inputdirektorat . "'";
 			}
 		}
-
-		if (!empty($jenis) && $jenis != 'ALL') {
-			if ($jenis == 'LAYANAN')
-				$query .= " AND jenis = '' ";
-			elseif ($jenis == 'LAYANAN_SP4N')
-				$query .= " AND jenis IN ('','SP4N') ";
+		if ($form_type == "GENDER") {
+			if (!empty($jenis) && $jenis != 'ALL') {
+				if ($jenis == 'LAYANAN')
+					$query .= " AND jenis = '' ";
+				elseif ($jenis == 'LAYANAN_SP4N')
+					$query .= " AND jenis IN ('','SP4N') ";
+			}
 		}
 
-		$results = $this->db->query($query);
+
+		$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender);
 		// echo "<pre>";
 		// print_r($query);
 		// exit;
+		$results = $this->db->query($query);
+
 		$item_data = $results->result_array();
 
 		$num_of_rows = count($item_data);

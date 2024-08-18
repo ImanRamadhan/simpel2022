@@ -14,8 +14,7 @@ class City extends CI_Model
 	public function has_grant($permission_id, $user_id)
 	{
 		//if no module_id is null, allow access
-		if($permission_id == NULL)
-		{
+		if ($permission_id == NULL) {
 			return TRUE;
 		}
 
@@ -23,24 +22,23 @@ class City extends CI_Model
 
 		return ($query->num_rows() == 1);
 	}
-	
+
 	/*
 	Determines if a given item_id is an item
 	*/
 	public function exists($item_id, $ignore_deleted = FALSE, $deleted = FALSE)
 	{
-		
+
 		$this->db->from('desk_kota');
 		$this->db->where('id', $item_id);
-		if($ignore_deleted == FALSE)
-		{
+		if ($ignore_deleted == FALSE) {
 			//$this->db->where('deleted', $deleted);
 		}
 
 		return ($this->db->get()->num_rows() == 1);
 	}
 
-	
+
 
 	/*
 	Gets total of rows
@@ -53,7 +51,7 @@ class City extends CI_Model
 		return $this->db->count_all_results();
 	}
 
-	
+
 
 	/*
 	Get number of rows
@@ -69,40 +67,33 @@ class City extends CI_Model
 	public function search($search, $filters, $rows = 0, $limit_from = 0, $sort = 'desk_kota.id', $order = 'asc', $count_only = FALSE)
 	{
 		// get_found_rows case
-		if($count_only == TRUE)
-		{
+		if ($count_only == TRUE) {
 			$this->db->select('COUNT(desk_kota.id) as count');
-		}
-		else
-		{
-		
+		} else {
+
 			$this->db->select('desk_kota.*');
-			
 		}
 
 		$this->db->from('desk_kota');
 		//$this->db->where('deleted', 0);
-		
-		if(!empty($search))
-		{
+
+		if (!empty($search)) {
 			$this->db->group_start();
-				$this->db->like('desk_kota.nama_kota', $search);
-				//$this->db->or_like('custom2', $search);
+			$this->db->like('desk_kota.nama_kota', $search);
+			//$this->db->or_like('custom2', $search);
 			$this->db->group_end();
 		}
-		
-		
+
+
 		// get_found_rows case
-		if($count_only == TRUE)
-		{
+		if ($count_only == TRUE) {
 			return $this->db->get()->row()->count;
 		}
 
 		// order by name of item by default
 		$this->db->order_by($sort, $order);
 
-		if($rows > 0)
-		{
+		if ($rows > 0) {
 			$this->db->limit($rows, $limit_from);
 		}
 
@@ -115,47 +106,42 @@ class City extends CI_Model
 	public function get_all($stock_location_id = -1, $rows = 0, $limit_from = 0)
 	{
 		$this->db->from('desk_kota');
-		
+
 
 		//$this->db->where('desk_kota.deleted', 0);
 
 		// order by name of item
 		//$this->db->order_by('desk_kota.nama_kota', 'asc');
 
-		if($rows > 0)
-		{
+		if ($rows > 0) {
 			$this->db->limit($rows, $limit_from);
 		}
 
 		return $this->db->get();
 	}
-	
-	
+
+
 	/*
 	Gets information about a particular item
 	*/
 	public function get_info($item_id)
 	{
 		$this->db->select('desk_kota.*');
-		
+
 		$this->db->from('desk_kota');
-		
+
 		$this->db->where('desk_kota.id', $item_id);
 
 		$query = $this->db->get();
 
-		if($query->num_rows() == 1)
-		{
+		if ($query->num_rows() == 1) {
 			return $query->row();
-		}
-		else
-		{
+		} else {
 			//Get empty base parent object, as $item_id is NOT an item
 			$item_obj = new stdClass();
 
 			//Get all the fields from items table
-			foreach($this->db->list_fields('desk_kota') as $field)
-			{
+			foreach ($this->db->list_fields('desk_kota') as $field) {
 				$item_obj->$field = '';
 			}
 
@@ -163,21 +149,19 @@ class City extends CI_Model
 		}
 	}
 
-	
 
-	
-	
+
+
+
 
 	/*
 	Inserts or updates a item
 	*/
 	public function save(&$item_data, $item_id = FALSE)
 	{
-		
-		if(!$item_id || !$this->exists($item_id, TRUE))
-		{
-			if($this->db->insert('desk_kota', $item_data))
-			{
+
+		if (!$item_id || !$this->exists($item_id, TRUE)) {
+			if ($this->db->insert('desk_kota', $item_data)) {
 				$item_data['id'] = $this->db->insert_id();
 
 				return TRUE;
@@ -248,15 +232,14 @@ class City extends CI_Model
 
 		return $success;*/
 	}
-	
+
 	/*
 	Checks if city name exists
 	*/
 	public function check_city_exists($city, $id = '')
 	{
 		// if the city is empty return like it is not existing
-		if(empty($city))
-		{
+		if (empty($city)) {
 			return FALSE;
 		}
 
@@ -264,15 +247,14 @@ class City extends CI_Model
 		$this->db->where('desk_kota.nama_kota', $city);
 		//$this->db->where('desk_kota.deleted', 0);
 
-		if(!empty($id))
-		{
+		if (!empty($id)) {
 			$this->db->where('desk_kota.id !=', $id);
 		}
 
 		return ($this->db->get()->num_rows() == 1);
 	}
 
-	
+
 	public function get_cities()
 	{
 		$this->db->select('nama_kota');
@@ -283,8 +265,4 @@ class City extends CI_Model
 
 		return $this->db->get();
 	}
-
-	
-
 }
-?>

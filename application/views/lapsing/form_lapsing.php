@@ -18,7 +18,7 @@
 <script type="text/javascript">
     $(document).ready(function() {
         $('#buttonExport').on('click', function() {
-            $.fileDownload('<?php echo site_url('excels/download_lapsing') ?>', {
+            $.fileDownload('<?php echo site_url('excels/download_lapsing_gender') ?>', {
 
                 data: {
                     formType: '<?php echo $lapsing_type; ?>',
@@ -27,8 +27,8 @@
                     kota: $("#kota").val() || "",
                     formType: $("#formType").val(),
                     kategori: $("#kategori").val(),
-                    gender: $("#gender").val(),
-                    jenis: $("#jenis").val(),
+                    gender: $("#gender").val(), //gender
+                    jenis: $("#jenis").val(), //sumber data
                     <?php echo $this->security->get_csrf_token_name(); ?>: csrf_token()
                 },
                 httpMethod: 'POST',
