@@ -1,0 +1,1 @@
+DELETE FROM `desk_profesi` WHERE `name` = 'PNS/TNI/POLRI';

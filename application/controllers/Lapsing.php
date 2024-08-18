@@ -175,35 +175,35 @@ class Lapsing extends Secure_Controller
 
 		$raw_data_lapsing = null;
 		if ($inputType == '1') {
-			$total_data_    			= $this->Report->get_total_data_(0, $formType, $inputTgl1, $inputTgl2, $inputKota, $inputKategori, $inputJenis, $inputGender);
-			$raw_data_lapsing          	= $this->Report->get_data_kelompok_jenis_pengaduan(0, $formType, $inputTgl1, $inputTgl2, $inputKota, $inputKategori, $inputJenis, $inputGender);
+			$total_data_    			= $this->Report->get_total_data_(-99, $formType, $inputTgl1, $inputTgl2, $inputKota, $inputKategori, $inputJenis, $inputGender);
+			$raw_data_lapsing          	= $this->Report->get_data_kelompok_jenis_pengaduan(-99, $formType, $inputTgl1, $inputTgl2, $inputKota, $inputKategori, $inputJenis, $inputGender);
 		} else if ($inputType == '2') {
-			$total_data_    			= $this->Report->get_total_data_(0, $formType, $inputTgl1, $inputTgl2, $inputKota, $inputKategori, $inputJenis, $inputGender);
-			$raw_data_lapsing          	= $this->Report->get_data_kelompok_mekanisme_menjawab(0, $formType, $inputTgl1, $inputTgl2, $inputKota, $inputKategori, $inputJenis, $inputGender);
+			$total_data_    			= $this->Report->get_total_data_(-99, $formType, $inputTgl1, $inputTgl2, $inputKota, $inputKategori, $inputJenis, $inputGender);
+			$raw_data_lapsing          	= $this->Report->get_data_kelompok_mekanisme_menjawab(-99, $formType, $inputTgl1, $inputTgl2, $inputKota, $inputKategori, $inputJenis, $inputGender);
 		} else if ($inputType == '3') {
-			$total_data_    			= $this->Report->get_total_data_(0, $formType, $inputTgl1, $inputTgl2, $inputKota, $inputKategori, $inputJenis, $inputGender);
-			$raw_data_lapsing          	= $this->Report->get_data_jenis_profesi_pengadu(0, $formType, $inputTgl1, $inputTgl2, $inputKota, $inputKategori, $inputJenis, $inputGender);
+			$total_data_    			= $this->Report->get_total_data_(-99, $formType, $inputTgl1, $inputTgl2, $inputKota, $inputKategori, $inputJenis, $inputGender);
+			$raw_data_lapsing          	= $this->Report->get_data_jenis_profesi_pengadu(-99, $formType, $inputTgl1, $inputTgl2, $inputKota, $inputKategori, $inputJenis, $inputGender);
 		} else if ($inputType == '4') {
-			$total_data_    			= $this->Report->get_total_data_(0, $formType, $inputTgl1, $inputTgl2, $inputKota, $inputKategori, $inputJenis, $inputGender);
-			$raw_data_lapsing          	= $this->Report->get_data_kelompok_informasi_produk(0, $formType, $inputTgl1, $inputTgl2, $inputKota, $inputKategori, $inputJenis, $inputGender);
+			$total_data_    			= $this->Report->get_total_data_(-99, $formType, $inputTgl1, $inputTgl2, $inputKota, $inputKategori, $inputJenis, $inputGender);
+			$raw_data_lapsing          	= $this->Report->get_data_kelompok_informasi_produk(-99, $formType, $inputTgl1, $inputTgl2, $inputKota, $inputKategori, $inputJenis, $inputGender);
 		} else if ($inputType == '5') {
-			$total_data_    			= $this->Report->get_total_data_per_klasifikasi(0, $formType, 'Farmakologi', $inputTgl1, $inputTgl2, $inputKota, $inputKategori, $inputJenis, $inputGender);
-			$raw_data_lapsing          	= $this->Report->get_data_kelompok_farmakologi(0, $formType, $inputTgl1, $inputTgl2, $inputKota, $inputKategori, $inputJenis, $inputGender);
+			$total_data_    			= $this->Report->get_total_data_per_klasifikasi(-99, $formType, 'Farmakologi', $inputTgl1, $inputTgl2, $inputKota, $inputKategori, $inputJenis, $inputGender);
+			$raw_data_lapsing          	= $this->Report->get_data_kelompok_farmakologi(-99, $formType, $inputTgl1, $inputTgl2, $inputKota, $inputKategori, $inputJenis, $inputGender);
 		} else if ($inputType == '6') {
-			$total_data_    			= $this->Report->get_total_data_per_klasifikasi(0, $formType, 'Mutu', $inputTgl1, $inputTgl2, $inputKota, $inputKategori, $inputJenis, $inputGender);
-			$raw_data_lapsing          = $this->Report->get_data_kelompok_mutu(0, $formType, $inputTgl1, $inputTgl2, $inputKota, $inputKategori, $inputJenis, $inputGender);
+			$total_data_    			= $this->Report->get_total_data_per_klasifikasi(-99, $formType, 'Mutu', $inputTgl1, $inputTgl2, $inputKota, $inputKategori, $inputJenis, $inputGender);
+			$raw_data_lapsing          = $this->Report->get_data_kelompok_mutu(-99, $formType, $inputTgl1, $inputTgl2, $inputKota, $inputKategori, $inputJenis, $inputGender);
 		} else if ($inputType == '7') {
-			$total_data_    			= $this->Report->get_total_data_per_klasifikasi(0, $formType, 'Legalitas', $inputTgl1, $inputTgl2, $inputKota, $inputKategori, $inputJenis, $inputGender);
-			$raw_data_lapsing          = $this->Report->get_data_kelompok_legalitas(0, $formType, $inputTgl1, $inputTgl2, $inputKota, $inputKategori, $inputJenis, $inputGender);
+			$total_data_    			= $this->Report->get_total_data_per_klasifikasi(-99, $formType, 'Legalitas', $inputTgl1, $inputTgl2, $inputKota, $inputKategori, $inputJenis, $inputGender);
+			$raw_data_lapsing          = $this->Report->get_data_kelompok_legalitas(-99, $formType, $inputTgl1, $inputTgl2, $inputKota, $inputKategori, $inputJenis, $inputGender);
 		} else if ($inputType == '8') {
-			$total_data_    			= $this->Report->get_total_data_per_klasifikasi(0, $formType, 'Penandaan', $inputTgl1, $inputTgl2, $inputKota, $inputKategori, $inputJenis, $inputGender);
-			$raw_data_lapsing          = $this->Report->get_data_kelompok_penandaan(0, $formType, $inputTgl1, $inputTgl2, $inputKota, $inputKategori, $inputJenis, $inputGender);
+			$total_data_    			= $this->Report->get_total_data_per_klasifikasi(-99, $formType, 'Penandaan', $inputTgl1, $inputTgl2, $inputKota, $inputKategori, $inputJenis, $inputGender);
+			$raw_data_lapsing          = $this->Report->get_data_kelompok_penandaan(-99, $formType, $inputTgl1, $inputTgl2, $inputKota, $inputKategori, $inputJenis, $inputGender);
 		} else if ($inputType == '9') {
-			$total_data_    			= $this->Report->get_total_data_per_klasifikasi(0, $formType, 'Informasi lain ttg Produk', $inputTgl1, $inputTgl2, $inputKota, $inputKategori, $inputJenis, $inputGender);
-			$raw_data_lapsing          = $this->Report->get_data_kelompok_info_lain_produk(0, $formType, $inputTgl1, $inputTgl2, $inputKota, $inputKategori, $inputJenis, $inputGender);
+			$total_data_    			= $this->Report->get_total_data_per_klasifikasi(-99, $formType, 'Informasi lain ttg Produk', $inputTgl1, $inputTgl2, $inputKota, $inputKategori, $inputJenis, $inputGender);
+			$raw_data_lapsing          = $this->Report->get_data_kelompok_info_lain_produk(-99, $formType, $inputTgl1, $inputTgl2, $inputKota, $inputKategori, $inputJenis, $inputGender);
 		} else if ($inputType == '10') {
-			$total_data_    			= $this->Report->get_total_data_per_klasifikasi(0, $formType, 'Info Umum', $inputTgl1, $inputTgl2, $inputKota, $inputKategori, $inputJenis, $inputGender);
-			$raw_data_lapsing          = $this->Report->get_data_kelompok_info_umum(0, $formType, $inputTgl1, $inputTgl2, $inputKota, $inputKategori, $inputJenis, $inputGender);
+			$total_data_    			= $this->Report->get_total_data_per_klasifikasi(-99, $formType, 'Info Umum', $inputTgl1, $inputTgl2, $inputKota, $inputKategori, $inputJenis, $inputGender);
+			$raw_data_lapsing          = $this->Report->get_data_kelompok_info_umum(-99, $formType, $inputTgl1, $inputTgl2, $inputKota, $inputKategori, $inputJenis, $inputGender);
 		}
 
 		// print_r($raw_data_lapsing);

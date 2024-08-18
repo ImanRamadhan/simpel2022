@@ -185,6 +185,26 @@ class Tickets extends Secure_Controller
 		$this->load->view('tickets/manage_sla', $data);
 	}
 
+	public function list_sla_perform()
+	{
+		$data['title'] = 'Layanan Belum di-TL';
+		$data['table_headers'] = $this->xss_clean(get_my_tickets_manage_table_headers());
+		
+		$data['city_filter'] = $this->input->get('kota');
+		$data['tgl1'] = $this->input->get('tgl1');
+		$data['tgl2'] = $this->input->get('tgl2');
+		
+		$data['tl_filter'] = $this->input->get('tl');
+		//$data['status_filter'] = $this->input->get('status');
+		$data['sla_filter'] = $this->input->get('sla');
+		
+		$data['filters'] = array();
+				
+		$this->setup_search($data);
+		
+		$this->load->view('tickets/manage_sla_perform', $data);
+	}
+
 	/*
 	Returns Items table data rows. This will be called with AJAX.
 	*/
@@ -365,6 +385,11 @@ class Tickets extends Secure_Controller
 			$this->Notification->mark_as_read($item_info->id, $this->session->id);
 		
 		$data['upload_config'] = $this->config->item('upload_setting');
+
+		if($item_info->jenis == 'PPID'){
+			$attachments_ppidtl = $this->Ticket->get_attachments_ppidtl($item_info->trackid,0);
+			$data["att_ppidtl"] = $attachments_ppidtl->row();
+		}
 		
 		$this->load->view('tickets/view', $data);
 	}
@@ -401,6 +426,9 @@ class Tickets extends Secure_Controller
 		$data['provinces2'] = get_provinces();
 		$data['profesi'] = get_profesi();
 		$data['products'] = get_products();
+
+		$data['range_age'] = get_range_age();
+
 		//$data['products'] = get_products_sla($item_info->info);
 		$data['sumberdata'] = array('' => '','SP4N' => 'SP4N','PPID'=>'PPID');
 		
@@ -663,6 +691,55 @@ class Tickets extends Secure_Controller
 			redirect('tickets/view/'.$item_id);
 		}
 	}
+
+	public function confirm_upload_signed_formulir($id, $ticketid)
+	{
+		$data['url_post'] = site_url('tickets/save_signed_formulir/'.$id.'/'.$ticketid);
+		$data['message'] = 'Silakan upload bukti formulir PPID yang sudah ditandatangani';
+		$data['upload_url'] = site_url('tickets/upload_signed_formulir/'.$id.'/'.$ticketid);
+		$data['id'] = $id;
+		$data['ticketid'] = $ticketid;
+		$this->load->view('tickets/confirm_upload_signed_formulir', $data);
+	}
+
+	public function upload_signed_formulir($id, $ticket_id){
+		$this->load->library('upload', $this->config->item('upload_setting'));
+		
+		$files = $_FILES;
+		$cpt = count($_FILES ['file'] ['name']);
+
+		for ($i = 0; $i < $cpt; $i++)
+		{
+			$name = $files ['file'] ['name'] [$i];
+			$_FILES ['file'] ['name'] = $name;
+			$_FILES ['file'] ['type'] = $files ['file'] ['type'] [$i];
+			$_FILES ['file'] ['tmp_name'] = $files ['file'] ['tmp_name'] [$i];
+			$_FILES ['file'] ['error'] = $files ['file'] ['error'] [$i];
+			$_FILES ['file'] ['size'] = $files ['file'] ['size'] [$i];
+		
+			if($this->upload->do_upload('file'))
+			{
+				$data = $this->upload->data();
+				$att_data = array(
+					'saved_name' => $data['file_name'],
+					'real_name' => $data['orig_name'],
+					'size' => $files ['file'] ['size'] [$i],
+					'ticket_id' => $ticket_id,
+					'mode' => $this->input->post('mode')
+				);
+				
+				if($this->Ticket->save_attachment_ppidtl($att_data))
+				{
+					$id = $att_data['id'];
+					echo json_encode(array('id' => $id, 'url' => base_url().'uploads/files/'.$att_data['saved_name'], 'error'=>0,'message'=>''));
+				}
+			}
+			else
+			{
+				echo json_encode(array('error' => 1, 'message' => $this->upload->display_errors()));
+			}
+		}
+	}
 	
 	public function confirm_fb_yes($item_id = -1)
 	{
@@ -708,16 +785,13 @@ class Tickets extends Secure_Controller
 	}
 	
 	public function save($item_id = -1)
-	{
-		
-		
+	{	
 		$item_info = $this->Ticket->get_info($item_id);
+
 		foreach(get_object_vars($item_info) as $property => $value)
 		{
 			$item_info->$property = $this->xss_clean($value);
 		}
-		
-		
 		
 		$old_date = explode('-',$item_info->tglpengaduan);
 		$today = explode('/',date('d/m/Y'));
@@ -788,15 +862,6 @@ class Tickets extends Secure_Controller
 		$klasifikasi =  $this->input->post('klasifikasi');
 		$subklasifikasi = $this->input->post('subklasifikasi');
 		
-		//$klasifikasi_id =  $this->input->post('klasifikasi_id');
-		//$subklasifikasi_id = $this->input->post('subklasifikasi_id');
-		
-		/*$kla_info = $this->Klasifikasi->get_info($klasifikasi_id);
-		$klasifikasi = $kla_info->nama;
-		
-		$subkla_info = $this->Subklasifikasi->get_info($subklasifikasi_id);
-		$subklasifikasi = $subkla_info->subklasifikasi;*/
-		
 		$sla = $this->input->post('sla');
 		
 		$is_rujuk =  $this->input->post('is_rujuk');
@@ -836,9 +901,6 @@ class Tickets extends Secure_Controller
 			$sla = 1;
 		}
 		
-		
-		
-		
 		$jawaban =  $this->input->post('jawaban');
 		$keterangan =  $this->input->post('keterangan');
 		$petugas_entry =  $this->input->post('petugas_entry');
@@ -851,7 +913,6 @@ class Tickets extends Secure_Controller
 		
 		if($jenis == 'PPID')
 		{
-		
 			//ppid data
 			$tgl_diterima = $this->input->post('tgl_diterima');
 			if(!empty($tgl_diterima))
@@ -926,7 +987,6 @@ class Tickets extends Secure_Controller
 			
 			$keputusan = $this->input->post('keputusan');
 			
-			//$no_reg_keberatan = $this->input->post('no_reg_keberatan');
 			$kuasa_nama = $this->input->post('kuasa_nama');
 			$kuasa_alamat = $this->input->post('kuasa_alamat');
 			$kuasa_telp = $this->input->post('kuasa_telp');
@@ -957,50 +1017,8 @@ class Tickets extends Secure_Controller
 		
 		}
 		
-		
-		//get sla
-		/*if($jenis == 'PPID')
-		{
-			//$sla = 14;
-			if($info == 'I')
-				$sla = 17;
-			if(!empty($kuasa_nama))
-				$sla = 30;
-		}
-		else
-		{
-			//$sla = $this->Sla->get_sla($kategori, $info, $klasifikasi_id, $subklasifikasi_id);
-			$sla = 7;
-		}*/
-		
-		/*$sla = 5; //default
-		if($item_info->category == '1') //Layanan
-		{
-			if($item_info->is_rujuk == '1')
-			{
-				//$sla = max($rujukan_info->sla1, $rujukan_info->sla2, $rujukan_info->sla3, $rujukan_info->sla4, $rujukan_info->sla5);
-			}
-			else
-			{
-				$sla = 5;
-			}
-		}
-		elseif($item_info->category == '2') //PPID
-		{
-			$sla = 17;
-		}
-		elseif($item_info->category == '3') //Keberatan
-		{
-			$sla = 30;
-		}
-		elseif($item_info->category == '4') //Sengketa
-		{
-			$sla = 30;
-		}*/
-		
 		if($jenis == 'PPID')
 		{
-		
 			$ppid_data = array(
 				'tgl_diterima' => $tgl_diterima,
 				'diterima_via' => $diterima_via,
@@ -1042,7 +1060,6 @@ class Tickets extends Secure_Controller
 				'tt_pejabat' => $tt_pejabat,
 				'keputusan' => $keputusan,
 				'nama_pejabat_ppid' => $nama_pejabat_ppid,
-				//'no_reg_keberatan' => $no_reg_keberatan,
 				'kuasa_nama' => $kuasa_nama,
 				'kuasa_alamat' => $kuasa_alamat,
 				'kuasa_telp' => $kuasa_telp,
@@ -1059,7 +1076,6 @@ class Tickets extends Secure_Controller
 				'keberatan_nama_pejabat' => $keberatan_nama_pejabat
 			);
 		}
-		
 		
 		//Save item data
 		$item_data = array(
@@ -1100,8 +1116,6 @@ class Tickets extends Secure_Controller
 			'shift' => $shift,
 			'klasifikasi' => $klasifikasi,
 			'subklasifikasi' => $subklasifikasi,
-			//'klasifikasi_id' => $klasifikasi_id,
-			//'subklasifikasi_id' => $subklasifikasi_id,
 			'sla' => $sla,
 			'is_rujuk' => $is_rujuk,
 			
@@ -1132,110 +1146,123 @@ class Tickets extends Secure_Controller
 			$item_info->$property = $this->xss_clean($value);
 		}
 		
-		//$item_data['history'] = $item_info->history;
-		//$item_data['history'] .= '<li class="smaller">Pada '.date('Y-m-d H:i:s').' layanan diubah oleh '.$this->session->name.'</li>';
-		
-		//$oldarrayticket = (array) $this->Ticket->get_info_ticket($item_id);
-		//$oldarrayppid = (array) $this->Ticket->get_info_ppid($item_id);
-		
 		if($this->Ticket->save($item_data, $item_id))
 		{
 			$item_info2 = $this->Ticket->get_info($item_id);		
 			log_layanan($item_info, $item_info2);
-			/*$success = TRUE;
+			$message = 'Data berhasil disimpan';
+			if($jenis == 'PPID')
+				$this->Ticket->save_ppid($ppid_data, $item_id);
 			
-			if($item_id == -1)
+			if($is_rujuk == '1')
 			{
-				$message = $this->xss_clean($this->lang->line('items_successful_adding') . ' ' . $item_id);
+				$rujukan_data = array(
+					'rid' => $item_id
+				);
 
-				echo json_encode(array('success' => TRUE, 'message' => $message, 'id' => $item_id));
+				if(isset($item_data['direktorat']) && $item_data['direktorat'] != "" && $item_data['direktorat'] != 0){
+					$rujukan_data['tgl_rujuk1'] = date("Y-m-d H:i:s");
+				} 
+
+				if(isset($item_data['direktorat2']) && $item_data['direktorat2'] != "" && $item_data['direktorat2'] != 0){
+					$rujukan_data['tgl_rujuk2'] = date("Y-m-d H:i:s");
+				}
+				if(isset($item_data['direktorat3']) && $item_data['direktorat3'] != "" && $item_data['direktorat3'] != 0) {
+					$rujukan_data['tgl_rujuk3'] = date("Y-m-d H:i:s");
+				}
+				if(isset($item_data['direktorat4']) && $item_data['direktorat4'] != "" && $item_data['direktorat4'] != 0) {
+					$rujukan_data['tgl_rujuk4'] = date("Y-m-d H:i:s");
+				}
+				if(isset($item_data['direktorat5']) && $item_data['direktorat5'] != "" && $item_data['direktorat5'] != 0) {
+					$rujukan_data['tgl_rujuk5'] = date("Y-m-d H:i:s");
+				}
+
+				
+				$this->Ticket->save_rujukan($rujukan_data, $item_id);
 			}
 			else
-			{*/
-				$message = 'Data berhasil disimpan';
-				if($jenis == 'PPID')
-					$this->Ticket->save_ppid($ppid_data, $item_id);
-				
-				//logChangesTicket($oldarrayticket,$item_id);
-				
-				if($is_rujuk == '1')
-				{
-					$rujukan_data = array(
-						'rid' => $item_id
-					);
-					$this->Ticket->save_rujukan($rujukan_data, $item_id);
-					
-					/*
-					//rujukan 1
-					if($dir1 != $item_info->direktorat)
-						$this->Ticket->update_rujukan($new_data, $dir1, $sla1, 1);
-					else
-					{
-						if($sla1 != $item_info->d1_prioritas)
-						{
-							$this->Ticket->update_rujukan_sla($item_id, $dir1, 1, $sla1);
-						}
-					}
-					
-					//rujukan 2
-					if($dir2 != $item_info->direktorat2)
-						$this->Ticket->update_rujukan($new_data, $dir2, $sla2, 2);
-					else
-					{
-						if($sla2 != $item_info->d2_prioritas)
-							$this->Ticket->update_rujukan_sla($item_id, $dir2, 2, $sla2);
-					}
-					
-					//rujukan 3
-					if($dir3 != $item_info->direktorat3)
-						$this->Ticket->update_rujukan($new_data, $dir3, $sla3, 3);
-					else
-					{
-						if($sla3 != $item_info->d3_prioritas)
-							$this->Ticket->update_rujukan_sla($item_id, $dir3, 3, $sla3);
-					}
-					
-					//rujukan 4
-					if($dir4 != $item_info->direktorat4)
-						$this->Ticket->update_rujukan($new_data, $dir4, $sla4, 4);
-					else
-					{
-						if($sla4 != $item_info->d4_prioritas)
-							$this->Ticket->update_rujukan_sla($item_id, $dir4, 4, $sla4);
-					}
-					
-					//rujukan 5
-					if($dir5 != $item_info->direktorat5)
-						$this->Ticket->update_rujukan($new_data, $dir5, $sla5, 5);
-					else
-					{
-						if($sla5 != $item_info->d5_prioritas)
-							$this->Ticket->update_rujukan_sla($item_id, $dir5, 5, $sla5);
-					}
-					*/
-					
-					
-					
-					
-				}
-				else
-				{
-					//remove from rujukan from layanan
-					/*if($item_info->direktorat) $this->Ticket->delete_rujukan($item_id, $item_info->direktorat, 1);
-					if($item_info->direktorat2) $this->Ticket->delete_rujukan($item_id, $item_info->direktorat2, 2);
-					if($item_info->direktorat3) $this->Ticket->delete_rujukan($item_id, $item_info->direktorat3, 3);
-					if($item_info->direktorat4) $this->Ticket->delete_rujukan($item_id, $item_info->direktorat4, 4);
-					if($item_info->direktorat5) $this->Ticket->delete_rujukan($item_id, $item_info->direktorat5, 5);*/
-				}
+			{
+				//remove from rujukan from layanan
+			}
 
-				echo json_encode(array('success' => TRUE, 'message' => $message, 'id' => $item_id));
-			//}
+			// handle current notifs, is exist any
+			$this->handleNotifikasi($item_info);
+			
+			echo json_encode(array('success' => TRUE, 'message' => $message, 'id' => $item_id));	
 		}
 		else // failure
 		{
 			$message = 'Data gagal disimpan';
 			
 			echo json_encode(array('success' => FALSE, 'message' => $message, 'id' => -1));
+		}
+	}
+
+	private function handleNotifikasi($item_info){
+		$list_directorate = [];
+
+		$dir1 =  $this->input->post('dir1');
+		$dir2 =  $this->input->post('dir2');
+		$dir3 =  $this->input->post('dir3');
+		$dir4 =  $this->input->post('dir4');
+		$dir5 =  $this->input->post('dir5');
+
+		if(!empty($dir1) && $dir1 != $item_info->direktorat){
+			array_push($list_directorate, $dir1);
+		} 
+		
+		if(!empty($dir2) && $dir2 != $item_info->direktorat2){
+			array_push($list_directorate, $dir2);
+		} 
+		if(!empty($dir3) && $dir3 != $item_info->direktorat3){
+			array_push($list_directorate, $dir3);
+		} 
+		if(!empty($dir4) && $dir4 != $item_info->direktorat4){
+			array_push($list_directorate, $dir4);
+		} 
+		if(!empty($dir5) && $dir5 != $item_info->direktorat5) {
+			array_push($list_directorate, $dir5);
+		} 
+
+		if(count($list_directorate) == 0){
+			return;
+		}
+
+		// extract list of user eligible to be sent by notif
+		$user_need_notified = $this->User->get_users_in_dir($list_directorate);
+
+		// echo json_encode($user_need_notified->result());
+
+		$timestamp = date('Y-m-d H:i:s');
+		// save notif to eligible user
+		foreach($user_need_notified->result() as $user){
+			$data = array(
+				'trackid' => $item_info->trackid,
+				'isu_topik' => $item_info->isu_topik
+			);
+			$email_body = $this->load->view('mail/ticket_assigned_to_you', $data, TRUE);
+			$data = array(
+				"title" => 'Rujukan',
+				"message" => $email_body,
+				"ticket_id" => $item_info->trackid,
+				"user_id" => $user->id,
+				"created_date" => date('Y-m-d H:i:s')
+			);
+			$this->Notification->save($data);
+
+			if(strlen($user->no_hp)>=10)
+			{
+				//insert sms
+				$konten = '[SIMPELLPK]Yth. Bpk/Ibu '.$user->name.', Terdapat rujukan untuk Anda dengan ID '.$item_info->trackid;
+				$sms_data = array(
+					'no_tujuan' => $user->no_hp,
+					'konten' => $konten,
+					'created_date' => $timestamp,
+					'ticket_id' => $item_info->trackid,
+					'is_sent' => 0
+				);
+				$this->Draft->insert_sms($sms_data);
+			}
 		}
 	}
 
@@ -2502,6 +2529,7 @@ class Tickets extends Secure_Controller
 		$item_id = (int)$item_id;
 		
 		$item_info = $this->Ticket->get_info($item_id);
+	
 		foreach(get_object_vars($item_info) as $property => $value)
 		{
 			$item_info->$property = $this->xss_clean($value);
@@ -2517,7 +2545,7 @@ class Tickets extends Secure_Controller
 		
 		$this->load->helper(array('dompdf', 'file'));
 		
-		$html = $this->load->view('tickets/print_pdf', $data, TRUE);
+		$html = $this->load->view('tickets/print_pdf', $data,TRUE);
 		$filename = rand(0,1000);
 		pdf_create($html, $filename);
 		

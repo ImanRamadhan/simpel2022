@@ -645,6 +645,78 @@ class Ticket extends CI_Model
 		return $this->db->get();
 	}
 
+	public function get_sla_tickets_perform_found_rows($search, $filters)
+	{
+		return $this->search_sla_tickets_perform($search, $filters, 0, 0, 'desk_tickets.id', 'desc', TRUE);
+	}
+
+	public function search_sla_tickets_perform($search, $filters, $rows = 0, $limit_from = 0, $sort = 'desk_tickets.id', $order = 'asc', $count_only = FALSE)
+	{
+		// get_found_rows case
+		if($count_only == TRUE)
+		{
+			$this->db->select('COUNT(desk_tickets.id) as count');
+		}
+		else
+		{
+			$this->db->select('desk_tickets.id, trackid, lastchange, iden_nama, isu_topik, status, is_rujuk, tl, fb, is_verified, hk');
+			$this->db->select('prod_masalah as problem, 0 as outstanding');
+			//$this->db->select("CASE WHEN is_rujuk = '1' AND status = '3' THEN hk WHEN is_rujuk = '1' AND status <> '3' THEN  5 * ((DATEDIFF( NOW() , dt) ) DIV 7) + MID('0123455501234445012333450122234501101234000123450', 7 * WEEKDAY(dt) + WEEKDAY(NOW()) + 1, 1) - (select count(tgl) from desk_holiday where tgl between dt AND NOW()) ELSE 0 END as outstanding");
+			$this->db->select("date_format(tglpengaduan,'%d/%m/%Y') as tglpengaduan");
+		}
+		
+		$this->db->from('desk_tickets');
+		
+		if(!empty($filters['tgl1']) && !empty($filters['tgl2']))
+		{
+			$this->db->where('tglpengaduan >=', $filters['tgl1']);
+			$this->db->where('tglpengaduan <=', $filters['tgl2']);
+		}
+		
+		if(!empty($filters['kota']))
+		{
+			$this->apply_filter($this->db, $filters['kota']);
+		}
+		
+		$this->db->where('tl',1);
+		$this->db->where('closed_date IS NOT NULL');
+		
+		if(!empty($filters['sla']))
+		{
+			if($filters['sla'] == 'meet')
+			{
+				$this->db->where('DATEDIFF(date(tl_date), date(tglpengaduan)) <= sla');
+			}
+			elseif($filters['sla'] == 'notmeet')
+			{
+				$this->db->where('DATEDIFF(date(tl_date), date(tglpengaduan)) > sla');
+			}
+		}
+
+		if(!empty($search))
+		{
+			$this->db->group_start();
+				$this->db->like('desk_tickets.trackid', $search);
+			$this->db->group_end();
+		}
+		
+		// get_found_rows case
+		if($count_only == TRUE)
+		{
+			return $this->db->get()->row()->count;
+		}
+
+		// order by name of item by default
+		$this->db->order_by($sort, $order);
+
+		if($rows > 0)
+		{
+			$this->db->limit($rows, $limit_from);
+		}
+		
+		return $this->db->get();
+	}
+	
 	/*
 	Rujukan Masuk
 	*/
@@ -660,12 +732,13 @@ class Ticket extends CI_Model
 			$this->db->select('COUNT(desk_tickets.id) as count');
 		} else {
 
-			$this->db->select('desk_tickets.*');
+			$this->db->select('desk_tickets.*, desk_rujukan.*');
 
 			$this->db->select("date_format(tglpengaduan,'%d/%m/%Y') as tglpengaduan");
 		}
 
 		$this->db->from('desk_tickets');
+		$this->db->join('desk_rujukan', 'desk_rujukan.rid = desk_tickets.id', 'LEFT');
 
 
 		if (!empty($filters['tgl1']) && !empty($filters['tgl2'])) {
@@ -1226,13 +1299,30 @@ class Ticket extends CI_Model
 		$sql .= ", date_format(a.fb_date,'%d/%m/%Y') as fb_date_fmt";
 		$sql .= ", date_format(a.closed_date,'%d/%m/%Y') as closed_date_fmt";
 		$sql .= ", date_format(a.verified_date,'%d/%m/%Y') as verified_date_fmt";
-		//$sql .= ", date_format(a.dt,'%d/%m/%Y') as dt_fmt";
+		// Begin select table direktorat
+		for ($i = 1; $i <= 5; $i++) {
+			$sql .= ", dd$i.name as rujukan$i";
+			$sql .= ", d$i"."_prioritas as rujukan_hk$i";
+		}
+		// ehd join table direktorat
+		$sql .= ", date_format(a.dt,'%d/%m/%Y') as dt_fmt";
 		$sql .= ", b.desc as jenis_produk";
 		$sql .= ", c.name as profesi";
 		$sql .= ", d.name as created_by";
 		$sql .= ", e.name as verified_by";
+		$sql .= ", a.is_rujuk";
 		$sql .= ", f.name as last_replier";
 		$sql .= " FROM (SELECT * FROM desk_tickets WHERE id=$item_id) a";
+		// Begin join table direktorat
+		for ($i = 1; $i <= 5; $i++) {
+			if ($i == 1) {
+				$sql .= " LEFT JOIN desk_direktorat dd$i ON dd$i.id = a.direktorat";
+			} else {
+				$sql .= " LEFT JOIN desk_direktorat dd$i ON dd$i.id = a.direktorat$i";
+			}
+		}
+		// ehd join table direktorat
+
 		$sql .= " LEFT JOIN desk_categories b ON a.kategori = b.id";
 		$sql .= " LEFT JOIN desk_profesi c ON a.iden_profesi = c.id";
 		$sql .= " LEFT JOIN desk_users d ON a.owner = d.id";
@@ -1467,8 +1557,13 @@ class Ticket extends CI_Model
 
 		$info = $this->get_info($item_id);
 		$status = $info->status;
-		if ($status != '3')
+
+		if($status != '3')
 			$status = '2';
+
+		if($this->session->id == $info->owner){
+			$status = '0';
+		}
 
 		$item_data = array(
 			'lastreplier' => '1',
@@ -2008,11 +2103,21 @@ class Ticket extends CI_Model
 	{
 		$this->db->select('*');
 		$this->db->from('desk_categories');
+		$this->db->where('deleted', 0);
 		$this->db->order_by('desc', 'asc');
 
 		return $this->db->get();
 	}
 
+	public function get_range_age()
+	{
+		$this->db->select('*');
+		$this->db->from('desk_ages');
+		$this->db->order_by('id', 'asc');
+
+		return $this->db->get();
+	}
+	
 	public function get_mekanisme()
 	{
 		$this->db->select('*');
@@ -2155,8 +2260,9 @@ class Ticket extends CI_Model
 		$this->db->from('desk_direktorat');
 		$this->db->where('is_rujukan', 1);
 		$this->db->where('deleted', 0);
-
-		if (!empty($cities))
+		$this->db->where('dir_status', 1);
+		
+		if(!empty($cities))
 			$this->db->where_in('kota', $cities);
 
 		$this->db->order_by('kota, name', 'asc');
@@ -2264,6 +2370,14 @@ class Ticket extends CI_Model
 		return $this->db->get();
 	}
 
+	public function get_attachments_ppidtl($item_id, $mode)
+	{
+		$this->db->from('desk_attachments_ppidtl');
+		$this->db->where('ticket_id', $item_id);
+		$this->db->where('mode', $mode);
+		return $this->db->get();
+	}
+
 	public function delete_attachments($att_id, $ticket_id, $mode)
 	{
 		//Run these queries as a transaction, we want to make sure we do all or nothing
@@ -2310,6 +2424,16 @@ class Ticket extends CI_Model
 		if ($this->db->insert('desk_attachments', $item_data)) {
 			$item_data['id'] = $this->db->insert_id();
 
+			return TRUE;
+		}
+
+		return FALSE;
+	}
+
+	public function save_attachment_ppidtl(&$item_data)
+	{
+		if ($this->db->insert('desk_attachments_ppidtl', $item_data)) {
+			$item_data['id'] = $this->db->insert_id();
 			return TRUE;
 		}
 

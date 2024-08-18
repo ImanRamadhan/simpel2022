@@ -239,6 +239,17 @@
 			</div>
 		</div>
 	</div>
+	<div class="card">
+			<div class="card-body">
+				<h5 class="mt-0 mb-3">Performa SLA Layanan Sudah TL</h5>
+				<div id="donut-performa-sla" class="morris-chart workloed-chart"></div>
+				<ul class="list-unstyled list-group text-muted m-2">
+					<li class="list-group-item border-0 d-flex justify-content-between align-items-center font-12">Memenuhi SLA <a href="<?php echo site_url('tickets/list_sla_perform?kota=PUSAT_CC&tl=N&sla=green&tgl1='.$date_1.'&tgl2='.$date_2)?>" title="Klik untuk melihat detail"><span class="badge badge-success badge-pill font-12" id="memenuhi_sla">0</span></a></li>
+					<li class="list-group-item border-0 d-flex justify-content-between align-items-center font-12">Tidak Memenuhi SLA <a href="<?php echo site_url('tickets/list_sla_perform?kota=PUSAT_CC&tl=N&sla=orange&tgl1='.$date_1.'&tgl2='.$date_2)?>" title="Klik untuk melihat detail"><span class="badge badge-warning badge-pill font-12" id="tidak_memenuhi_sla">0</span></a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
 </div>
 
 <?php $this->load->view("home/home_js"); ?>

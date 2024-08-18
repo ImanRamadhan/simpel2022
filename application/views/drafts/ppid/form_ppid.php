@@ -478,12 +478,12 @@
 			<?php echo form_label('Perihal <span class="text-danger">*</span>', 'rincian', array('for' => 'message', 'class' => 'col-form-label col-sm-3')); ?>
 			<div class="col-sm-8">
 				<?php echo form_textarea(array(
-					'class' => 'form-control form-control-sm',
-					'name' => 'tt_perihal',
-					'id' => 'tt_perihal',
-					'rows' => 4,
-					'value' => (empty($ppid_info->tt_perihal) ? 'Tanggapan Permintaan Informasi Publik' : '')
-				)); ?>
+				'class'=>'form-control form-control-sm', 
+				'name'=>'tt_perihal', 
+				'id'=>'tt_perihal', 
+				'rows'=>4,
+				'value'=>(empty($ppid_info->tt_perihal)?'Tanggapan Permintaan Informasi Publik':$ppid_info->tt_perihal)
+				));?>
 			</div>
 		</div>
 		<div class="form-group form-group-sm row">

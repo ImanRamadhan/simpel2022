@@ -618,6 +618,7 @@ function get_rujukanmasuk_tickets_manage_table_headers()
 		array('trackid' => 'ID Layanan', 'class' => 'text-nowrap', 'titleTooltip' => 'aaa'),
 		
 		array('tglpengaduan' => 'Tgl Layanan', 'align' => 'center'),
+		array('tgldirujuk' => 'Tgl Dirujuk', 'align' => 'center', 'sortable' => false),
 		array('lastchange' => 'Update Terakhir', 'align' => 'center'),
 		array('iden_nama' => 'Nama Konsumen','align' => 'left'),
 		//array('outstanding' => 'Outstanding','align' => 'center'),
@@ -663,12 +664,36 @@ function get_rujukanmasuk_ticket_data_row($item, $no)
 		//'trackid' => anchor("rujukan/view/$item->id?ref=rujukan_masuk&r=".rand(1000,9999), $item->trackid),
 		'trackid' => anchor("rujukan/view/$item->id?ref=rujukan_masuk&r=".rand(1000,9999), $item->trackid, array('title' => $problem)),
 		'tglpengaduan' => $item->tglpengaduan,
+		// 'tgldirujuk' => '2024-01-01',
 		'lastchange' => time_since($item->lastchange),
 		'iden_nama' => $item->iden_nama,
 		'edit' => $view_link.' '.$edit_link. ' '.$pdf_link. ' '.$copy_link
-		);
+	);
+
+	switch($CI->session->direktoratid){
+		case $item->direktorat:
+			$data['tgldirujuk'] = $item->tgl_rujuk1;
+		
+		case $item->direktorat2:
+			$data['tgldirujuk'] = $item->tgl_rujuk2;
+
+		case $item->direktorat3:
+			$data['tgldirujuk'] = $item->tgl_rujuk3;
 	
-	$data['status'] = get_status($item->status); 
+		case $item->direktorat4:
+			$data['tgldirujuk'] = $item->tgl_rujuk4;
+
+		case $item->direktorat5:
+			$data['tgldirujuk'] = $item->tgl_rujuk5;
+	}
+
+	$data['status'] = get_status($item->status);
+	
+	// $data['status'] = get_status(5); 
+
+	if($item->status == '2' && $CI->session->userdata('user_id') != $item->owner){
+		$data['status'] = get_status(0); 
+	}
 	
 	$data['tl'] = ($item->tl == 1)?'Y':'N';
 	$data['fb'] = ($item->fb == 1)?'Y':'N';
@@ -1249,6 +1274,7 @@ function get_jobs_manage_table_headers()
 	$headers = array(
 		array('id' => 'ID', 'visible' => false, 'width' => '80px'),
 		array('no' => 'No.', 'sortable' => false, 'width' => '80px'),
+		array('ID' => 'ID/ Kode Database', 'align' => 'center', 'width' => '120px'),
 		array('name' => 'Nama Profesi', 'align' => 'left'),
 		
 		
@@ -1275,6 +1301,7 @@ function get_job_data_row($item, $no)
 	$data = array (
 		'id' => $item->id,
 		'no' => $no.'.',
+		'ID' => $item->id,
 		'name' => $item->name,
 		'edit' => anchor($controller_name."/view/$item->id", '<i class="fa fa-edit" aria-hidden="true"></i>',
 			array('class'=>'', 'data-btn-submit' => $CI->lang->line('common_submit'), 'title'=>$CI->lang->line($controller_name.'_update')))
@@ -1844,6 +1871,54 @@ function get_drafts_rujukan_data_row($item, $no)
 		
 	
 		
+	return $data;
+}
+
+function get_categories_manage_table_headers()
+{
+	$CI =& get_instance();
+
+	$headers = array(
+		array('no' => 'No.', 'sortable' => false, 'width' => '80px'),
+		array('name' => 'Nama', 'align' => 'left'),
+		array('desc' => 'Deskripsi', 'align' => 'left'),
+		array('deleted' => 'Status', 'align' => 'center'),
+		
+	);
+	
+	
+
+	if($CI->User->has_grant('messages', $CI->session->userdata('user_id')))
+	{
+		$headers[] = array('messages' => '', 'sortable' => FALSE);
+	}
+
+	
+	return transform_headers($headers);
+}
+
+
+function get_categories_data_row($item, $no)
+{
+	$CI =& get_instance();
+	$controller_name = strtolower(get_class($CI));
+	
+	
+	$data = array (
+		'id' => $item->id,
+		'no' => $no.'.',
+		'name' => $item->name,
+		'desc' => $item->desc,
+		'edit' => anchor($controller_name."/view/$item->id", '<i class="fa fa-edit" aria-hidden="true"></i>',
+			array('class'=>'', 'data-btn-submit' => $CI->lang->line('common_submit'), 'title'=>$CI->lang->line($controller_name.'_update')))
+		);
+	
+	if($item->deleted)
+		$data['deleted'] = 'Disabled';
+	else
+		$data['deleted'] = 'Enabled';
+		
+			
 	return $data;
 }
 

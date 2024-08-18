@@ -195,8 +195,10 @@ class Drafts extends Secure_Controller
 
 		$data['profesi'] = get_profesi();
 		$data['products'] = get_products();
-		$data['sumberdata'] = array('' => '', 'SP4N' => 'SP4N', 'PPID' => 'PPID');
 
+		$data['range_age'] = get_range_age();
+
+		$data['sumberdata'] = array('' => '','SP4N' => 'SP4N','PPID'=>'PPID');
 		//$data['klasifikasi'] = get_klasifikasi_sla($item_info->kategori, $item_info->info);
 		$data['klasifikasi'] = get_klasifikasi();
 		$data['subklasifikasi'] = get_subklasifikasi2($item_info->klasifikasi);
@@ -287,12 +289,9 @@ class Drafts extends Secure_Controller
 		$data['provinces2'] = get_provinces();
 
 		$data['profesi'] = get_profesi();
-
-
+		$data['range_age'] = get_range_age();
 		$data['products'] = get_products();
 		//$data['products'] = get_products_sla('P');
-
-
 		$data['sumberdata'] = array('' => '', 'SP4N' => 'SP4N', 'PPID' => 'PPID');
 
 		$data['klasifikasi'] = get_klasifikasi();
@@ -362,9 +361,9 @@ class Drafts extends Secure_Controller
 		$data['products'] = get_products();
 		//$data['products'] = get_products_sla('P');
 
-
-		$data['sumberdata'] = array('' => '', 'SP4N' => 'SP4N', 'PPID' => 'PPID');
-
+		$data['range_age'] = get_range_age();
+		$data['sumberdata'] = array('' => '','SP4N' => 'SP4N','PPID'=>'PPID');
+		
 		$data['klasifikasi'] = get_klasifikasi();
 		//$data['klasifikasi'] = array();
 
@@ -434,10 +433,10 @@ class Drafts extends Secure_Controller
 
 		$data['products'] = get_products();
 		//$data['products'] = get_products_sla('P');
-
-
-		$data['sumberdata'] = array('' => '', 'SP4N' => 'SP4N' /*,'PPID'=>'PPID'*/);
-
+		$data['range_age'] = get_range_age();
+		
+		
+		$data['sumberdata'] = array('' => '','SP4N' => 'SP4N' /*,'PPID'=>'PPID'*/);
 		$data['klasifikasi'] = get_klasifikasi();
 		//$data['klasifikasi'] = array();
 
@@ -564,6 +563,7 @@ class Drafts extends Secure_Controller
 		$info =  $this->input->post('info');
 		$penerima =  $this->input->post('penerima');
 		$kategori =  $this->input->post('kategori');
+		$kategori_lainnya = $this->input->post('kategori_lainnya');
 		$submited_via =  $this->input->post('submited_via');
 		$jenis =  $this->input->post('jenis');
 		$shift =  $this->input->post('shift');
@@ -834,6 +834,7 @@ class Drafts extends Secure_Controller
 			'info' => $info,
 			'penerima' => $penerima,
 			'kategori' => $kategori,
+			'kategori_lainnya' => $kategori_lainnya,
 			'submited_via' => $submited_via,
 			'jenis' => $jenis,
 			'shift' => $shift,
@@ -1621,13 +1622,7 @@ class Drafts extends Secure_Controller
 			'keberatan_perihal' => $keberatan_perihal,
 			'keberatan_isi_surat' => $keberatan_isi_surat,
 			'keberatan_nama_pejabat' => $keberatan_nama_pejabat,*/
-
-
-
 		);
-
-
-
 
 		$tipe_medsos =  $this->input->post('tipe_medsos');
 		if (!empty($submited_via) && $submited_via != 'Medsos')
@@ -1742,9 +1737,6 @@ class Drafts extends Secure_Controller
 		}
 
 		$send = $this->input->post('send');
-
-
-
 		if ($this->Draft->save($item_data, $item_id)) {
 
 			$message = 'Data berhasil disimpan';
