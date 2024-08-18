@@ -173,7 +173,10 @@ class Dashboard_balai extends Secure_Controller
 	
 	public function rujukan_masuk_not_answered()
 	{		
-		$cnt = $this->Ajaxb->rujukan_masuk_not_answered($this->session->dashboard_date1, $this->session->dashboard_date2);
+		$dateStartFilter = date('Y-01-01');
+		$dateEndFilter = date('Y-m-d');
+		//$cnt = $this->Ajaxb->rujukan_masuk_not_answered($this->session->dashboard_date1, $this->session->dashboard_date2);
+		$cnt = $this->Ajaxb->rujukan_masuk_not_answered($dateStartFilter, $dateEndFilter);
 		echo json_encode($cnt);
 	}
 	

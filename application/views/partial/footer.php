@@ -18,37 +18,42 @@
 			$(document).ready(function()
 			{
 				<?php if($this->session->city == 'PUSAT'): ?>
-				$.getJSON('<?php echo site_url('dashboard/rujukan_keluar_replied');?>', function (data) {
-					//console.log(data);
-					$('#rujukan_keluar_replied').html(data);
-				});
+				// $.getJSON('<?php echo site_url('dashboard/rujukan_keluar_replied');?>', function (data) {
+				// 	//console.log(data);
+				// 	$('#rujukan_keluar_replied').html(data);
+				// });
 				
 				$.getJSON('<?php echo site_url('dashboard/rujukan_masuk_not_closed');?>', function (data) {
 					//console.log(data);
 					$('#rujukan_masuk_not_closed').html(data);
+				});
+
+				$.getJSON('<?php echo site_url('dashboard/rujukan_masuk_not_closed_menu');?>', function (data) {
+					//console.log(data);
+					$('#rujukan_masuk_not_closed_menu').html(data);
 				});
 				
 				<?php elseif($this->session->city == 'UNIT TEKNIS'): ?>
 				
 				$.getJSON('<?php echo site_url('dashboard_unit/rujukan_masuk_not_answered');?>', function (data) {
 					//console.log(data);
-					data = "";
+					//data = "";
 					$('#rujukan_masuk_not_answered').html(data);
-					$('#rujukan_masuk_not_closed').html(data);
+					//$('#rujukan_masuk_not_closed').html(data);
 				});
 				
 				
 				<?php else: ?>
 				$.getJSON('<?php echo site_url('dashboard_balai/rujukan_masuk_not_answered');?>', function (data) {
 					//console.log(data);
-					data = "";
+					//data = "";
 					$('#rujukan_masuk_not_answered').html(data);
 				});
-				$.getJSON('<?php echo site_url('dashboard_balai/rujukan_masuk_not_closed');?>', function (data) {
-					//console.log(data);
-					data = "";
-					$('#rujukan_masuk_not_closed').html(data);
-				});
+				// $.getJSON('<?php echo site_url('dashboard_balai/rujukan_masuk_not_closed');?>', function (data) {
+				// 	//console.log(data);
+				// 	//data = "";
+				// 	$('#rujukan_masuk_not_closed').html(data);
+				// });
 				<?php endif; ?>
 				
 			});

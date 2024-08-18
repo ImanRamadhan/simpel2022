@@ -366,11 +366,14 @@ class Ajaxb extends CI_Model
 	{
 		$this->db->select('COUNT(id) as cnt');
 		$this->db->from('desk_tickets');
-		//$this->db->where('tglpengaduan >=', $date1);
-		//$this->db->where('tglpengaduan <=', $date2);
+		$this->db->where('tglpengaduan >=', $date1);
+		$this->db->where('tglpengaduan <=', $date2);
 		//$this->db->where('kota', 'PUSAT');
-		//$this->db->where('status !=', '3');
+		$this->db->where('status !=', '3');
+		$this->db->group_start();
 		$this->db->where('replierid', '');
+		$this->db->or_where('replierid', NULL);
+		$this->db->group_end();
 		$this->db->group_start();
 			$this->db->where('direktorat', $this->session->direktoratid);
 			$this->db->or_where('direktorat2', $this->session->direktoratid);

@@ -127,6 +127,7 @@ $(document).ready(function()
 				{"field":"verified_date","title":"Tgl Verifikasi","switchable":true,"sortable":false,"valign":"top","class":"","sorter":"","align":"center", "rowspan":2},
 				{"field":"verificator_name","title":"Verifikator","switchable":true,"sortable":false,"valign":"top","class":"","sorter":"","align":"center", "rowspan":2},
 				{"field":"tglpengaduan","title":"Tgl Layanan","switchable":true,"sortable":false,"valign":"top","class":"","sorter":"","align":"center", "rowspan":2},
+				{"field":"jumlahsla","title":"Jumlah SLA","switchable":true,"sortable":false,"valign":"top","class":"","sorter":"","align":"center", "rowspan":2},
 				{"field":"closed_date","title":"Tgl Closed","switchable":true,"sortable":false,"valign":"top","class":"","sorter":"","align":"center", "rowspan":2},
 				{"field":"fb","title":"Status FB","switchable":true,"sortable":false,"valign":"top","class":"","sorter":"","align":"center", "rowspan":2},
 				{"field":"fb_date","title":"Tgl FB","switchable":true,"sortable":false,"valign":"top","class":"","sorter":"","align":"center", "rowspan":2},

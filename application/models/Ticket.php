@@ -83,7 +83,7 @@ class Ticket extends CI_Model
 			$this->db->where('tglpengaduan >=', $filters['tgl1']);
 			$this->db->where('tglpengaduan <=', $filters['tgl2']);
 		}
-
+		
 		if ($this->session->city == 'PUSAT') {
 			if (!empty($filters['kota'])) {
 				$this->apply_filter($this->db, $filters['kota']);
@@ -678,7 +678,7 @@ class Ticket extends CI_Model
 		}
 
 
-		$this->db->where_in('info', array('P', 'I'));
+		$this->db->where_in('info', array('P', 'I', 'S'));
 
 		$this->db->group_start();
 		$this->db->where('direktorat', $this->session->direktoratid);
@@ -693,8 +693,6 @@ class Ticket extends CI_Model
 			$this->db->like('desk_tickets.trackid', $search);
 			$this->db->group_end();
 		}
-
-
 
 		// get_found_rows case
 		if ($count_only == TRUE) {

@@ -136,6 +136,7 @@ thead tr.second th {
 								<th  style="vertical-align : middle;text-align:center;">Tanggal Verifikasi</th>
                                 <th  style="vertical-align : middle;text-align:center;">Verifikator</th>
 								<th style="vertical-align : middle;text-align:center;">Tgl Layanan</th>
+								<th style="vertical-align : middle;text-align:center;">Jumlah SLA</th>
 								<th style="vertical-align : middle;text-align:center;">Tgl Closed</th>
 								<th  style="vertical-align : middle;text-align:center;">Status FB</th>
 								<th  style="vertical-align : middle;text-align:center;">Tanggal FB</th>
@@ -205,13 +206,14 @@ thead tr.second th {
 							<td><?php echo $row['verificator_name']; ?></td>
 							
 							<td><?php echo $row['tglpengaduan']; ?></td>
+							<td><?php echo $row['sla']; ?></td>
 							<td><?php echo $row['closed_date']; ?></td>
 							<td><?php echo $row['fb']?'Sudah':'Belum'; ?></td>
 							<td><?php echo $row['fb_date']; ?></td>
 							<td align="center"><?php echo $row['hk']; ?></td>
 							<td align="center"><?php 
 								
-								if($row['hk'] <= $row['sla'])
+								if($row['hk'] <= $row['sla'] && $row['tl'])
 								{
 									echo 'Y';
 								}

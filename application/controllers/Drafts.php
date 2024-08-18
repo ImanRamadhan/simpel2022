@@ -1477,6 +1477,7 @@ class Drafts extends Secure_Controller
 		$info =  $this->input->post('info');
 		$penerima =  $this->input->post('penerima');
 		$kategori =  $this->input->post('kategori');
+		$kategori_lainnya = $this->input->post('kategori_lainnya');
 		$submited_via =  $this->input->post('submited_via');
 		$jenis =  $this->input->post('jenis');
 		$shift =  $this->input->post('shift');
@@ -1748,6 +1749,7 @@ class Drafts extends Secure_Controller
 			'info' => $info,
 			'penerima' => $penerima,
 			'kategori' => $kategori,
+			'kategori_lainnya' => $kategori_lainnya,
 			'submited_via' => $submited_via,
 			'jenis' => $jenis,
 			'shift' => $shift,

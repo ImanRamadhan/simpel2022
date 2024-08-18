@@ -29,15 +29,16 @@
 	</li>
 
 	<li class="has-submenu">
-		<a href="#"><i class="mdi mdi-bullseye"></i>Rujukan</a><span class="badge badge-danger badge-pill noti-icon-badge" id="rujukan_keluar_replied">0</span>
+		<a href="#"><i class="mdi mdi-bullseye"></i>Rujukan</a>
+		<!-- <span class="badge badge-danger badge-pill noti-icon-badge" id="rujukan_keluar_replied">0</span> -->
 		<ul class="submenu ">
 			<li class="">
 
-				<a href="<?php echo site_url('rujukan/list_masuk'); ?>">Rujukan Masuk &nbsp;<i class="badge badge-danger badge-pill text-white" id="rujukan_masuk_not_closed"></i></a>
+				<a href="<?php echo site_url('rujukan/list_masuk'); ?>">Rujukan Masuk &nbsp;<i class="badge badge-danger badge-pill text-white" id="rujukan_masuk_not_closed_menu"></i></a>
 
 			</li>
 
-			<li class=""><a href="<?php echo site_url('rujukan/list_keluar') ?>">Rujukan Keluar </a></li>
+			<li class=""><a href="<?php echo site_url('rujukan/list_keluar') ?>">Rujukan Keluar &nbsp;<i class="badge badge-danger badge-pill text-white" id="rujukan_keluar_not_closed"></i></a></li>
 			<li class=""><a href="<?php echo site_url('rujukan/list_keluar_saya') ?>">Rujukan Keluar Saya</a></li>
 			<li class=""><a href="<?php echo site_url('rujukan/list_status_closed') ?>">Rujukan Status Closed</a></li>
 

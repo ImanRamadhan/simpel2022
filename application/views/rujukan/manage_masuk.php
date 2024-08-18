@@ -35,23 +35,27 @@ $(document).ready(function()
     });
 	
 	
-	if($.remember({ name: 'rujukan_masuk.tgl1' }) != null) 
-	{
-		$('#tgl1').val($.remember({ name: 'rujukan_masuk.tgl1' }));
-	}
-	else
-	{
-		$("#tgl1").val("<?php echo date('01/m/Y'); ?>");
-	}
+	// if($.remember({ name: 'rujukan_masuk.tgl1' }) != null) 
+	// {
+	// 	$('#tgl1').val($.remember({ name: 'rujukan_masuk.tgl1' }));
+	// }
+	// else
+	// {
+	// 	$("#tgl1").val("<?php echo date('01/m/Y'); ?>");
+	// }
+
+	$("#tgl1").val("<?php echo date('01/01/Y'); ?>");
 	
-	if($.remember({ name: 'rujukan_masuk.tgl2' }) != null) 
-	{
-		$('#tgl2').val($.remember({ name: 'rujukan_masuk.tgl2' }));
-	}
-	else
-	{
-		$("#tgl2").val("<?php echo date('d/m/Y'); ?>");
-	}
+	// if($.remember({ name: 'rujukan_masuk.tgl2' }) != null) 
+	// {
+	// 	$('#tgl2').val($.remember({ name: 'rujukan_masuk.tgl2' }));
+	// }
+	// else
+	// {
+	// 	$("#tgl2").val("<?php echo date('d/m/Y'); ?>");
+	// }
+
+	$("#tgl2").val("<?php echo date('d/m/Y'); ?>");
 	
 	var tgl1 = '<?php echo $tgl1; ?>';
 	if(tgl1 != '')
