@@ -11,23 +11,38 @@ class RequestAccess extends CI_Model {
         $id     = $this->input->post('id');
         $type   = $this->input->post('type');
         $data   = [];
-        $exist  = $this->db->where('id',$id)->get("login_request")->row();
-        
+
+		if ($userId != null) {
+			$exist  = $this->db->where('user_id',$userId)->get("login_request")->row();
+		} else {
+			$exist  = $this->db->where('id',$id)->get("login_request")->row();
+		}
+		
         $date   = new DateTime();
 
         if(!$exist){
-            $data["user_id"]    = $userId;
+            $data["user_id"]    	= $userId;
+			$data["created_by"]		= $this->session->id;
+			$data["updated_by"]		= $this->session->id;
             $this->db->insert('login_request', $data);
             return TRUE;
-        }
+        } else {
+			$data["code"] 			= NULL;
+			$data["valid_until"] 	= NULL;
+			$data["updated_by"]		= $this->session->id;
+			$userId 				= $exist->user_id;
+		}
+
         if((int)$type == 1){
             $dateTomorrow           = $date->modify("+1 day")->format("Y-m-d H:i:s");
             $data["valid_until"]    = $dateTomorrow;
 			$data["code"]			= random_int(10000000, 99999999);
+			$data["updated_by"]		= $this->session->id;
         }else if((int)$type == 2){
             $data["valid_until"]    = $date->modify("-1 hour")->format("Y-m-d H:i:s");
         }
-        $this->db->where('id',$id);
+		
+        $this->db->where('user_id',$userId);
         $this->db->update("login_request",$data);
         return TRUE;
     }

@@ -58,7 +58,7 @@
         });
         $(document).on('click','.data-btn-approve',function(event){
             event.preventDefault();
-            console.log("test");
+            
             var  id = $(this).data('id')
             if(confirm('yakin ingin menerima permintaan akses login data tersebut?')){
                 updateRequest(id,1);
@@ -66,7 +66,7 @@
         })
         $(document).on('click','.data-btn-reject',function(event){
             event.preventDefault();
-            console.log("test");
+            
             var  id = $(this).data('id')
             if(confirm('yakin ingin menonaktifkan/menolak permintaan akses login data tersebut?')){
                 updateRequest(id,2);

@@ -84,10 +84,11 @@ class Request_access extends Secure_Controller
             $message = $this->xss_clean($this->lang->line('items_update_approve_request_login'));
         else
             $message = $this->xss_clean($this->lang->line('items_update_reject_request_login'));
+        
         if ($this->RequestAccess->save()) {
             echo json_encode(array('success' => TRUE, 'message' => $this->xss_clean($this->lang->line('items_successfull')) . ''. $message));
         }else{
-        echo json_encode(array('success' => FALSE, 'message' => $this->xss_clean($this->lang->line('items_fail')) . ''. $message));  
+            echo json_encode(array('success' => FALSE, 'message' => $this->xss_clean($this->lang->line('items_fail')) . ''. $message));  
         }
     }
 }
