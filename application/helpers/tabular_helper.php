@@ -1025,7 +1025,60 @@ function get_my_tickets_manage_table_headers()
 	
 	return transform_headers($headers);
 }
+function get_request_access_manage_table_headers()
+{
+	$CI =& get_instance();
 
+	$headers = array(
+		
+		array('no' => 'No.', 'align' => 'center', 'sortable' => false),
+		array('id' => 'ID', 'visible' => false),
+		array('nama' => 'Request ke Petugas'),
+		array('valid_until' => 'Berlaku Sampai', 'align' => 'center'),
+		array('code' => 'Pass Code', 'visible' => is_administrator() ? false : true),
+		array('status' => 'Status', 'align' => 'center'),
+	);
+	
+	
+	return transform_headers($headers);
+}
+
+function get_request_access_data_row($item, $no)
+{
+	$CI =& get_instance();
+	$controller_name = strtolower(get_class($CI));
+	$status = '<span class="badge badge-dark badge-pill py-2 px-4"> Waiting Approval </span>';
+	$dateNow = date("Y-m-d H:i:s");
+	$dateItem = $item->valid_until; 
+
+	$timestampNow = strtotime($dateNow);
+	$timestampItem = strtotime($dateItem);
+	$isActive = true;
+	if ($timestampNow > $timestampItem && !is_null($item->valid_until)) {
+		$status = '<span class="badge badge-warning badge-pill py-2 px-4"> Rejected / Expired </span>';
+		$isActive = false;
+	} elseif ($timestampNow < $timestampItem && !is_null($item->valid_until)) {
+		$status = '<span class="badge badge-success badge-pill py-2 px-4">Active</span>';
+		$isActive = true;
+	}
+	$buttonApprove = anchor('request_access/#', '<i class="fa fa-check-square"> </i>',array( 'data-id' => $item->id ,'class'=>'btn btn-sm btn-success data-btn-approve'));
+	$buttonReject = anchor('request_access/#', '<i class="fa fa-times-circle"> </i>',array( 'data-id' => $item->id ,'class'=>'btn mx-1 btn-sm btn-warning data-btn-reject'));
+
+	if(!is_null($item->valid_until))
+		$buttonApprove = '';
+
+	$data = array (
+		'no' => $no.'.',
+		'id' => $item->id,
+		'nama' => $item->nama,
+		'valid_until' => $item->valid_until,
+		'code' => $item->code,
+		'status' => $status,
+		'edit' => $isActive ?  $buttonApprove . $buttonReject : '' ,
+	);
+	if(is_administrator()) unset($data['edit']);
+	return $data;
+}
 function get_my_ticket_data_row($item, $no)
 {
 	$CI =& get_instance();
@@ -1249,6 +1302,7 @@ function get_jobs_manage_table_headers()
 	$headers = array(
 		array('id' => 'ID', 'visible' => false, 'width' => '80px'),
 		array('no' => 'No.', 'sortable' => false, 'width' => '80px'),
+		array('ID' => 'ID/ Kode Database', 'align' => 'center', 'width' => '120px'),
 		array('name' => 'Nama Profesi', 'align' => 'left'),
 		
 		
@@ -1275,6 +1329,7 @@ function get_job_data_row($item, $no)
 	$data = array (
 		'id' => $item->id,
 		'no' => $no.'.',
+		'ID' => $item->id,
 		'name' => $item->name,
 		'edit' => anchor($controller_name."/view/$item->id", '<i class="fa fa-edit" aria-hidden="true"></i>',
 			array('class'=>'', 'data-btn-submit' => $CI->lang->line('common_submit'), 'title'=>$CI->lang->line($controller_name.'_update')))
@@ -1844,6 +1899,54 @@ function get_drafts_rujukan_data_row($item, $no)
 		
 	
 		
+	return $data;
+}
+
+function get_categories_manage_table_headers()
+{
+	$CI =& get_instance();
+
+	$headers = array(
+		array('no' => 'No.', 'sortable' => false, 'width' => '80px'),
+		array('name' => 'Nama', 'align' => 'left'),
+		array('desc' => 'Deskripsi', 'align' => 'left'),
+		array('deleted' => 'Status', 'align' => 'center'),
+		
+	);
+	
+	
+
+	if($CI->User->has_grant('messages', $CI->session->userdata('user_id')))
+	{
+		$headers[] = array('messages' => '', 'sortable' => FALSE);
+	}
+
+	
+	return transform_headers($headers);
+}
+
+
+function get_categories_data_row($item, $no)
+{
+	$CI =& get_instance();
+	$controller_name = strtolower(get_class($CI));
+	
+	
+	$data = array (
+		'id' => $item->id,
+		'no' => $no.'.',
+		'name' => $item->name,
+		'desc' => $item->desc,
+		'edit' => anchor($controller_name."/view/$item->id", '<i class="fa fa-edit" aria-hidden="true"></i>',
+			array('class'=>'', 'data-btn-submit' => $CI->lang->line('common_submit'), 'title'=>$CI->lang->line($controller_name.'_update')))
+		);
+	
+	if($item->deleted)
+		$data['deleted'] = 'Disabled';
+	else
+		$data['deleted'] = 'Enabled';
+		
+			
 	return $data;
 }
 

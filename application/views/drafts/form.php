@@ -156,6 +156,9 @@ $(document).ready(function()
 	$('#iden_kota2').hide();
 	$('#prod_provinsi2').hide();
 	
+	//klasifikasi - add iman 23 Juni 2024
+	$('#div-lainnya').hide();
+	
 	<?php if(!$item_info->is_rujuk):?>
 	/*$('#dir1').hide();$('#sla1').hide();
 	$('#dir2').hide();$('#sla2').hide();
@@ -249,6 +252,17 @@ $(document).ready(function()
 			//console.log(entry);
 			$('#subklasifikasi_id').append($('<option></option>').attr('value', entry.id).text(entry.value));
 		  });
+	});
+
+	$('#kategori').on('change', function(){
+		let kategori = $('#kategori option:selected').text();
+		if (kategori == 'Lainnya') {
+			$('#div-lainnya').show();
+			$('#kategori_lainnya').val('');
+		} else {
+			$('#div-lainnya').hide();
+			$('#kategori_lainnya').val('');
+		}
 	});
 	
 	$('#klasifikasi').on('change', function(){
@@ -541,7 +555,7 @@ $(document).ready(function()
 									 dataType: 'json',
 									 success:function(data){
 										$.notify(data.message, { type: data.success ? 'success' : 'danger' });
-										setTimeout(function(){window.location.href = "<?php echo site_url('tickets/view/'); ?>" + data.id;}, 1000);
+										// setTimeout(function(){window.location.href = "<?php echo site_url('tickets/view/'); ?>" + data.id;}, 1000);
 									 }
 								});
 							}
@@ -550,11 +564,6 @@ $(document).ready(function()
 								setTimeout(function(){window.location.href = "<?php echo site_url('drafts/edit/'); ?>" + response.id;}, 1000);
 							}
 						});
-							
-							
-						
-						
-						
 					}
 					
 					

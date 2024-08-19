@@ -117,6 +117,9 @@
 			<li>
 				<a href="https://simpellpk.pom.go.id/simpel2022/public/docs/Manual-Simpellpk-Pusat%202022_rev%202309.pdf" target="_blank">User Manual</a>
 			</li>
+			<li>
+				<a href="<?php echo site_url('request_access'); ?>">Login Force</a>
+			</li>
 		</ul>
 	</li>
 

@@ -24,6 +24,7 @@
 					<?php 
 						if($item_info->info == 'I') echo 'Permintaan Informasi';
 						else if($item_info->info == 'P') echo 'Pengaduan';
+						else if($item_info->info == 'S') echo 'Saran';
 						else if($item_info->info == 'IK') echo 'Informasi Keracunan';
 						else echo '';
 					?></p>

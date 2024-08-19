@@ -316,7 +316,7 @@ class Draft extends CI_Model
 			$item_obj->lastchange_fmt = '';
 			$item_obj->is_rujuk = '0';
 			$item_obj->shift = '1';
-			$item_obj->info = 'P';
+			$item_obj->info = 'I';
 
 			return $item_obj;
 		}
@@ -660,6 +660,24 @@ class Draft extends CI_Model
 					$rujukan_array = array(
 						'rid' => $item_data['id']
 					);
+
+					if(isset($item_data['direktorat']) && $item_data['direktorat'] != "" && $item_data['direktorat'] != 0){
+						$rujukan_array['tgl_rujuk1'] = date("Y-m-d H:i:s");
+					} 
+
+					if(isset($item_data['direktorat2']) && $item_data['direktorat2'] != "" && $item_data['direktorat2'] != 0){
+						$rujukan_array['tgl_rujuk2'] = date("Y-m-d H:i:s");
+					}
+					if(isset($item_data['direktorat3']) && $item_data['direktorat3'] != "" && $item_data['direktorat3'] != 0) {
+						$rujukan_array['tgl_rujuk3'] = date("Y-m-d H:i:s");
+					}
+					if(isset($item_data['direktorat4']) && $item_data['direktorat4'] != "" && $item_data['direktorat4'] != 0) {
+						$rujukan_array['tgl_rujuk4'] = date("Y-m-d H:i:s");
+					}
+					if(isset($item_data['direktorat5']) && $item_data['direktorat5'] != "" && $item_data['direktorat5'] != 0) {
+						$rujukan_array['tgl_rujuk5'] = date("Y-m-d H:i:s");
+					}
+
 					$this->db->insert('desk_rujukan', $rujukan_array);
 				}
 				

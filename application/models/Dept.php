@@ -13,8 +13,7 @@ class Dept extends CI_Model
 	public function has_grant($permission_id, $user_id)
 	{
 		//if no module_id is null, allow access
-		if($permission_id == NULL)
-		{
+		if ($permission_id == NULL) {
 			return TRUE;
 		}
 
@@ -22,7 +21,7 @@ class Dept extends CI_Model
 
 		return ($query->num_rows() == 1);
 	}
-	
+
 	/*
 	Determines if a given item_id is an item
 	*/
@@ -30,12 +29,10 @@ class Dept extends CI_Model
 	{
 		// check if $item_id is a number and not a string starting with 0
 		// because cases like 00012345 will be seen as a number where it is a barcode
-		if(ctype_digit($item_id) && substr($item_id, 0, 1) != '0')
-		{
+		if (ctype_digit($item_id) && substr($item_id, 0, 1) != '0') {
 			$this->db->from('items');
 			$this->db->where('item_id', (int) $item_id);
-			if($ignore_deleted == FALSE)
-			{
+			if ($ignore_deleted == FALSE) {
 				$this->db->where('deleted', $deleted);
 			}
 
@@ -45,7 +42,7 @@ class Dept extends CI_Model
 		return FALSE;
 	}
 
-	
+
 
 	/*
 	Gets total of rows
@@ -58,7 +55,7 @@ class Dept extends CI_Model
 		return $this->db->count_all_results();
 	}
 
-	
+
 
 	/*
 	Get number of rows
@@ -74,46 +71,38 @@ class Dept extends CI_Model
 	public function search($search, $filters, $rows = 0, $limit_from = 0, $sort = 'desk_direktorat.id', $order = 'asc', $count_only = FALSE)
 	{
 		// get_found_rows case
-		if($count_only == TRUE)
-		{
+		if ($count_only == TRUE) {
 			$this->db->select('COUNT(desk_direktorat.id) as count');
-		}
-		else
-		{
-		
+		} else {
+
 			$this->db->select('desk_direktorat.*');
-			
 		}
 
 		$this->db->from('desk_direktorat');
 		$this->db->where('deleted', 0);
-		
-		if(!empty($filters['kota']))
-		{
+
+		if (!empty($filters['kota'])) {
 			$this->db->where('kota', $filters['kota']);
 		}
-		
-		if(!empty($search))
-		{
+
+		if (!empty($search)) {
 			$this->db->group_start();
-				$this->db->like('desk_direktorat.name', $search);
-				$this->db->or_like('desk_direktorat.kota', $search);
-				$this->db->or_like('desk_direktorat.kode_prefix', $search);
+			$this->db->like('desk_direktorat.name', $search);
+			$this->db->or_like('desk_direktorat.kota', $search);
+			$this->db->or_like('desk_direktorat.kode_prefix', $search);
 			$this->db->group_end();
 		}
-		
-		
+
+
 		// get_found_rows case
-		if($count_only == TRUE)
-		{
+		if ($count_only == TRUE) {
 			return $this->db->get()->row()->count;
 		}
 
 		// order by name of item by default
 		$this->db->order_by($sort, $order);
 
-		if($rows > 0)
-		{
+		if ($rows > 0) {
 			$this->db->limit($rows, $limit_from);
 		}
 
@@ -133,40 +122,35 @@ class Dept extends CI_Model
 		// order by name of item
 		$this->db->order_by('t_standards.sarana', 'asc');
 
-		if($rows > 0)
-		{
+		if ($rows > 0) {
 			$this->db->limit($rows, $limit_from);
 		}
 
 		return $this->db->get();
 	}
-	
-	
+
+
 	/*
 	Gets information about a particular item
 	*/
 	public function get_info($item_id)
 	{
 		$this->db->select('desk_direktorat.*');
-		
+
 		$this->db->from('desk_direktorat');
-		
+
 		$this->db->where('desk_direktorat.id', $item_id);
 
 		$query = $this->db->get();
 
-		if($query->num_rows() == 1)
-		{
+		if ($query->num_rows() == 1) {
 			return $query->row();
-		}
-		else
-		{
+		} else {
 			//Get empty base parent object, as $item_id is NOT an item
 			$item_obj = new stdClass();
 
 			//Get all the fields from items table
-			foreach($this->db->list_fields('desk_direktorat') as $field)
-			{
+			foreach ($this->db->list_fields('desk_direktorat') as $field) {
 				$item_obj->$field = '';
 			}
 
@@ -174,20 +158,18 @@ class Dept extends CI_Model
 		}
 	}
 
-	
 
-	
-	
+
+
+
 
 	/*
 	Inserts or updates a item
 	*/
 	public function save(&$item_data, $item_id = FALSE)
 	{
-		if($item_id == -1 /*|| !$this->exists($item_id, TRUE)*/)
-		{
-			if($this->db->insert('desk_direktorat', $item_data))
-			{
+		if ($item_id == -1 /*|| !$this->exists($item_id, TRUE)*/) {
+			if ($this->db->insert('desk_direktorat', $item_data)) {
 				$item_data['id'] = $this->db->insert_id();
 
 				return TRUE;
@@ -218,10 +200,10 @@ class Dept extends CI_Model
 	{
 		//Run these queries as a transaction, we want to make sure we do all or nothing
 		$this->db->trans_start();
-		
+
 		$this->db->where('id', $item_id);
 		$success = $this->db->update('desk_direktorat', array('deleted' => 1));
-		
+
 
 		$this->db->trans_complete();
 
@@ -248,7 +230,7 @@ class Dept extends CI_Model
 		//Run these queries as a transaction, we want to make sure we do all or nothing
 		$this->db->trans_start();
 
-		
+
 		$this->db->where_in('id', $item_ids);
 		$success = $this->db->update('desk_direktorat', array('deleted' => 1));
 
@@ -258,36 +240,35 @@ class Dept extends CI_Model
 
 		return $success;
 	}
-	
+
 	public function get_dept_name_by_id($id)
 	{
-		if($id == 0) return '';
-		
+		if ($id == 0) return '';
+
 		$this->db->select('name');
 		$this->db->from('desk_direktorat');
 		$this->db->where('id', $id);
-		
-		
+
+
 		$query = $this->db->get();
 
-		if($query->num_rows() == 1)
-		{
+		if ($query->num_rows() == 1) {
 			return $query->row()->name;
 		}
-		
+
 		return '';
 	}
-	
+
 	public function get_units($kota = '')
 	{
-		 
+
 		//$kota = str_replace('_', ' ', $kota);
 
 		$this->db->from('desk_direktorat');
-		if(!empty($kota))
+		if (!empty($kota))
 			$this->db->where('kota', $kota);
-		$this->db->where('deleted',0);
-		
+		$this->db->where('deleted', 0);
+
 		$this->db->order_by('name', 'asc');
 
 		$query =  $this->db->get();
@@ -306,7 +287,17 @@ class Dept extends CI_Model
 		return $this->db->get();
 	}*/
 
-	
+	public function get_direktorat($kota)
+	{
+		$this->db->select('name, id');
+		$this->db->from('desk_direktorat');
+		if ($kota != '') {
+			$this->db->where('kota', $kota);
+		}
 
+		$this->db->where('deleted', 0);
+		$this->db->order_by('name', 'asc');
+
+		return $this->db->get();
+	}
 }
-?>
