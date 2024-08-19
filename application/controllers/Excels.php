@@ -329,10 +329,10 @@ class Excels extends CI_Controller
     {
         //$inputTgl1  		= date("Y-m-d", strtotime($this->input->post('tgl1')));
         //$inputTgl2 			= date("Y-m-d", strtotime($this->input->post('tgl2')));
-        $inputTgl1          = convert_date1($this->input->post('tgl1'));
-        $inputTgl2             = convert_date1($this->input->post('tgl2'));
-        $reportType         = $this->input->post('type');
-        $filename           = "";
+        $inputTgl1        = convert_date1($this->input->post('tgl1'));
+        $inputTgl2        = convert_date1($this->input->post('tgl2'));
+        $reportType       = $this->input->post('type');
+        $filename         = "";
 
         if ($reportType == '1') {
             $filename = "DatabaseHarian_" . $inputTgl1 . "_" . $inputTgl2;
@@ -1045,8 +1045,7 @@ class Excels extends CI_Controller
             }
             $start_index++;
         }
-
-
+      
         $styleArray = array(
             'borders' => array(
                 'allBorders' => array(
@@ -2446,42 +2445,85 @@ class Excels extends CI_Controller
             $data['subklasifikasi_id'] = $idget;
 
             //tindak lanjut
-            $data['is_rujuk'] = $workSheet->getCell('AL' . $column)->getValue() == 'Ya' ? '1' :  '0';
+            $data['is_rujuk'] = $workSheet->getCell('AL'.$column)->getValue() == 'Ya' ? '1' :  '0';
+            if($data['is_rujuk'] == '1'){
+                $columns = ['AM', 'AO', 'AQ', 'AS', 'AU'];
+                $priorities = ['AN', 'AP', 'AR', 'AT', 'AV'];
+            
+                foreach ($columns as $index => $col) {
+                    $direktoratKey = $index == 0 ? 'direktorat' : 'direktorat' . ($index + 1);
+                    $data[$direktoratKey] = $workSheet->getCell($col . $column)->getValue() != '' 
+                        ? $this->get_direktorat_id($workSheet->getCell($col . $column)->getValue()) 
+                        : '0';
+                }
+            
+                foreach ($priorities as $index => $col) {
+                    $priorityKey = 'd' . ($index + 1) . '_prioritas';
+                    $data[$priorityKey] = $workSheet->getCell($col . $column)->getValue() != '' 
+                        ? explode(' ', $workSheet->getCell($col . $column)->getValue())[0] 
+                        : '0';
+                }
+            }
+            
 
             //Jawaban
-            $data['jawaban'] = $workSheet->getCell('AW' . $column)->getValue() == '' ? '' :  $workSheet->getCell('AW' . $column)->getValue();
-            $data['keterangan'] = $workSheet->getCell('AX' . $column)->getValue() == '' ? '' :  $workSheet->getCell('AX' . $column)->getValue();
-            $data['petugas_entry'] = $workSheet->getCell('AY' . $column)->getValue() == '' ? '' :  $workSheet->getCell('AY' . $column)->getValue();
-            $data['penjawab'] = $workSheet->getCell('AZ' . $column)->getValue() == '' ? '' :  $workSheet->getCell('AZ' . $column)->getValue();
-            $data['answered_via'] = $workSheet->getCell('BA' . $column)->getValue() == '' ? '' :  $workSheet->getCell('BA' . $column)->getValue();
+            $data['jawaban'] = $workSheet->getCell('AW'.$column)->getValue() == '' ? '' :  $workSheet->getCell('AW'.$column)->getValue();
+            $data['keterangan'] = $workSheet->getCell('AX'.$column)->getValue() == '' ? '' :  $workSheet->getCell('AX'.$column)->getValue();
+            $data['petugas_entry'] = $workSheet->getCell('AY'.$column)->getValue() == '' ? '' :  $workSheet->getCell('AY'.$column)->getValue();
+            $data['penjawab'] = $workSheet->getCell('AZ'.$column)->getValue() == '' ? '' :  $workSheet->getCell('AZ'.$column)->getValue();
+            $data['answered_via'] = $workSheet->getCell('BA'.$column)->getValue() == '' ? '' :  $workSheet->getCell('BA'.$column)->getValue();
 
             //default
-            $data['trackid'] = '';
             $data['owner'] = $this->session->id;
             $data['kota'] = $this->session->city;
             $data['dt'] = $dt;
             $data['tglpengaduan'] = date('Y-m-d');
+            
+            $data['trackid'] = '';
             $data['waktu'] = date('H:i:s');
             $data['owner_dir'] = $this->session->direktoratid;
+
             $data['tipe_medsos'] = '';
+            if((int)$this->input->post("type") == 2){
+                      $data['is_sent'] = '1';
+                  } else {
+                      $data['is_sent'] = '0';
+                  }
 
-            $data_bulk[] = $data;
-            $column++;
+                  $data_bulk[] = $data;
+                  $column++;
+              }
+      
+            try {
+                $prefix = 'PST';
+                if($this->session->city != 'PUSAT')
+                    $prefix = $this->Balai->get_prefix($this->session->city);
+
+                $this->Draft->save_bulk($data_bulk);
+
+                if((int)$this->input->post("type") == 2){
+
+                    $item_save = array_map(function($item) use($prefix) {
+                        $item['is_sent'] = '1';
+                        $item['trackid'] = $this->Draft->generate_ticketid($this->session->city,$prefix,date('Y-m-d'));
+                        return $item;
+                    }, $data_bulk);
+
+                    $this->Ticket->save_bulk($item_save);
+                }
+
+                $msg = array('status' => 'S', 'msg' => "Berhasil mengirim upload file!");
+
+            } catch (\Throwable $th) {
+                $msg = array('status' => 'F', 'msg' => "Upload Gagal!");
+            }
+
+            echo json_encode($msg);
         }
 
-
-
-        if ($this->Draft->save_bulk($data_bulk)) {
-            $msg = array('status' => 'S', 'msg' => "Upload Sukses!");
-        } else {
-            $msg = array('status' => 'F', 'msg' => "Upload Gagal!");
-        }
-
-
-
-        echo json_encode($msg);
+    private function get_direktorat_id($name){
+        return $this->db->get_where("desk_direktorat",["name" => $name])->row()->id;
     }
-
 
     public function download_template_upload()
     {
@@ -2866,3 +2908,4 @@ class Excels extends CI_Controller
         $writer->save('php://output');
     }
 }
+

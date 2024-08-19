@@ -48,7 +48,8 @@ $(document).ready(function()
 					<div class="form-group form-group-sm row">
 						<?php echo form_label('', 'label', array('class'=>'required col-form-label col-sm-2')); ?>
 						<div class='col-sm-10'>
-							<button class="btn btn-warning" id="buttonProses" enabled>Upload</button>
+							<button data-type="1" class="btn btn-warning" id="buttonProses" enabled>Upload</button>
+                            <button data-type="2" class="btn btn-success" id="buttonSend" disabled> Kirim</button>
 						</div>
 					</div>
 					
@@ -64,8 +65,11 @@ $(document).ready(function()
 <script type="text/javascript">
     $(document).ready(function() {
         $("#form-data").hide();
-
-        $('#buttonProses').click(function() {
+        $('#fileExcel').on('change',function(){
+            $('#buttonSend').removeAttr("disabled")
+        })
+        $('#buttonProses , #buttonSend').click(function() {
+            var type = $(this).data('type')
             var fileUpload = $('#fileExcel').prop('files')[0];
             if (fileUpload == undefined)
             {
@@ -85,8 +89,8 @@ $(document).ready(function()
 
                     fd.append('files[]', file);
                 };
+                fd.append('type', type);
                 fd.append('<?php echo $this->security->get_csrf_token_name(); ?>', csrf_token() );
-				
                 $.ajax({
                     type: 'POST',
                     url: '<?php echo site_url('excels/upload_file_template_xls') ?>',
@@ -99,21 +103,18 @@ $(document).ready(function()
                         if (data.status == 'S') {
                             $.notify( data.msg, { type: 'success' });
 							//table_support.refresh();
-
-                            setTimeout(function () {window.location = "<?php echo site_url('drafts') ?>";}, 2000);
+                            if(parseInt(type) == 2){
+                                setTimeout(function () {window.location = "<?php echo site_url('tickets') ?>";}, 2000);
+                            }
+                            if(parseInt(type) == 1){
+                                setTimeout(function () {window.location = "<?php echo site_url('drafts') ?>";}, 2000);
+                            }
                         } else if (data.status == 'F') {
                             //swal("Error!", data.msg, "error");
                             $.notify( data.msg, { type: 'danger', delay:10000 });
                             console.log(data.msg);
                         }
                     },
-                    error: function(data) {
-                        //console.log(data);
-                        //swal("Error!", "Something went wrong!", "error");
-                        //$.notify(data.responseText, { type: 'danger' , delay:10000});
-                        //console.log("masuk error " + data.responseText);
-                        //console.log(data);
-                    }
                 });  
             } else {
                 console.log('Tipe file');
