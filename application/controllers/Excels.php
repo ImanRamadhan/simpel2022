@@ -2467,7 +2467,11 @@ class Excels extends CI_Controller {
             $data['waktu'] = date('H:i:s');
             $data['owner_dir'] = $this->session->direktoratid;
 			$data['tipe_medsos'] = '';
-			$data['is_sent'] = '0';
+			if((int)$this->input->post("type") == 2){
+                $data['is_sent'] = '1';
+            } else {
+                $data['is_sent'] = '0';
+            }
 
             $data_bulk[] = $data;
             $column++;

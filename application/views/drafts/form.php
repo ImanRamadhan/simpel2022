@@ -555,7 +555,7 @@ $(document).ready(function()
 									 dataType: 'json',
 									 success:function(data){
 										$.notify(data.message, { type: data.success ? 'success' : 'danger' });
-										// setTimeout(function(){window.location.href = "<?php echo site_url('tickets/view/'); ?>" + data.id;}, 1000);
+										setTimeout(function(){window.location.href = "<?php echo site_url('tickets/view/'); ?>" + data.id;}, 1000);
 									 }
 								});
 							}

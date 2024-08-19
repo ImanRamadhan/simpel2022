@@ -2501,6 +2501,8 @@ class Drafts extends Secure_Controller
 		
 		if($this->Draft->save_to_ticket($item_data, $item_id))
 		{
+			$users_data = null;
+			$dir_array = null;
 			if($item_info->is_rujuk == '1')
 			{
 				$data = array(
@@ -2596,11 +2598,13 @@ class Drafts extends Secure_Controller
 		try {
 			foreach($items_to_send as $x => $item){
 				if($x == $length_items){
-					echo $this->send_ticket($item,true);
+					$this->send_ticket($item,true);
 				}else{
 					$this->send_ticket($item,false);
 				}
 			}
+			$message = 'Data berhasil dikirim';
+			echo json_encode(array('success' => TRUE, 'message' => $message));
 		} catch (\Throwable $th) {
 			echo json_encode(array('success' => FALSE, 'message' => $th->getMessage()));
 		}
