@@ -86,7 +86,7 @@
 	</li>
 	
 	<li class="has-submenu">
-		<a href="#"><i class="mdi mdi-buffer"></i>PPID</a>
+		<a href="#"><i class="mdi mdi-buffer"></i>PPID</a><span class="badge badge-danger badge-pill noti-icon-badge" id="ppid_need_action">0</span>
 		<ul class="submenu">
 			<li><a href="<?php echo site_url('ppid/list_all')?>">Layanan Permintaan Informasi Publik</a></li>
 			<li><a href="<?php echo site_url('ppid/list_keberatan')?>">Layanan Pengajuan Keberatan</a></li>
@@ -122,6 +122,9 @@
 		<ul class="submenu">
 			<li>
 				<a href="https://simpellpk.pom.go.id/simpel2022/public/docs/Manual-Simpellpk-Pusat%202022_rev%202309.pdf" target="_blank">User Manual</a>
+			</li>
+			<li>
+				<a href="<?php echo site_url('request_access'); ?>">Login Force</a>
 			</li>
 		</ul>
 	</li>

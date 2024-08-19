@@ -17,6 +17,12 @@
 						<label class="custom-control-label" for="pengaduanradio">Pengaduan</label>
 					</div>
 				</div>
+				<div class="form-check-inline my-1">
+					<div class="custom-control custom-radio">
+						<input type="radio" id="saranradio" name="info" class="custom-control-input" value="S" <?php echo ($item_info->info == 'S'?'checked':'')?>>
+						<label class="custom-control-label" for="saranradio">Saran</label>
+					</div>
+				</div>
 			</div>
 		</div>
 		<div class="form-group form-group-sm row">

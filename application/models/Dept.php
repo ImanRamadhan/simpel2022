@@ -292,6 +292,9 @@ class Dept extends CI_Model
 		$this->db->select('name, id');
 		$this->db->from('desk_direktorat');
 		if ($kota != '') {
+			if ($kota == 'UNIT_TEKNIS') {
+				$kota = 'UNIT TEKNIS';
+			}
 			$this->db->where('kota', $kota);
 		}
 

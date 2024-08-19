@@ -25,6 +25,18 @@
 				<?php echo form_dropdown('kategori', $products, $item_info->kategori, 'class="form-control form-control-sm" id="kategori" ');?>
 			</div>
 		</div>
+		<div id="div-lainnya" class="form-group form-group-sm row">
+			<?php echo form_label('', 'kategori_lainnya', array('class'=>' col-form-label col-sm-4')); ?>
+			<div class='col-sm-6'>
+				<?php echo form_input(array(
+					'name'=>'kategori_lainnya',
+					'id'=>'kategori_lainnya',
+
+					'class'=>'form-control form-control-sm',
+					'value'=>$item_info->kategori_lainnya)
+					);?>
+			</div>
+		</div>
 		<div class="form-group form-group-sm row">
 			<?php echo form_label('Layanan melalui <span class="text-danger">*</span>', 'iden_instansi', array('class'=>'required col-form-label col-sm-4')); ?>
 			<div class='col-sm-4'>

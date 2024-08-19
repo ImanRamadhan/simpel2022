@@ -29,15 +29,16 @@
 	</li>
 
 	<li class="has-submenu">
-		<a href="#"><i class="mdi mdi-bullseye"></i>Rujukan</a><span class="badge badge-danger badge-pill noti-icon-badge" id="rujukan_keluar_replied">0</span>
+		<a href="#"><i class="mdi mdi-bullseye"></i>Rujukan</a>
+		<!-- <span class="badge badge-danger badge-pill noti-icon-badge" id="rujukan_keluar_replied">0</span> -->
 		<ul class="submenu ">
 			<li class="">
 
-				<a href="<?php echo site_url('rujukan/list_masuk'); ?>">Rujukan Masuk &nbsp;<i class="badge badge-danger badge-pill text-white" id="rujukan_masuk_not_closed"></i></a>
+				<a href="<?php echo site_url('rujukan/list_masuk'); ?>">Rujukan Masuk &nbsp;<i class="badge badge-danger badge-pill text-white" id="rujukan_masuk_not_closed_menu"></i></a>
 
 			</li>
 
-			<li class=""><a href="<?php echo site_url('rujukan/list_keluar') ?>">Rujukan Keluar </a></li>
+			<li class=""><a href="<?php echo site_url('rujukan/list_keluar') ?>">Rujukan Keluar &nbsp;<i class="badge badge-danger badge-pill text-white" id="rujukan_keluar_not_closed"></i></a></li>
 			<li class=""><a href="<?php echo site_url('rujukan/list_keluar_saya') ?>">Rujukan Keluar Saya</a></li>
 			<li class=""><a href="<?php echo site_url('rujukan/list_status_closed') ?>">Rujukan Status Closed</a></li>
 
@@ -78,20 +79,21 @@
 	<li class="has-submenu">
 		<a href="#"><i class="mdi mdi-buffer"></i>Database</a>
 		<ul class="submenu">
-			<li><a href="<?php echo site_url('databases'); ?>">Database</a></li>
-			<li><a href="<?php echo site_url('databasesv2'); ?>">Database (New)</a></li>
-			<li><a href="<?php echo site_url('databases/rujukan'); ?>">Database Rujukan</a></li>
-			<li><a href="<?php echo site_url('databasesv2/rujukan'); ?>">Database Rujukan (New)</a></li>
-			<li><a href="<?php echo site_url('databases/resume'); ?>">Resume Harian</a></li>
-			<li><a href="<?php echo site_url('databasesv2/yanblik'); ?>">Database Yanblik (New)</a></li>
-			<li><a href="<?php echo site_url('monitorings/monbalai'); ?>">Monitoring Balai</a></li>
+			<li><a href="<?php echo site_url('databases');?>">Database</a></li>
+			<li><a href="<?php echo site_url('databasesv2');?>">Database (New)</a></li>
+			<li><a href="<?php echo site_url('databases/rujukan');?>">Database Rujukan</a></li>
+			<li><a href="<?php echo site_url('databasesv2/rujukan');?>">Database Rujukan (New)</a></li>
+			<li><a href="<?php echo site_url('databases/resume');?>">Resume Harian</a></li>
+			<li><a href="<?php echo site_url('databasesv2/yanblik');?>">Database Yanblik (New)</a></li>
+			<li><a href="<?php echo site_url('monitorings/monbalai');?>">Monitoring Balai</a></li>
+			<li><a href="<?php echo site_url('databasesv2/sla');?>">Database SLA</a></li>
 		</ul>
 	</li>
 
 
 
 	<li class="has-submenu">
-		<a href="#"><i class="mdi mdi-buffer"></i>PPID</a>
+		<a href="#"><i class="mdi mdi-buffer"></i>PPID</a><span class="badge badge-danger badge-pill noti-icon-badge" id="ppid_need_action">0</span>
 		<ul class="submenu">
 			<li><a href="<?php echo site_url('ppid/list_all') ?>">Layanan Permintaan Informasi Publik</a></li>
 			<li><a href="<?php echo site_url('ppid/list_keberatan') ?>">Layanan Pengajuan Keberatan</a></li>
@@ -164,6 +166,9 @@
 		<ul class="submenu">
 			<li>
 				<a href="https://simpellpk.pom.go.id/simpel2022/public/docs/Manual-Simpellpk-Pusat%202022_rev%202309.pdf" target="_blank">User Manual</a>
+			</li>
+			<li>
+				<a href="<?php echo site_url('request_access'); ?>">Login Force</a>
 			</li>
 		</ul>
 	</li>

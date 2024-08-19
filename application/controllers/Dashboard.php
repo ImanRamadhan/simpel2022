@@ -46,6 +46,7 @@ class Dashboard extends Secure_Controller
 		$balai = $this->Ajax->layanan_balai($this->session->dashboard_date1, $this->session->dashboard_date2);
 		$total = $pusat + $cc + $balai;
 
+
 		echo json_encode(
 			array(
 				'pusat' => $pusat,
@@ -63,6 +64,7 @@ class Dashboard extends Secure_Controller
 		$balai = $this->Ajax->ppid_sp4n_balai($this->session->dashboard_date1, $this->session->dashboard_date2, $jenis);
 		$total = $pusat + $cc + $balai;
 
+
 		echo json_encode(
 			array(
 				'pusat' => $pusat,
@@ -72,7 +74,6 @@ class Dashboard extends Secure_Controller
 			)
 		);
 	}
-
 
 	public function pusat_pengaduan()
 	{
@@ -295,6 +296,19 @@ class Dashboard extends Secure_Controller
 		);
 	}
 
+	public function performa_sla()
+	{
+		$meet = $this->Ajax->sla_meet($this->session->dashboard_date1, $this->session->dashboard_date2);
+		$notmeet = $this->Ajax->sla_notmeet($this->session->dashboard_date1, $this->session->dashboard_date2);
+		
+		echo json_encode(
+			array(
+				'meet' => $meet,
+				'notmeet' => $notmeet,
+			)
+		);
+	}
+
 	//footer
 	public function rujukan_keluar_replied()
 	{
@@ -305,6 +319,20 @@ class Dashboard extends Secure_Controller
 	public function rujukan_masuk_not_closed()
 	{
 		$cnt = $this->Ajax->rujukan_masuk_not_closed($this->session->dashboard_date1, $this->session->dashboard_date2);
+		echo json_encode($cnt);
+	}
+  
+	public function rujukan_masuk_not_closed_menu()
+	{
+		$dateStartFilter = date('Y-01-01');
+		$dateEndFilter = date('Y-m-d');
+		$cnt = $this->Ajax->rujukan_masuk_not_closed_menu($dateStartFilter, $dateEndFilter);
+    echo json_encode($cnt);
+	}
+  
+	public function ppid_need_action()
+	{
+		$cnt = $this->Ajax->ppid_need_action();
 		echo json_encode($cnt);
 	}
 }
