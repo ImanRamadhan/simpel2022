@@ -730,7 +730,6 @@ class Ticket extends CI_Model
 		$this->db->from('desk_tickets');
 		$this->db->join('desk_rujukan', 'desk_rujukan.rid = desk_tickets.id', 'LEFT');
 
-
 		if (!empty($filters['tgl1']) && !empty($filters['tgl2'])) {
 			$this->db->where('tglpengaduan >=', $filters['tgl1']);
 			$this->db->where('tglpengaduan <=', $filters['tgl2']);
@@ -747,7 +746,7 @@ class Ticket extends CI_Model
 		}
 
 
-		$this->db->where_in('info', array('P', 'I', 'S'));
+		$this->db->where_in('info', array('P', 'I'));
 
 		$this->db->group_start();
 		$this->db->where('direktorat', $this->session->direktoratid);
@@ -777,7 +776,6 @@ class Ticket extends CI_Model
 		if ($rows > 0) {
 			$this->db->limit($rows, $limit_from);
 		}
-
 
 
 		return $this->db->get();

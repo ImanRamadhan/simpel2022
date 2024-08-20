@@ -701,19 +701,19 @@ function get_rujukanmasuk_ticket_data_row($item, $no)
 
 	switch ($CI->session->direktoratid) {
 		case $item->direktorat:
-			$data['tgldirujuk'] = $item->tgl_rujuk1;
+			$data['tgldirujuk'] = $item->tl_date1;
 
 		case $item->direktorat2:
-			$data['tgldirujuk'] = $item->tgl_rujuk2;
+			$data['tgldirujuk'] = $item->tl_date2;
 
 		case $item->direktorat3:
-			$data['tgldirujuk'] = $item->tgl_rujuk3;
+			$data['tgldirujuk'] = $item->tl_date3;
 
 		case $item->direktorat4:
-			$data['tgldirujuk'] = $item->tgl_rujuk4;
+			$data['tgldirujuk'] = $item->tl_date4;
 
 		case $item->direktorat5:
-			$data['tgldirujuk'] = $item->tgl_rujuk5;
+			$data['tgldirujuk'] = $item->tl_date5;
 	}
 
 	$data['status'] = get_status($item->status);

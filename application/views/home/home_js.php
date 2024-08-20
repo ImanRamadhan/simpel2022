@@ -12,7 +12,8 @@
 			orientation: 'bottom'
 		});
 
-		/*$.getJSON('<?php echo site_url('dashboard/layanan_pusat'); ?>', function (data) {
+		/*
+		$.getJSON('<?php echo site_url('dashboard/layanan_pusat'); ?>', function (data) {
 			$('#layanan_pusat').html(data);
 		});
 		
@@ -26,7 +27,8 @@
 		
 		$.getJSON('<?php echo site_url('dashboard/layanan_total'); ?>', function (data) {
 			$('#layanan_total').html(data);
-		});*/
+		});
+		*/
 
 		$.getJSON('<?php echo site_url('dashboard/layanan_all'); ?>', function(data) {
 			//console.log(data);
@@ -141,7 +143,7 @@
 		
 		$.getJSON('<?php echo site_url('dashboard/layanan_total'); ?>', function (data) {
 			$('#layanan_total').html(data);
-		});*/
+		});
 
 		$.getJSON('<?php echo site_url('dashboard/layanan_all'); ?>', function(data) {
 			//console.log(data);
@@ -514,6 +516,7 @@
 					},
 					{
 						label: "Belum di-TL",
+			}]})
 		});
 
 		$.getJSON('<?php echo site_url('dashboard/layanan_pusat_fb'); ?>', function(data) {
@@ -657,6 +660,4 @@
 		});
 
 	});
-	
-});
 </script>
