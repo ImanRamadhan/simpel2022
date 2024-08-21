@@ -126,7 +126,7 @@
 									$persen_p = 0;
 									$jml_t = 0;
 									$persen_t = 0;
-									foreach ($products->result_array() as $row) :
+									foreach ($products as $row) :
 										$id = $row['id'];
 									?>
 										<tr>
@@ -251,7 +251,7 @@
 									$persen_p = 0;
 									$jml_t = 0;
 									$persen_t = 0;
-									foreach ($profesi->result_array() as $row) :
+									foreach ($profesi as $row) :
 										$id = $row['id'];
 									?>
 										<tr>
