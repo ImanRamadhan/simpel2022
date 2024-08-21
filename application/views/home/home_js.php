@@ -30,75 +30,7 @@
 		});
 		*/
 
-		$.getJSON('<?php echo site_url('dashboard/layanan_all'); ?>', function(data) {
-			//console.log(data);
-			$('#layanan_pusat').html(data.pusat);
-			$('#layanan_cc').html(data.cc);
-			$('#layanan_balai').html(data.balai);
-			$('#layanan_total').html(data.total);
 
-			Morris.Donut({
-				element: 'donut-layanan',
-				data: [{
-						label: "Balai",
-						value: data.balai
-					},
-					{
-						label: "CC",
-						value: data.cc
-					},
-					{
-						label: "Pusat",
-						value: data.pusat
-					}
-				],
-				resize: true,
-				colors: ['#e3eaef', '#ff679b', '#777edd'],
-				labelColor: '#888',
-				backgroundColor: 'transparent',
-				fillOpacity: 0.1,
-				formatter: function(x) {
-					return x + ""
-				}
-			});
-
-
-		});
-
-		$.getJSON('<?php echo site_url('dashboard/ppid_sp4n_all/PPID'); ?>', function(data) {
-			//console.log(data);
-			$('#ppid_pusat').html(data.pusat);
-			$('#ppid_cc').html(data.cc);
-			$('#ppid_balai').html(data.balai);
-			$('#ppid_total').html(data.total);
-
-			Morris.Donut({
-				element: 'donut-ppid',
-				data: [{
-						label: "Balai",
-						value: data.balai
-					},
-					{
-						label: "CC",
-						value: data.cc
-					},
-					{
-						label: "Pusat",
-						value: data.pusat
-					}
-				],
-				resize: true,
-				colors: ['#e3eaef', '#ff679b', '#777edd'],
-				labelColor: '#888',
-				backgroundColor: 'transparent',
-				fillOpacity: 0.1,
-				formatter: function(x) {
-					return x + ""
-				}
-			});
-
-
-		});
 
 		$.getJSON('<?php echo site_url('dashboard/ppid_sp4n_all/SP4N'); ?>', function(data) {
 			//console.log(data);
@@ -132,16 +64,16 @@
 				}
 			});
 		});
-		
-		$.getJSON('<?php echo site_url('dashboard/layanan_cc'); ?>', function (data) {
+
+		$.getJSON('<?php echo site_url('dashboard/layanan_cc'); ?>', function(data) {
 			$('#layanan_cc').html(data);
 		});
-		
-		$.getJSON('<?php echo site_url('dashboard/layanan_balai'); ?>', function (data) {
+
+		$.getJSON('<?php echo site_url('dashboard/layanan_balai'); ?>', function(data) {
 			$('#layanan_balai').html(data);
 		});
-		
-		$.getJSON('<?php echo site_url('dashboard/layanan_total'); ?>', function (data) {
+
+		$.getJSON('<?php echo site_url('dashboard/layanan_total'); ?>', function(data) {
 			$('#layanan_total').html(data);
 		});
 
@@ -214,42 +146,6 @@
 
 
 		});
-
-		$.getJSON('<?php echo site_url('dashboard/ppid_sp4n_all/SP4N'); ?>', function(data) {
-			//console.log(data);
-			$('#sp4n_pusat').html(data.pusat);
-			$('#sp4n_cc').html(data.cc);
-			$('#sp4n_balai').html(data.balai);
-			$('#sp4n_total').html(data.total);
-
-			Morris.Donut({
-				element: 'donut-sp4n',
-				data: [{
-						label: "Balai",
-						value: data.balai
-					},
-					{
-						label: "CC",
-						value: data.cc
-					},
-					{
-						label: "Pusat",
-						value: data.pusat
-					}
-				],
-				resize: true,
-				colors: ['#e3eaef', '#ff679b', '#777edd'],
-				labelColor: '#888',
-				backgroundColor: 'transparent',
-				fillOpacity: 0.1,
-				formatter: function(x) {
-					return x + ""
-				}
-			});
-
-
-		});
-
 
 		/*
 		
@@ -505,79 +401,7 @@
 			$('#rujukan_keluar_sudah_dijawab').html(data);
 		});*/
 
-		$.getJSON('<?php echo site_url('dashboard/layanan_pusat_tl'); ?>', function(data) {
-			$('#pusat_sudah_tl').html(data.done);
-			$('#pusat_belum_tl').html(data.notdone);
-			Morris.Donut({
-				element: 'donut-layanan-tl',
-				data: [{
-						label: "Sudah di-TL",
-						value: data.done
-					},
-					{
-						label: "Belum di-TL",
-			}]})
-		});
 
-		$.getJSON('<?php echo site_url('dashboard/layanan_pusat_fb'); ?>', function(data) {
-			$('#pusat_sudah_fb').html(data.done);
-			$('#pusat_belum_fb').html(data.notdone);
-			Morris.Donut({
-				element: 'donut-layanan-fb',
-				data: [{
-						label: "Sudah di-FB",
-						value: data.done
-					},
-					{
-						label: "Belum di-FB",
-						value: data.notdone
-					}
-				],
-				resize: true,
-				colors: ['#777edd', '#ff679b'],
-				labelColor: '#888',
-				backgroundColor: 'transparent',
-				fillOpacity: 0.1,
-				formatter: function(x) {
-					return x + ""
-				}
-			});
-		});
-
-		$.getJSON('<?php echo site_url('dashboard/belum_tl'); ?>', function(data) {
-			$('#belum_tl_red').html(data.red);
-			$('#belum_tl_orange').html(data.orange);
-			$('#belum_tl_black').html(data.black);
-			$('#belum_tl_green').html(data.green);
-			Morris.Donut({
-				element: 'donut-belum-tl',
-				data: [{
-						label: "SLA <= 5 HK",
-						value: data.red
-					},
-					{
-						label: "SLA 5 - 14 HK",
-						value: data.orange
-					},
-					{
-						label: "SLA 14 - 60 HK",
-						value: data.green
-					},
-					{
-						label: "Melewati SLA",
-						value: data.black
-					}
-				],
-				resize: true,
-				colors: ['red', 'orange', 'green', 'black'],
-				labelColor: '#888',
-				backgroundColor: 'transparent',
-				fillOpacity: 0.1,
-				formatter: function(x) {
-					return x + ""
-				}
-			});
-		});
 
 		$.getJSON('<?php echo site_url('dashboard/layanan_pusat_fb'); ?>', function(data) {
 			$('#pusat_sudah_fb').html(data.done);
@@ -642,21 +466,28 @@
 		});
 
 	});
-	$.getJSON('<?php echo site_url('dashboard/performa_sla');?>', function (data) {
+	$.getJSON('<?php echo site_url('dashboard/performa_sla'); ?>', function(data) {
 		$('#memenuhi_sla').html(data.meet);
 		$('#tidak_memenuhi_sla').html(data.notmeet);
 		Morris.Donut({
 			element: 'donut-performa-sla',
-			data: [
-			  {label: "Memenuhi SLA", value: data.meet},
-			  {label: "Tidak Memenuhi SLA", value: data.notmeet},
+			data: [{
+					label: "Memenuhi SLA",
+					value: data.meet
+				},
+				{
+					label: "Tidak Memenuhi SLA",
+					value: data.notmeet
+				},
 			],
 			resize: true,
-			colors:[ 'red', 'orange'], 
+			colors: ['red', 'orange'],
 			labelColor: '#888',
 			backgroundColor: 'transparent',
 			fillOpacity: 0.1,
-			formatter: function (x) { return x + ""}
+			formatter: function(x) {
+				return x + ""
+			}
 		});
 
 	});
