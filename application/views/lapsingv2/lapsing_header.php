@@ -13,6 +13,13 @@
 				</div>
 			</div>
 			<div class="form-group form-group-sm row">
+				<?php echo form_label('Pilih Direktorat', 'label_direktorat', array('class' => 'required col-form-label col-sm-4')); ?>
+				<div class='col-sm-8'>
+					<?php
+					echo form_dropdown('direktorat',  $direktorat, '', 'class="form-control form-control-sm" id="direktorat"'); ?>
+				</div>
+			</div>
+			<div class="form-group form-group-sm row">
 				<?php echo form_label('Pilih Sumber Data', 'label_kota', array('class' => 'required col-form-label col-sm-4')); ?>
 				<div class='col-sm-8'>
 					<?php

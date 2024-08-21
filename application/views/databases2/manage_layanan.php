@@ -544,6 +544,7 @@
 					<?php else: ?>
 						kota: '<?php echo $this->session->city; ?>',
 					<?php endif; ?>
+					direktorat: $('#direktorat').val() || "",
 					tgl1: moment($("#tgl1").val(), 'DD/MM/YYYY').format('YYYY-MM-DD') || "",
 					tgl2: moment($("#tgl2").val(), 'DD/MM/YYYY').format('YYYY-MM-DD') || "",
 					kategori: $('#kategori').val() || "",
@@ -585,6 +586,13 @@
 						<div class='col-sm-4'>
 							<?php
 							echo form_dropdown('kota', $cities, '', 'class="form-control form-control-sm" id="kota"'); ?>
+						</div>
+					</div>
+					<div class="form-group form-group-sm row">
+						<?php echo form_label('Pilih Direktorat', 'label_direktorat', array('class' => 'required col-form-label col-sm-2')); ?>
+						<div class='col-sm-4'>
+							<?php
+							echo form_dropdown('direktorat',  $direktorat, '', 'class="form-control form-control-sm" id="direktorat"'); ?>
 						</div>
 					</div>
 				<?php endif; ?>
@@ -633,9 +641,6 @@
 
 				<div id="toolbar">
 					<div class="float-left form-inline" role="toolbar">
-
-
-
 						&nbsp;
 						<!--<a id="export" class="btn export btn-soft-info btn-sm" href="#" title="Export data ke MS Excel">
 							<span class="fa fa-download">&nbsp;</span>Export
@@ -668,7 +673,27 @@
 
 <script type="text/javascript">
 	$(document).ready(function() {
+		$('#kota').on('change', function() {
+			$.remember({
+				name: 'databasev2.kota',
+				value: $('#kota').val()
+			})
 
+			if ($(this).val() == '') {
+				$('#direktorat').empty();
+				return;
+			}
+
+			$.getJSON("<?php echo site_url('lapsingv2/get_direktorat/'); ?>" + $(this).val(), function(data) {
+				if (data) {
+					$('#direktorat').empty();
+					$('#direktorat').append($('<option></option>').attr('value', '').text('ALL'));
+					$.each(data, function(key, entry) {
+						$('#direktorat').append($('<option></option>').attr('value', entry.id).text(entry.name));
+					})
+				}
+			});
+		});
 
 		$("#tgl1").datepicker({
 			zIndexOffset: '1001',

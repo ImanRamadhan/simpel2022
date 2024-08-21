@@ -20,6 +20,7 @@ class Databases_Sla extends Secure_Controller
 		$order = $this->input->get('order');
 
 		$kota = $this->input->get('kota');
+		$direktorat = $this->input->get('direktorat');
 		$tgl1 = $this->input->get('tgl1');
 		$tgl2 = $this->input->get('tgl2');
 
@@ -42,6 +43,7 @@ class Databases_Sla extends Secure_Controller
 			'keyword' => $keyword,
 			'kategori' => $kategori,
 			'jenis' => $jenis,
+			'direktorat' => $direktorat
 			/*'status' => $status,
 						'tl' => $tl,
 						'fb' => $fb,

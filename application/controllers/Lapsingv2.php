@@ -267,6 +267,8 @@ class Lapsingv2 extends Secure_Controller
 		$inputTgl1_ = convert_date1($inputTgl1);
 		$inputTgl2_ = convert_date1($inputTgl2);
 
+		$inputDirektorat = $this->input->post('inputDirektorat');
+
 		$sheet = 1;
 		$kategori = $this->input->post('kategori');
 		$data['kategori'] = $kategori;
@@ -275,7 +277,8 @@ class Lapsingv2 extends Secure_Controller
 
 		$data['products'] = $this->Report->get_products();
 		$data['profesi'] = $this->Report->get_profesi();
-		$raw_data = $this->Report->get_data_lapsing($sheet, $formType, $inputTgl1_, $inputTgl2_, $inputKota, $kategori, $jenis, $gender);
+
+		$raw_data = $this->Report->get_data_lapsing($sheet, $formType, $inputTgl1_, $inputTgl2_, $inputKota, $kategori, $jenis, $gender, $inputDirektorat);
 
 		$data['data_lapsing'] = $raw_data;
 

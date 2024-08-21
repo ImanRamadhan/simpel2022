@@ -64,7 +64,12 @@ class Databasesv2 extends Secure_Controller
 		}
 		$data['categories'] = $categories_array;
 
-
+		$direktorat = $this->Dept->get_direktorat('');
+		$direktorat_array = array('ALL' => 'ALL');
+		foreach ($direktorat->result() as $dir) {
+			$direktorat_array[$dir->id] = $dir->name;
+		}
+		$data['direktorat'] = $direktorat_array;
 
 		$data['unitRujukan'] = get_direktorat_rujukan();
 	}
@@ -130,6 +135,7 @@ class Databasesv2 extends Secure_Controller
 		$order = $this->input->get('order');
 
 		$kota = $this->input->get('kota');
+		$direktorat = $this->input->get('direktorat');
 		$tgl1 = $this->input->get('tgl1');
 		$tgl2 = $this->input->get('tgl2');
 
@@ -154,6 +160,7 @@ class Databasesv2 extends Secure_Controller
 			'kategori' => $kategori,
 			'jenis' => $jenis,
 			'status_rujukan' => $status_rujukan,
+			'direktorat' => $direktorat
 			/*'tl' => $tl,
 						'fb' => $fb,
 						'is_rujuk' => $is_rujuk,
@@ -166,10 +173,7 @@ class Databasesv2 extends Secure_Controller
 		//$filledup = array_fill_keys($this->input->get('filters'), TRUE);
 		//$filters = array_merge($filters, $filledup);
 
-
-
 		$items = $this->Database->search($search, $filters, $limit, $offset, $sort, $order);
-
 		$total_rows = $this->Database->get_found_rows($search, $filters);
 
 		$data_rows = array();

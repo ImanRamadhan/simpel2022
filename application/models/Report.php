@@ -9,7 +9,7 @@ class Report extends CI_Model
 {
 
 	//LAPSING
-	public function build_condition($sheet, $inputKota, $kategori, $jenis, $gender)
+	public function build_condition($sheet, $inputKota, $kategori, $jenis, $gender, $direktorat)
 	{
 		$query = "";
 		if ($gender == 'ALL') {
@@ -49,6 +49,10 @@ class Report extends CI_Model
 			$query .= $filter_cc;
 		}
 
+		if (($direktorat != "") && ($direktorat != "ALL")) {
+			$query .= " AND (direktorat = '$direktorat' OR direktorat2 = '$direktorat' OR direktorat3 = '$direktorat' OR direktorat4 = '$direktorat' OR direktorat5 = '$direktorat') ";
+		}
+
 		if ($kategori != "") {
 			if ($kategori != 'ALL')
 				$query .= " and kategori = '$kategori'";
@@ -65,9 +69,6 @@ class Report extends CI_Model
 			// }
 		}
 
-
-
-
 		return $query;
 	}
 
@@ -82,7 +83,7 @@ class Report extends CI_Model
 	}
 
 
-	public function get_data_kelompok_jenis_pengaduan($sheet, $form_type, $inputTgl1, $inputTgl2, $inputKota, $kategori, $jenis, $gender)
+	public function get_data_kelompok_jenis_pengaduan($sheet, $form_type, $inputTgl1, $inputTgl2, $inputKota, $kategori, $jenis, $gender, $direktorat)
 	{
 		if ($gender == 'ALL') {
 			$query = "SELECT 
@@ -102,7 +103,7 @@ class Report extends CI_Model
 					AND info='P' 
 				";
 
-			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "L");
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "L", $direktorat);
 
 			if ($form_type == "YANBLIK") {
 				$query .= " AND subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
@@ -130,7 +131,7 @@ class Report extends CI_Model
 					tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
 					AND info='P' ";
 
-			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "P");
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "P", $direktorat);
 			if ($form_type == "YANBLIK") {
 				$query .= " AND subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
 				//$query .= " and klasifikasi = 'Layanan Publik' ";
@@ -155,7 +156,7 @@ class Report extends CI_Model
 						tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
 						AND info='I' ";
 
-			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "L");
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "L", $direktorat);
 			if ($form_type == "YANBLIK") {
 				$query .= " AND subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
 				//$query .= " and klasifikasi = 'Layanan Publik' ";
@@ -180,7 +181,7 @@ class Report extends CI_Model
 					WHERE
 						tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
 						AND info='I' ";
-			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "P");
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "P", $direktorat);
 			if ($form_type == "YANBLIK") {
 				$query .= " AND subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
 				//$query .= " and klasifikasi = 'Layanan Publik' ";
@@ -212,7 +213,7 @@ class Report extends CI_Model
 				AND info='P' 
 				";
 
-			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender);
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender, $direktorat);
 
 			if ($form_type == "YANBLIK") {
 				$query .= " and subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
@@ -241,7 +242,7 @@ class Report extends CI_Model
 				BETWEEN '$inputTgl1' AND '$inputTgl2' 
 				AND info='I' ";
 
-			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender);
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender, $direktorat);
 			if ($form_type == "YANBLIK") {
 				$query .= " and subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
 				//$query .= " and klasifikasi = 'Layanan Publik' ";
@@ -262,6 +263,10 @@ class Report extends CI_Model
 			}
 		}
 
+		// echo "<pre>";
+		// print_r($query);
+		// exit;
+
 		$results = $this->db->query($query);
 		$query = $this->db->last_query();
 
@@ -271,7 +276,7 @@ class Report extends CI_Model
 		return $results->result_array();
 	}
 
-	public function get_data_kelompok_mekanisme_menjawab($sheet, $form_type, $inputTgl1, $inputTgl2, $inputKota, $kategori, $jenis, $gender)
+	public function get_data_kelompok_mekanisme_menjawab($sheet, $form_type, $inputTgl1, $inputTgl2, $inputKota, $kategori, $jenis, $gender, $direktorat)
 	{
 		if ($gender == 'ALL') {
 			$query = "SELECT 
@@ -291,7 +296,7 @@ class Report extends CI_Model
 					AND info='P' 
 				";
 
-			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "L");
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "L", $direktorat);
 
 			if ($form_type == "YANBLIK") {
 				$query .= " AND subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
@@ -319,7 +324,7 @@ class Report extends CI_Model
 					tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
 					AND info='P' ";
 
-			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "P");
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "P", $direktorat);
 			if ($form_type == "YANBLIK") {
 				$query .= " AND subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
 				//$query .= " and klasifikasi = 'Layanan Publik' ";
@@ -344,7 +349,7 @@ class Report extends CI_Model
 						tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
 						AND info='I' ";
 
-			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "L");
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "L", $direktorat);
 			if ($form_type == "YANBLIK") {
 				$query .= " AND subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
 				//$query .= " and klasifikasi = 'Layanan Publik' ";
@@ -369,7 +374,7 @@ class Report extends CI_Model
 					WHERE
 						tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
 						AND info='I' ";
-			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "P");
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "P", $direktorat);
 			if ($form_type == "YANBLIK") {
 				$query .= " AND subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
 				//$query .= " and klasifikasi = 'Layanan Publik' ";
@@ -397,7 +402,7 @@ class Report extends CI_Model
 					WHERE tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
 					AND info='P' ";
 
-			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender);
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender, $direktorat);
 
 			if ($form_type == "YANBLIK") {
 				$query .= " and subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
@@ -423,7 +428,7 @@ class Report extends CI_Model
 				WHERE tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
 				AND info='I' ";
 
-			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender);
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender, $direktorat);
 
 			if ($form_type == "YANBLIK") {
 				$query .= " and subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
@@ -451,7 +456,7 @@ class Report extends CI_Model
 		return $results->result_array();
 	}
 
-	public function get_data_jenis_profesi_pengadu($sheet, $form_type, $inputTgl1, $inputTgl2, $inputKota, $kategori, $jenis, $gender)
+	public function get_data_jenis_profesi_pengadu($sheet, $form_type, $inputTgl1, $inputTgl2, $inputKota, $kategori, $jenis, $gender, $direktorat)
 	{
 		if ($gender == 'ALL') {
 			$query = "SELECT 
@@ -471,7 +476,7 @@ class Report extends CI_Model
 					AND info='P' 
 				";
 
-			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "L");
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "L", $direktorat);
 
 			if ($form_type == "YANBLIK") {
 				$query .= " AND subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
@@ -499,7 +504,7 @@ class Report extends CI_Model
 					tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
 					AND info='P' ";
 
-			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "P");
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "P", $direktorat);
 			if ($form_type == "YANBLIK") {
 				$query .= " AND subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
 				//$query .= " and klasifikasi = 'Layanan Publik' ";
@@ -524,7 +529,7 @@ class Report extends CI_Model
 						tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
 						AND info='I' ";
 
-			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "L");
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "L", $direktorat);
 			if ($form_type == "YANBLIK") {
 				$query .= " AND subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
 				//$query .= " and klasifikasi = 'Layanan Publik' ";
@@ -549,7 +554,7 @@ class Report extends CI_Model
 					WHERE
 						tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
 						AND info='I' ";
-			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "P");
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "P", $direktorat);
 			if ($form_type == "YANBLIK") {
 				$query .= " AND subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
 				//$query .= " and klasifikasi = 'Layanan Publik' ";
@@ -576,7 +581,7 @@ class Report extends CI_Model
 					WHERE tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
 					AND info='P' ";
 
-			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender);
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender, $direktorat);
 
 			if ($form_type == "YANBLIK") {
 				$query .= " and subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
@@ -601,7 +606,7 @@ class Report extends CI_Model
 				WHERE tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
 				AND info='I' ";
 
-			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender);
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender, $direktorat);
 
 			if ($form_type == "YANBLIK") {
 				$query .= " and subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
@@ -629,7 +634,7 @@ class Report extends CI_Model
 		return $results->result_array();
 	}
 
-	public function get_data_kelompok_informasi_produk($sheet, $form_type, $inputTgl1, $inputTgl2, $inputKota, $kategori, $jenis, $gender)
+	public function get_data_kelompok_informasi_produk($sheet, $form_type, $inputTgl1, $inputTgl2, $inputKota, $kategori, $jenis, $gender, $direktorat)
 	{
 		if ($gender == 'ALL') {
 			$query = "SELECT 
@@ -649,7 +654,7 @@ class Report extends CI_Model
 					AND info='P' 
 				";
 
-			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "L");
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "L", $direktorat);
 
 			if ($form_type == "YANBLIK") {
 				$query .= " AND subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
@@ -677,7 +682,7 @@ class Report extends CI_Model
 					tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
 					AND info='P' ";
 
-			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "P");
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "P", $direktorat);
 			if ($form_type == "YANBLIK") {
 				$query .= " AND subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
 				//$query .= " and klasifikasi = 'Layanan Publik' ";
@@ -702,7 +707,7 @@ class Report extends CI_Model
 						tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
 						AND info='I' ";
 
-			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "L");
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "L", $direktorat);
 			if ($form_type == "YANBLIK") {
 				$query .= " AND subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
 				//$query .= " and klasifikasi = 'Layanan Publik' ";
@@ -727,7 +732,7 @@ class Report extends CI_Model
 					WHERE
 						tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
 						AND info='I' ";
-			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "P");
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "P", $direktorat);
 			if ($form_type == "YANBLIK") {
 				$query .= " AND subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
 				//$query .= " and klasifikasi = 'Layanan Publik' ";
@@ -754,7 +759,7 @@ class Report extends CI_Model
 				WHERE tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
 				AND info='P' ";
 
-			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender);
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender, $direktorat);
 
 			if ($form_type == "YANBLIK") {
 				$query .= " and subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
@@ -779,7 +784,7 @@ class Report extends CI_Model
 			WHERE tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
 			AND info='I' ";
 
-			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender);
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender, $direktorat);
 
 			if ($form_type == "YANBLIK") {
 				$query .= " and subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
@@ -815,7 +820,7 @@ class Report extends CI_Model
 		return $results->result_array();
 	}
 
-	public function get_data_kelompok_farmakologi($sheet, $form_type, $inputTgl1, $inputTgl2, $inputKota, $kategori, $jenis, $gender)
+	public function get_data_kelompok_farmakologi($sheet, $form_type, $inputTgl1, $inputTgl2, $inputKota, $kategori, $jenis, $gender, $direktorat)
 	{
 		if ($gender == 'ALL') {
 			$query = "SELECT 
@@ -835,7 +840,7 @@ class Report extends CI_Model
 					AND info='P' 
 				";
 
-			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "L");
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "L", $direktorat);
 
 			if ($form_type == "YANBLIK") {
 				$query .= " AND subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
@@ -863,7 +868,7 @@ class Report extends CI_Model
 					tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
 					AND info='P' ";
 
-			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "P");
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "P", $direktorat);
 			if ($form_type == "YANBLIK") {
 				$query .= " AND subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
 				//$query .= " and klasifikasi = 'Layanan Publik' ";
@@ -888,7 +893,7 @@ class Report extends CI_Model
 						tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
 						AND info='I' ";
 
-			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "L");
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "L", $direktorat);
 			if ($form_type == "YANBLIK") {
 				$query .= " AND subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
 				//$query .= " and klasifikasi = 'Layanan Publik' ";
@@ -913,7 +918,7 @@ class Report extends CI_Model
 					WHERE
 						tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
 						AND info='I' ";
-			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "P");
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "P", $direktorat);
 			if ($form_type == "YANBLIK") {
 				$query .= " AND subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
 				//$query .= " and klasifikasi = 'Layanan Publik' ";
@@ -941,7 +946,7 @@ class Report extends CI_Model
 					WHERE tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
 					AND info='P' ";
 
-			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender);
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender, $direktorat);
 
 			if ($form_type == "YANBLIK") {
 				$query .= " and subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
@@ -967,7 +972,7 @@ class Report extends CI_Model
 				AND info='I' 
 				";
 
-			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender);
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender, $direktorat);
 
 			if ($form_type == "YANBLIK") {
 				$query .= " and subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
@@ -998,7 +1003,7 @@ class Report extends CI_Model
 		return $results->result_array();
 	}
 
-	public function get_data_kelompok_mutu($sheet, $form_type, $inputTgl1, $inputTgl2, $inputKota, $kategori, $jenis, $gender)
+	public function get_data_kelompok_mutu($sheet, $form_type, $inputTgl1, $inputTgl2, $inputKota, $kategori, $jenis, $gender, $direktorat)
 	{
 		if ($gender == 'ALL') {
 			$query = "SELECT 
@@ -1018,7 +1023,7 @@ class Report extends CI_Model
 					AND info='P' 
 				";
 
-			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "L");
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "L", $direktorat);
 
 			if ($form_type == "YANBLIK") {
 				$query .= " AND subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
@@ -1046,7 +1051,7 @@ class Report extends CI_Model
 					tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
 					AND info='P' ";
 
-			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "P");
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "P", $direktorat);
 			if ($form_type == "YANBLIK") {
 				$query .= " AND subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
 				//$query .= " and klasifikasi = 'Layanan Publik' ";
@@ -1071,7 +1076,7 @@ class Report extends CI_Model
 						tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
 						AND info='I' ";
 
-			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "L");
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "L", $direktorat);
 			if ($form_type == "YANBLIK") {
 				$query .= " AND subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
 				//$query .= " and klasifikasi = 'Layanan Publik' ";
@@ -1096,7 +1101,7 @@ class Report extends CI_Model
 					WHERE
 						tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
 						AND info='I' ";
-			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "P");
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "P", $direktorat);
 			if ($form_type == "YANBLIK") {
 				$query .= " AND subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
 				//$query .= " and klasifikasi = 'Layanan Publik' ";
@@ -1124,7 +1129,7 @@ class Report extends CI_Model
 					WHERE tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
 					AND info='P' ";
 
-			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender);
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender, $direktorat);
 
 			if ($form_type == "YANBLIK") {
 				$query .= " and subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
@@ -1149,7 +1154,7 @@ class Report extends CI_Model
 				WHERE tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
 				AND info='I' ";
 
-			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender);
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender, $direktorat);
 
 			if ($form_type == "YANBLIK") {
 				$query .= " and subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
@@ -1180,7 +1185,7 @@ class Report extends CI_Model
 		return $results->result_array();
 	}
 
-	public function get_data_kelompok_legalitas($sheet, $form_type, $inputTgl1, $inputTgl2, $inputKota, $kategori, $jenis, $gender)
+	public function get_data_kelompok_legalitas($sheet, $form_type, $inputTgl1, $inputTgl2, $inputKota, $kategori, $jenis, $gender, $direktorat)
 	{
 		if ($gender == 'ALL') {
 			$query = "SELECT 
@@ -1200,7 +1205,7 @@ class Report extends CI_Model
 					AND info='P' 
 				";
 
-			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "L");
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "L", $direktorat);
 
 			if ($form_type == "YANBLIK") {
 				$query .= " AND subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
@@ -1228,7 +1233,7 @@ class Report extends CI_Model
 					tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
 					AND info='P' ";
 
-			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "P");
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "P", $direktorat);
 			if ($form_type == "YANBLIK") {
 				$query .= " AND subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
 				//$query .= " and klasifikasi = 'Layanan Publik' ";
@@ -1253,7 +1258,7 @@ class Report extends CI_Model
 						tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
 						AND info='I' ";
 
-			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "L");
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "L", $direktorat);
 			if ($form_type == "YANBLIK") {
 				$query .= " AND subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
 				//$query .= " and klasifikasi = 'Layanan Publik' ";
@@ -1278,7 +1283,7 @@ class Report extends CI_Model
 					WHERE
 						tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
 						AND info='I' ";
-			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "P");
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "P", $direktorat);
 			if ($form_type == "YANBLIK") {
 				$query .= " AND subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
 				//$query .= " and klasifikasi = 'Layanan Publik' ";
@@ -1305,7 +1310,7 @@ class Report extends CI_Model
 					WHERE tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
 					AND info='P'  ";
 
-			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender);
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender, $direktorat);
 
 			if ($form_type == "YANBLIK") {
 				$query .= " and subklasifikasi IN('Proses pendaftaran','Sertifikasi', 'Petugas Yanblik') ";
@@ -1332,7 +1337,7 @@ class Report extends CI_Model
 				WHERE tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
 				AND info='I' ";
 
-			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender);
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender, $direktorat);
 
 			if ($form_type == "YANBLIK") {
 				$query .= " and subklasifikasi IN('Proses pendaftaran','Sertifikasi', 'Petugas Yanblik') ";
@@ -1368,7 +1373,7 @@ class Report extends CI_Model
 		return $results->result_array();
 	}
 
-	public function get_data_kelompok_penandaan($sheet, $form_type, $inputTgl1, $inputTgl2, $inputKota, $kategori, $jenis, $gender)
+	public function get_data_kelompok_penandaan($sheet, $form_type, $inputTgl1, $inputTgl2, $inputKota, $kategori, $jenis, $gender, $direktorat)
 	{
 		if ($gender == 'ALL') {
 			$query = "SELECT 
@@ -1388,7 +1393,7 @@ class Report extends CI_Model
 					AND info='P' 
 				";
 
-			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "L");
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "L", $direktorat);
 
 			if ($form_type == "YANBLIK") {
 				$query .= " AND subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
@@ -1416,7 +1421,7 @@ class Report extends CI_Model
 					tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
 					AND info='P' ";
 
-			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "P");
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "P", $direktorat);
 			if ($form_type == "YANBLIK") {
 				$query .= " AND subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
 				//$query .= " and klasifikasi = 'Layanan Publik' ";
@@ -1441,7 +1446,7 @@ class Report extends CI_Model
 						tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
 						AND info='I' ";
 
-			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "L");
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "L", $direktorat);
 			if ($form_type == "YANBLIK") {
 				$query .= " AND subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
 				//$query .= " and klasifikasi = 'Layanan Publik' ";
@@ -1466,7 +1471,7 @@ class Report extends CI_Model
 					WHERE
 						tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
 						AND info='I' ";
-			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "P");
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "P", $direktorat);
 			if ($form_type == "YANBLIK") {
 				$query .= " AND subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
 				//$query .= " and klasifikasi = 'Layanan Publik' ";
@@ -1493,7 +1498,7 @@ class Report extends CI_Model
 				WHERE tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
 				AND info='P' ";
 
-			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender);
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender, $direktorat);
 
 			if ($form_type == "YANBLIK") {
 				$query .= " and subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
@@ -1518,7 +1523,7 @@ class Report extends CI_Model
 				WHERE tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
 				AND info='I' ";
 
-			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender);
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender, $direktorat);
 
 			if ($form_type == "YANBLIK") {
 				$query .= " and subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
@@ -1554,7 +1559,7 @@ class Report extends CI_Model
 		return $results->result_array();
 	}
 
-	public function get_data_kelompok_info_lain_produk($sheet, $form_type, $inputTgl1, $inputTgl2, $inputKota, $kategori, $jenis, $gender)
+	public function get_data_kelompok_info_lain_produk($sheet, $form_type, $inputTgl1, $inputTgl2, $inputKota, $kategori, $jenis, $gender, $direktorat)
 	{
 		if ($gender == 'ALL') {
 			$query = "SELECT 
@@ -1574,7 +1579,7 @@ class Report extends CI_Model
 					AND info='P' 
 				";
 
-			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "L");
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "L", $direktorat);
 
 			if ($form_type == "YANBLIK") {
 				$query .= " AND subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
@@ -1602,7 +1607,7 @@ class Report extends CI_Model
 					tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
 					AND info='P' ";
 
-			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "P");
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "P", $direktorat);
 			if ($form_type == "YANBLIK") {
 				$query .= " AND subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
 				//$query .= " and klasifikasi = 'Layanan Publik' ";
@@ -1627,7 +1632,7 @@ class Report extends CI_Model
 						tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
 						AND info='I' ";
 
-			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "L");
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "L", $direktorat);
 			if ($form_type == "YANBLIK") {
 				$query .= " AND subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
 				//$query .= " and klasifikasi = 'Layanan Publik' ";
@@ -1652,7 +1657,7 @@ class Report extends CI_Model
 					WHERE
 						tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
 						AND info='I' ";
-			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "P");
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "P", $direktorat);
 			if ($form_type == "YANBLIK") {
 				$query .= " AND subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
 				//$query .= " and klasifikasi = 'Layanan Publik' ";
@@ -1679,7 +1684,7 @@ class Report extends CI_Model
 				WHERE tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
 				AND info='P' ";
 
-			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender);
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender, $direktorat);
 
 			if ($form_type == "YANBLIK") {
 				$query .= " and subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
@@ -1703,7 +1708,7 @@ class Report extends CI_Model
 					from desk_tickets WHERE tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
 					AND info='I' ";
 
-			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender);
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender, $direktorat);
 
 			if ($form_type == "YANBLIK") {
 				$query .= " and subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
@@ -1734,7 +1739,7 @@ class Report extends CI_Model
 		return $results->result_array();
 	}
 
-	public function get_data_kelompok_info_umum($sheet, $form_type, $inputTgl1, $inputTgl2, $inputKota, $kategori, $jenis, $gender)
+	public function get_data_kelompok_info_umum($sheet, $form_type, $inputTgl1, $inputTgl2, $inputKota, $kategori, $jenis, $gender, $direktorat)
 	{
 		if ($gender == 'ALL') {
 			$query = "SELECT 
@@ -1754,7 +1759,7 @@ class Report extends CI_Model
 					AND info='P' 
 				";
 
-			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "L");
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "L", $direktorat);
 
 			if ($form_type == "YANBLIK") {
 				$query .= " AND subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
@@ -1782,7 +1787,7 @@ class Report extends CI_Model
 					tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
 					AND info='P' ";
 
-			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "P");
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "P", $direktorat);
 			if ($form_type == "YANBLIK") {
 				$query .= " AND subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
 				//$query .= " and klasifikasi = 'Layanan Publik' ";
@@ -1807,7 +1812,7 @@ class Report extends CI_Model
 						tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
 						AND info='I' ";
 
-			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "L");
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "L", $direktorat);
 			if ($form_type == "YANBLIK") {
 				$query .= " AND subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
 				//$query .= " and klasifikasi = 'Layanan Publik' ";
@@ -1832,7 +1837,7 @@ class Report extends CI_Model
 					WHERE
 						tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
 						AND info='I' ";
-			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "P");
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, "P", $direktorat);
 			if ($form_type == "YANBLIK") {
 				$query .= " AND subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
 				//$query .= " and klasifikasi = 'Layanan Publik' ";
@@ -1865,7 +1870,7 @@ class Report extends CI_Model
 			WHERE tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
 			AND info='P' ";
 
-			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender);
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender, $direktorat);
 
 			if ($form_type == "YANBLIK") {
 				$query .= " and subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
@@ -1890,7 +1895,7 @@ class Report extends CI_Model
 			WHERE tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
 			AND info='I' ";
 
-			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender);
+			$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender, $direktorat);
 
 			if ($form_type == "YANBLIK") {
 				$query .= " and subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
@@ -1927,7 +1932,7 @@ class Report extends CI_Model
 		return $results->result_array();
 	}
 
-	public function get_total_data_($sheet, $form_type, $inputTgl1, $inputTgl2, $inputKota, $kategori, $jenis, $gender)
+	public function get_total_data_($sheet, $form_type, $inputTgl1, $inputTgl2, $inputKota, $kategori, $jenis, $gender, $direktorat)
 	{
 
 		$query = "SELECT count(*) as total 
@@ -1954,20 +1959,20 @@ class Report extends CI_Model
 			$query .= " and submited_via = 'Medsos' ";
 		}
 
-		$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender);
+		$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender, $direktorat);
 
 		$results = $this->db->query($query);
 		return $results->result_array();
 	}
 
-	public function get_total_data_per_klasifikasi($sheet, $form_type, $klasifikasi, $inputTgl1, $inputTgl2, $inputKota, $kategori, $jenis, $gender)
+	public function get_total_data_per_klasifikasi($sheet, $form_type, $klasifikasi, $inputTgl1, $inputTgl2, $inputKota, $kategori, $jenis, $gender, $direktorat)
 	{
 
 		$query = "select count(*) as total 
 			from desk_tickets 
 			WHERE tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' and klasifikasi = '$klasifikasi'";
 
-		$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender);
+		$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender, $direktorat, $direktorat);
 
 		if ($form_type == "YANBLIK") {
 			if ($klasifikasi == 'Info Umum')
@@ -2002,7 +2007,7 @@ class Report extends CI_Model
 	}
 
 	//PPID
-	public function get_data_ppid($inputTgl1, $inputTgl2, $inputKota, $inputType)
+	public function get_data_ppid($inputTgl1, $inputTgl2, $inputKota, $inputType, $direktorat)
 	{
 		$query = "select trackid, iden_nama, iden_telp, iden_alamat, tglpengaduan, desk_profesi.name as profesi, 
 			desk_ppid.*
@@ -2011,7 +2016,7 @@ class Report extends CI_Model
 			left join desk_ppid ON desk_tickets.id = desk_ppid.id 
 			WHERE tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' AND desk_tickets.jenis = 'PPID' ";
 
-		$query .= $this->build_condition(0, $inputKota, '', '', '');
+		$query .= $this->build_condition(0, $inputKota, '', '', '', $direktorat);
 
 		if ($inputType == 'P') {
 			$query .= " AND (alasan_keberatan is null or alasan_keberatan = '') ";
@@ -2034,35 +2039,33 @@ class Report extends CI_Model
 
 		if ($form_type == "PPID") {
 			$query .= " AND jenis = 'PPID' ";
-		}
-		if ($form_type == "YANBLIK") {
+		} elseif ($form_type == "YANBLIK") {
 			$query .= " and subklasifikasi IN('Proses pendaftaran','Sertifikasi','Petugas Yanblik') ";
 			//$query .= " and klasifikasi = 'Layanan Publik' ";
-		}
-		if ($form_type == "LAPSING_RUJUKAN_MASUK") {
+		} elseif ($form_type == "LAPSING_RUJUKAN_MASUK") {
 			// rujukan masuk, jika is_rujuk = '1' namun direktorat berbeda dengan owner_dir
 			$query .= " AND is_rujuk = '1' ";
-			if ($inputdirektorat != '') {
+			if (($inputdirektorat != "") && ($inputdirektorat != "ALL")) {
 				$query .= " AND direktorat = '" . $inputdirektorat . "' AND owner_dir != '" . $inputdirektorat . "'";
 			}
-		}
-		if ($form_type == "LAPSING_RUJUKAN_KELUAR") {
+		} elseif ($form_type == "LAPSING_RUJUKAN_KELUAR") {
 			$query .= " AND is_rujuk = '1' ";
-			if ($inputdirektorat != '') {
+			if (($inputdirektorat != "") && ($inputdirektorat != "ALL")) {
 				$query .= " AND direktorat = '" . $inputdirektorat . "'";
 			}
-		}
-		if ($form_type == "GENDER") {
+		} elseif ($form_type == "GENDER") {
 			if (!empty($jenis) && $jenis != 'ALL') {
 				if ($jenis == 'LAYANAN')
 					$query .= " AND jenis = '' ";
 				elseif ($jenis == 'LAYANAN_SP4N')
 					$query .= " AND jenis IN ('','SP4N') ";
 			}
+		} elseif (($inputdirektorat != "") && ($inputdirektorat != "ALL")) {
+			$query .= " AND ( direktorat = '" . $inputdirektorat . "' OR direktorat2 = '" . $inputdirektorat . "' OR direktorat3 = '" . $inputdirektorat . "' OR direktorat4 = '" . $inputdirektorat . "' OR direktorat5 = '" . $inputdirektorat . "' ) ";
 		}
 
 
-		$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender);
+		$query .= $this->build_condition($sheet, $inputKota, $kategori, $jenis, $gender, $inputdirektorat);
 		// echo "<pre>";
 		// print_r($query);
 		// exit;
@@ -2513,7 +2516,7 @@ class Report extends CI_Model
 	{
 		$this->db->from('desk_categories');
 		$this->db->where('deleted', 0);
-		
+
 		//$this->db->where('mode', $mode);
 
 		return $this->db->get();

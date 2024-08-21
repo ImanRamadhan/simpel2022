@@ -733,6 +733,21 @@
 				name: 'lapsing.kota',
 				value: $('#kota').val()
 			})
+
+			if ($(this).val() == '') {
+				$('#direktorat').empty();
+				return;
+			}
+
+			$.getJSON("<?php echo site_url('lapsingv2/get_direktorat/'); ?>" + $(this).val(), function(data) {
+				if (data) {
+					$('#direktorat').empty();
+					$('#direktorat').append($('<option></option>').attr('value', '').text('ALL'));
+					$.each(data, function(key, entry) {
+						$('#direktorat').append($('<option></option>').attr('value', entry.id).text(entry.name));
+					})
+				}
+			});
 		});
 
 		$('#tgl1').on('change', function() {

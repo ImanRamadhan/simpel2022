@@ -61,6 +61,13 @@ class Databases extends Secure_Controller
 			$categories_array[$cat->id] = $cat->desc;
 		}
 		$data['categories'] = $categories_array;
+
+		$direktorat = $this->Dept->get_direktorat('');
+		$direktorat_array = array('ALL' => 'ALL');
+		foreach ($direktorat->result() as $dir) {
+			$direktorat_array[$dir->id] = $dir->name;
+		}
+		$data['direktorat'] = $direktorat_array;
 	}
 
 	public function index()
@@ -93,8 +100,24 @@ class Databases extends Secure_Controller
 		$inputLength 			= $this->input->post('length');
 		$inputStart 			= $this->input->post('start');
 		$inputSearch 			= $this->input->post('search');
+		$inputdirektorat 	= $this->input->post('direktorat');
 
-		$data['layanan']	= $this->DatabaseM->get_data_pengaduan_konsumen($inputTgl1, $inputTgl2, $inputKota, $inputKategori, $inputDatasource, $inputLength, $inputStart, $inputSearch);
+		$data['layanan']	= $this->DatabaseM->get_data_pengaduan_konsumen(
+			$inputTgl1,
+			$inputTgl2,
+			$inputKota,
+			$inputKategori,
+			$inputDatasource,
+			$inputLength,
+			$inputStart,
+			'',
+			'',
+			'',
+			'',
+			'',
+			'',
+			$inputdirektorat
+		);
 
 		//print_r($data['layanan']);
 
@@ -256,12 +279,12 @@ class Databases extends Secure_Controller
 			$inputKota 			= $this->input->post('kota');
 		else
 			$inputKota 			= $this->session->city;
-
+		$direktorat 			= $this->input->post('direktorat');
 		$inputLength 			= $this->input->post('length');
 		$inputStart 			= $this->input->post('start');
 		$inputSearch 			= $this->input->post('search');
 
-		$data_resume	= $this->DatabaseM->get_data_resume($inputTgl1, $inputTgl2, $inputKota, $inputLength, $inputStart, $inputSearch);
+		$data_resume	= $this->DatabaseM->get_data_resume($inputTgl1, $inputTgl2, $inputKota, $inputLength, $inputStart, $inputSearch, $direktorat);
 
 
 		//echo json_encode($data_resume, JSON_NUMERIC_CHECK);

@@ -91,6 +91,9 @@ class Database extends CI_Model
 
 		if ($this->session->city == 'PUSAT') {
 			if (!empty($filters['kota'])) {
+				if ($filters['kota'] == 'UNIT_TEKNIS') {
+					$filters['kota'] = 'UNIT TEKNIS';
+				}
 				$this->apply_filter($this->db, $filters['kota']);
 			}
 		} elseif ($this->session->city == 'UNIT TEKNIS') {
@@ -129,6 +132,14 @@ class Database extends CI_Model
 				$this->db->where('jenis', $filters['jenis']);
 		}
 
+		if (!empty($filters['direktorat']) && ($filters['direktorat'] != 'ALL') && ($filters['direktorat'] != '')) {
+			$this->db->or_where('direktorat', $filters['direktorat']);
+			$this->db->or_where('direktorat2', $filters['direktorat']);
+			$this->db->or_where('direktorat3', $filters['direktorat']);
+			$this->db->or_where('direktorat4', $filters['direktorat']);
+			$this->db->or_where('direktorat5', $filters['direktorat']);
+		}
+
 		if (!empty($filters['kategori']) && $filters['kategori'] != 'ALL') {
 			$this->db->where('kategori', $filters['kategori']);
 		}
@@ -140,27 +151,6 @@ class Database extends CI_Model
 			}
 			$this->db->where_in('status', $statuses, FALSE);
 		}
-		/*if(!empty($filters['is_rujuk']))
-		{
-			$is_rujuks = array();
-			foreach($filters['is_rujuk'] as $v)
-			{
-				$is_rujuks[] = "'".$v."'";
-			}
-			$this->db->where_in('is_rujuk', $is_rujuks, FALSE);
-		}*/
-		/*if(!empty($filters['tl']))
-		{
-			$this->db->where_in('tl',$filters['tl']);
-		}
-		if(!empty($filters['fb']))
-		{
-			$this->db->where_in('fb',$filters['fb']);
-		}*/
-		/*if(!empty($filters['is_verified']))
-		{
-			$this->db->where_in('is_verified',$filters['is_verified']);
-		}*/
 
 		$this->db->where_in('info', array('P', 'I'));
 
@@ -171,25 +161,14 @@ class Database extends CI_Model
 			$this->db->group_end();
 		}
 
-
-
-
 		// get_found_rows case
 		if ($count_only == TRUE) {
 			return $this->db->get()->row()->count;
 		}
 
-
-		//$this->db->group_by('desk_tickets.trackid');
-
-		// order by name of item by default
-		//$this->db->order_by($sort, $order);
-
 		if ($rows > 0) {
 			$this->db->limit($rows, $limit_from);
 		}
-
-
 
 		return $this->db->get();
 	}
@@ -319,6 +298,17 @@ class Database extends CI_Model
 
 		$this->db->where_in('info', array('P', 'I'));
 
+		if (!empty($filters['direktorat']) && $filters['direktorat'] != 'ALL') {
+
+			$this->db->group_start();
+			$this->db->where('desk_tickets.direktorat', $filters['direktorat']);
+			$this->db->or_where('desk_tickets.direktorat2', $filters['direktorat']);
+			$this->db->or_where('desk_tickets.direktorat3', $filters['direktorat']);
+			$this->db->or_where('desk_tickets.direktorat4', $filters['direktorat']);
+			$this->db->or_where('desk_tickets.direktorat5', $filters['direktorat']);
+			$this->db->group_end();
+		}
+
 		if (!empty($search)) {
 			$this->db->group_start();
 			$this->db->like('desk_tickets.trackid', $search);
@@ -343,9 +333,8 @@ class Database extends CI_Model
 		if ($rows > 0) {
 			$this->db->limit($rows, $limit_from);
 		}
-
-
-
+		// echo $this->db->get_compiled_select();
+		// exit;
 		return $this->db->get();
 	}
 

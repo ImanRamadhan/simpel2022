@@ -63,7 +63,7 @@ class DatabaseM extends CI_Model
 			elseif ($inputStatusRujukan == "N")
 				$query .= " and tl = 0 ";
 		}
-		if (!empty($inputUnitRujukan)) {
+		if ((!empty($inputUnitRujukan)) && ($inputUnitRujukan != '') && ($inputUnitRujukan != 'ALL')) {
 			$query .= " AND (";
 			$query .= " direktorat = " . $inputUnitRujukan . " OR ";
 			$query .= " direktorat2 = " . $inputUnitRujukan . " OR ";
@@ -82,7 +82,7 @@ class DatabaseM extends CI_Model
 		$this->db->select("desk_tickets.kota, klasifikasi, subklasifikasi");
 		$this->db->select("direktorat, direktorat2, direktorat3, direktorat4, direktorat5");
 		$this->db->select("submited_via as sarana, tl, fb, fb_isi, tl_date, sla, iden_jk");
-		$this->db->select("prod_masalah as detail_laporan, penerima, petugas_entry, keterangan, is_rujuk");
+		$this->db->select("prod_masalah as detail_laporan, penerima, t1.petugas_entry as kode_petugas , keterangan, is_rujuk");
 
 		$this->db->select("desk_categories.name as jenis_komoditi");
 		$this->db->select("desk_profesi.name as pekerjaan");
@@ -173,7 +173,8 @@ class DatabaseM extends CI_Model
 		$status = '',
 		$tl = '',
 		$fb = '',
-		$sla = ''
+		$sla = '',
+		$inputdirektorat = ''
 	) {
 
 		$query = "SELECT 
@@ -200,17 +201,17 @@ class DatabaseM extends CI_Model
 		if ($status != '')
 			$query .= " AND t1.status = '$status' ";
 
-		if (!empty($tl))
+		if ((!empty($tl) && ($tl != '') && ($tl != 'ALL')))
 			$query .= " AND tl = '$tl' ";
 
-		if (!empty($fb))
+		if ((!empty($fb) && ($fb != '') && ($fb != 'ALL')))
 			$query .= " AND fb = '$fb' ";
 
-		if (!empty($sla))
+		if ((!empty($sla) && ($sla != '') && ($sla != 'ALL')))
 			$query .= " AND sla = '$sla' ";
 
 
-		$query .= $this->build_condition($inputKota, $inputKategori, $inputDatasource, "");
+		$query .= $this->build_condition($inputKota, $inputKategori, $inputDatasource, "", $inputdirektorat);
 
 		if (!empty($inputSearch)) {
 
@@ -237,8 +238,8 @@ class DatabaseM extends CI_Model
 		}
 
 		//$query .= " order by t1.id asc ";
-		//echo $query;
-		//exit;
+		// echo $query;
+		// exit;
 		/*if($inputLength!= ""){
 			$query .= " LIMIT $inputStart, $inputLength ";  
 		}*/
@@ -259,7 +260,8 @@ class DatabaseM extends CI_Model
 		$menu = '',
 		$status = '',
 		$tl = '',
-		$fb = ''
+		$fb = '',
+		$direktorat
 	) {
 
 		$query = "SELECT 
@@ -294,7 +296,7 @@ class DatabaseM extends CI_Model
 			$query .= " AND fb = '$fb' ";
 
 
-		$query .= $this->build_condition($inputKota, $inputKategori, $inputDatasource, "");
+		$query .= $this->build_condition($inputKota, $inputKategori, $inputDatasource, "", $direktorat);
 
 		if (!empty($inputSearch)) {
 
@@ -440,13 +442,13 @@ class DatabaseM extends CI_Model
 		return $results->result_array();
 	}
 
-	public function get_data_resume($inputTgl1, $inputTgl2, $kota, $inputLength, $inputStart, $inputSearch)
+	public function get_data_resume($inputTgl1, $inputTgl2, $kota, $inputLength, $inputStart, $inputSearch, $direktorat)
 	{
 		$sql = "SELECT  id, info, concat(iden_nama, '; ', iden_jk, '; ', iden_alamat, '; ', submited_via, '; ', waktu, '; ', iden_instansi, '; ', iden_email, '; ', trackid, '; ') AS identitas_konsumen, prod_masalah, jawaban, keterangan 
 				from desk_tickets 
 				where tglpengaduan between '$inputTgl1' AND '$inputTgl2' ";
 
-		$sql .= $this->get_condition_resume($kota);
+		$sql .= $this->get_condition_resume($kota, $direktorat);
 
 
 		/*if($inputSearch != ''){
@@ -457,15 +459,13 @@ class DatabaseM extends CI_Model
 		/*if($inputLength != ''){
 			$sql .= " LIMIT $inputStart, $inputLength ";  
 		}*/
-
-
-
-
+		// print_r($sql);
+		// die;
 		$results = $this->db->query($sql);
 		return $results->result_array();
 	}
 
-	public function get_condition_resume($kota)
+	public function get_condition_resume($kota, $inputUnitRujukan)
 	{
 		$sql = "";
 
@@ -492,7 +492,15 @@ class DatabaseM extends CI_Model
 		else
 			$sql = " AND kota = '$kota' AND info IN ('I','P') ";
 
-
+		if ((!empty($inputUnitRujukan)) && ($inputUnitRujukan != '') && ($inputUnitRujukan != 'ALL')) {
+			$sql .= " AND (";
+			$sql .= " direktorat = " . $inputUnitRujukan . " OR ";
+			$sql .= " direktorat2 = " . $inputUnitRujukan . " OR ";
+			$sql .= " direktorat3 = " . $inputUnitRujukan . " OR ";
+			$sql .= " direktorat4 = " . $inputUnitRujukan . " OR ";
+			$sql .= " direktorat5 = " . $inputUnitRujukan . " ";
+			$sql .= " ) ";
+		}
 
 		return $sql;
 	}

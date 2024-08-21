@@ -8,6 +8,13 @@
 					<?php echo form_dropdown('kota', $cities, (!empty($this->session->tickets_city) ? $this->session->tickets_city : ''), 'class="form-control form-control-sm" id="kota"'); ?>
 				</div>
 			</div>
+			<div class="form-group form-group-sm row">
+				<?php echo form_label('Pilih Direktorat', 'label_direktorat', array('class' => 'required col-form-label col-sm-3')); ?>
+				<div class='col-sm-6'>
+					<?php
+					echo form_dropdown('direktorat',  $direktorat, '', 'class="form-control form-control-sm" id="direktorat"'); ?>
+				</div>
+			</div>
 		<?php endif; ?>
 		<div class="form-group form-group-sm row">
 			<?php echo form_label('Pilih Tanggal', 'label_tgl', array('class' => 'required col-form-label col-sm-3')); ?>
@@ -85,6 +92,23 @@
 		</div>
 		<script type="text/javascript">
 			$(document).ready(function() {
+				$('#kota').on('change', function() {
+
+					if ($(this).val() == '') {
+						$('#direktorat').empty();
+						return;
+					}
+
+					$.getJSON("<?php echo site_url('lapsingv2/get_direktorat/'); ?>" + $(this).val(), function(data) {
+						if (data) {
+							$('#direktorat').empty();
+							$('#direktorat').append($('<option></option>').attr('value', '').text('ALL'));
+							$.each(data, function(key, entry) {
+								$('#direktorat').append($('<option></option>').attr('value', entry.id).text(entry.name));
+							})
+						}
+					});
+				});
 
 
 
