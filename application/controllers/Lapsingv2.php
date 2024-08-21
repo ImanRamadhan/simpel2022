@@ -301,6 +301,7 @@ class Lapsingv2 extends Secure_Controller
 		$data['lapsing_type'] = $formType;
 
 		$inputKota 		= $this->input->post('kota');
+		$inputdirektorat 		= $this->input->post('direktorat');
 
 		if (empty($inputKota))
 			$inputKota		= $this->session->city;
@@ -320,7 +321,7 @@ class Lapsingv2 extends Secure_Controller
 
 		//$data['products'] = $this->Report->get_products();
 		//$data['profesi'] = $this->Report->get_profesi();
-		$raw_data = $this->Report->get_data_lapsing_ppid($sheet, $formType, $inputTgl1_, $inputTgl2_, $inputKota);
+		$raw_data = $this->Report->get_data_lapsing_ppid($sheet, $formType, $inputTgl1_, $inputTgl2_, $inputKota, $inputdirektorat);
 
 		$data['data_lapsing'] = $raw_data;
 		$data['tgl1'] = $inputTgl1;

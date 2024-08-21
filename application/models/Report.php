@@ -2530,7 +2530,7 @@ class Report extends CI_Model
 		return $this->db->get();
 	}
 
-	public function get_data_lapsing_ppid($sheet, $form_type, $inputTgl1, $inputTgl2, $inputKota)
+	public function get_data_lapsing_ppid($sheet, $form_type, $inputTgl1, $inputTgl2, $inputKota, $inputdirektorat)
 	{
 		$query = "SELECT 
 			concat (
@@ -2559,20 +2559,13 @@ class Report extends CI_Model
 		AND tglpengaduan BETWEEN '$inputTgl1' AND '$inputTgl2' 
 		";
 
-		/*if($form_type == "YANBLIK"){
-			//$query .= " and subklasifikasi IN('Proses pendaftaran','Sertifikasi','Desain kemasan','Logo','Petugas Yanblik') ";
-			$query .= " and klasifikasi = 'Layanan Publik' ";
-		} else {
-			$query .= " and info IN ('P','I') ";
-		}
-
-		if($sheet == 1){
-			$query .= " and submited_via = 'Medsos' ";
-		}*/
-
-		$query .= $this->build_condition($sheet, $inputKota, 0, '', '');
-
+		$query .= " and info IN ('P','I') ";
+		$query .= " AND ( b.`alasan_keberatan` IS NULL  OR b.`alasan_keberatan` = '' ) ";
+		$query .= $this->build_condition($sheet, $inputKota, 0, '', '', $inputdirektorat);
 		$query .= " GROUP BY bln, bln2 order by bln2";
+
+		// print_r($query);
+		// die;
 
 		$results = $this->db->query($query);
 		return $results->result_array();
