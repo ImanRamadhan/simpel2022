@@ -2075,19 +2075,26 @@ class Report extends CI_Model
 
 		$num_of_rows = count($item_data);
 
-		$array_produk = array(
-			0 => array(0, 0, 0, 0, 0, 0),
-			1 => array(0, 0, 0, 0, 0, 0),
-			2 => array(0, 0, 0, 0, 0, 0),
-			3 => array(0, 0, 0, 0, 0, 0),
-			4 => array(0, 0, 0, 0, 0, 0),
-			5 => array(0, 0, 0, 0, 0, 0),
-			6 => array(0, 0, 0, 0, 0, 0),
-			7 => array(0, 0, 0, 0, 0, 0),
-			8 => array(0, 0, 0, 0, 0, 0),
-			9 => array(0, 0, 0, 0, 0, 0),
-			10 => array(0, 0, 0, 0, 0, 0)
-		);
+		$array_produk = array();
+		$arrNormal = array(0, 0, 0, 0, 0, 0);
+		$get_products = $this->Report->get_products();
+		foreach ($get_products as $key => $value) {
+			array_push($array_produk, $arrNormal);
+		}
+		array_push($array_produk, $arrNormal);
+		// $array_produk = array(
+		// 	0 => array(0, 0, 0, 0, 0, 0),
+		// 	1 => array(0, 0, 0, 0, 0, 0),
+		// 	2 => array(0, 0, 0, 0, 0, 0),
+		// 	3 => array(0, 0, 0, 0, 0, 0),
+		// 	4 => array(0, 0, 0, 0, 0, 0),
+		// 	5 => array(0, 0, 0, 0, 0, 0),
+		// 	6 => array(0, 0, 0, 0, 0, 0),
+		// 	7 => array(0, 0, 0, 0, 0, 0),
+		// 	8 => array(0, 0, 0, 0, 0, 0),
+		// 	9 => array(0, 0, 0, 0, 0, 0),
+		// 	10 => array(0, 0, 0, 0, 0, 0)
+		// );
 
 		$array_mekanisme = array(
 			'Email' => array(0, 0, 0, 0, 0, 0),
@@ -2106,25 +2113,30 @@ class Report extends CI_Model
 
 		//$array_mekanisme_p = $array_mekanisme;
 		//$array_mekanisme_i = $array_mekanisme;
-
-		$array_profesi = array(
-			0 => array(0, 0, 0, 0, 0, 0),
-			1 => array(0, 0, 0, 0, 0, 0),
-			2 => array(0, 0, 0, 0, 0, 0),
-			3 => array(0, 0, 0, 0, 0, 0),
-			4 => array(0, 0, 0, 0, 0, 0),
-			5 => array(0, 0, 0, 0, 0, 0),
-			6 => array(0, 0, 0, 0, 0, 0),
-			7 => array(0, 0, 0, 0, 0, 0),
-			8 => array(0, 0, 0, 0, 0, 0),
-			9 => array(0, 0, 0, 0, 0, 0),
-			10 => array(0, 0, 0, 0, 0, 0),
-			11 => array(0, 0, 0, 0, 0, 0),
-			12 => array(0, 0, 0, 0, 0, 0),
-			13 => array(0, 0, 0, 0, 0, 0),
-			14 => array(0, 0, 0, 0, 0, 0),
-			15 => array(0, 0, 0, 0, 0, 0)
-		);
+		$array_profesi = array();
+		$get_profesi = $this->Report->get_profesi();
+		foreach ($get_profesi as $key => $value) {
+			array_push($array_profesi, $arrNormal);
+		}
+		array_push($array_profesi, $arrNormal);
+		// $array_profesi = array(
+		// 	0 => array(0, 0, 0, 0, 0, 0),
+		// 	1 => array(0, 0, 0, 0, 0, 0),
+		// 	2 => array(0, 0, 0, 0, 0, 0),
+		// 	3 => array(0, 0, 0, 0, 0, 0),
+		// 	4 => array(0, 0, 0, 0, 0, 0),
+		// 	5 => array(0, 0, 0, 0, 0, 0),
+		// 	6 => array(0, 0, 0, 0, 0, 0),
+		// 	7 => array(0, 0, 0, 0, 0, 0),
+		// 	8 => array(0, 0, 0, 0, 0, 0),
+		// 	9 => array(0, 0, 0, 0, 0, 0),
+		// 	10 => array(0, 0, 0, 0, 0, 0),
+		// 	11 => array(0, 0, 0, 0, 0, 0),
+		// 	12 => array(0, 0, 0, 0, 0, 0),
+		// 	13 => array(0, 0, 0, 0, 0, 0),
+		// 	14 => array(0, 0, 0, 0, 0, 0),
+		// 	15 => array(0, 0, 0, 0, 0, 0)
+		// );
 
 		//$array_profesi_p = $array_profesi;
 		//$array_profesi_i = $array_profesi;
@@ -2521,7 +2533,7 @@ class Report extends CI_Model
 
 		//$this->db->where('mode', $mode);
 
-		return $this->db->get();
+		return $this->db->get()->result_array();
 	}
 
 	public function get_profesi()
@@ -2529,7 +2541,7 @@ class Report extends CI_Model
 		$this->db->from('desk_profesi');
 		//$this->db->where('mode', $mode);
 
-		return $this->db->get();
+		return $this->db->get()->result_array();
 	}
 
 	public function get_data_lapsing_ppid($sheet, $form_type, $inputTgl1, $inputTgl2, $inputKota, $inputdirektorat)
