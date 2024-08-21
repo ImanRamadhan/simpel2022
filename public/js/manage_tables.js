@@ -181,6 +181,38 @@
 		
 	};
 	
+	var do_send_draft = function (url, ids) {
+		BootstrapDialog.confirm('Apakah Anda yakin untuk mengirim drafts(s) ini?', function(result){
+			if(result)
+			{
+				$.post((url || options.resource) + '/send', {'ids[]': ids || selected_ids()}, function (response) {
+					//delete was successful, remove checkbox rows
+					if (response.success) {
+						var selector = ids ? row_selector(ids) : selected_rows();
+						table().collapseAllRows();
+						$(selector).each(function (index, element) {
+							$(this).find("td").animate({backgroundColor: "green"}, 1200, "linear")
+								.end().animate({opacity: 0}, 1200, "linear", function () {
+									table().remove({
+										field: options.uniqueId,
+										values: selected_ids()
+									});
+									if (index == $(selector).length - 1) {
+										refresh();
+										enable_actions();
+									}
+								});
+						});
+						$.notify(response.message, { type: 'success' });
+					} else {
+						$.notify(response.message, { type: 'danger' });
+					}
+				}, "json");
+			}
+		});
+	};
+	
+
 	var do_verify = function (url, ids) {
 		BootstrapDialog.confirm('Apakah Anda yakin untuk memverifikasi layanan(s) ini?', function(result){
 			if(result)
@@ -361,6 +393,7 @@
 		init_delete();
 		init_verify();
 		init_close();
+		init_send_draft();
 		init_nonactive();
 		toggle_column_visibility();
 		dialog_support.init("button.modal-dlg");
@@ -371,6 +404,13 @@
 			do_delete();
 		});
 	};
+
+	var init_send_draft = function (confirmMessage) {
+		$("#send").click(function (event) {
+			do_send_draft();
+		});
+	};
+
 
 	var init_verify = function (confirmMessage) {
 		$("#btn_verify").click(function (event) {

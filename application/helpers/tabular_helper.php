@@ -701,19 +701,19 @@ function get_rujukanmasuk_ticket_data_row($item, $no)
 
 	switch ($CI->session->direktoratid) {
 		case $item->direktorat:
-			$data['tgldirujuk'] = $item->tgl_rujuk1;
+			$data['tgldirujuk'] = $item->tl_date1;
 
 		case $item->direktorat2:
-			$data['tgldirujuk'] = $item->tgl_rujuk2;
+			$data['tgldirujuk'] = $item->tl_date2;
 
 		case $item->direktorat3:
-			$data['tgldirujuk'] = $item->tgl_rujuk3;
+			$data['tgldirujuk'] = $item->tl_date3;
 
 		case $item->direktorat4:
-			$data['tgldirujuk'] = $item->tgl_rujuk4;
+			$data['tgldirujuk'] = $item->tl_date4;
 
 		case $item->direktorat5:
-			$data['tgldirujuk'] = $item->tgl_rujuk5;
+			$data['tgldirujuk'] = $item->tl_date5;
 	}
 
 	$data['status'] = get_status($item->status);
@@ -1123,7 +1123,60 @@ function get_my_tickets_manage_table_headers()
 
 	return transform_headers($headers);
 }
+function get_request_access_manage_table_headers()
+{
+	$CI =& get_instance();
 
+	$headers = array(
+		
+		array('no' => 'No.', 'align' => 'center', 'sortable' => false),
+		array('id' => 'ID', 'visible' => false),
+		array('nama' => 'Request ke Petugas'),
+		array('valid_until' => 'Berlaku Sampai', 'align' => 'center'),
+		array('code' => 'Pass Code', 'visible' => is_administrator() ? false : true),
+		array('status' => 'Status', 'align' => 'center'),
+	);
+	
+	
+	return transform_headers($headers);
+}
+
+function get_request_access_data_row($item, $no)
+{
+	$CI =& get_instance();
+	$controller_name = strtolower(get_class($CI));
+	$status = '<span class="badge badge-dark badge-pill py-2 px-4"> Waiting Approval </span>';
+	$dateNow = date("Y-m-d H:i:s");
+	$dateItem = $item->valid_until; 
+
+	$timestampNow = strtotime($dateNow);
+	$timestampItem = strtotime($dateItem);
+	$isActive = true;
+	if ($timestampNow > $timestampItem && !is_null($item->valid_until)) {
+		$status = '<span class="badge badge-warning badge-pill py-2 px-4"> Rejected / Expired </span>';
+		$isActive = false;
+	} elseif ($timestampNow < $timestampItem && !is_null($item->valid_until)) {
+		$status = '<span class="badge badge-success badge-pill py-2 px-4">Active</span>';
+		$isActive = true;
+	}
+	$buttonApprove = anchor('request_access/#', '<i class="fa fa-check-square"> </i>',array( 'data-id' => $item->id ,'class'=>'btn btn-sm btn-success data-btn-approve'));
+	$buttonReject = anchor('request_access/#', '<i class="fa fa-times-circle"> </i>',array( 'data-id' => $item->id ,'class'=>'btn mx-1 btn-sm btn-warning data-btn-reject'));
+
+	if(!is_null($item->valid_until))
+		$buttonApprove = '';
+
+	$data = array (
+		'no' => $no.'.',
+		'id' => $item->id,
+		'nama' => $item->nama,
+		'valid_until' => $item->valid_until,
+		'code' => $item->code,
+		'status' => $status,
+		'edit' => $isActive ?  $buttonApprove . $buttonReject : '' ,
+	);
+	if(is_administrator()) unset($data['edit']);
+	return $data;
+}
 function get_my_ticket_data_row($item, $no)
 {
 	$CI = &get_instance();
@@ -1551,13 +1604,16 @@ function get_notifikasi_data_row($item, $no)
 		'created_date' => $item->created_date,
 		'lastchange' => time_since($item->created_date),
 		'ticket_id' => $item->ticket_id,
-		'edit' => anchor(
-			$controller_name . "/view/$item->id",
-			'<i class="fa fa-search-plus" aria-hidden="true"></i>',
-			array('class' => '', 'data-btn-submit' => $CI->lang->line('common_submit'), 'title' => $CI->lang->line($controller_name . '_view'))
-		)
-	);
-	$data['is_read'] = ($item->is_read) ? "<i class='fa fa-envelope-open'></i>" : "<i class='fa fa-envelope'></i>";
+		'edit' => anchor($controller_name."/view/$item->id", '<i class="fa fa-search-plus" aria-hidden="true"></i>',
+			array('class'=>'', 'data-btn-submit' => $CI->lang->line('common_submit'), 'title'=>$CI->lang->line($controller_name.'_view')))
+		);
+	if ($item->is_read) {
+		$data['is_read'] = anchor($controller_name."/view/$item->id", '<i class="fa fa-envelope-open" style="color: black"></i>',
+		array('class'=>'', 'data-btn-submit' => $CI->lang->line('common_submit'), 'title'=>$CI->lang->line($controller_name.'_view')));
+	} else {
+		$data['is_read'] = anchor($controller_name."/view/$item->id", '<div class="unread-mail"><i class="fa fa-envelope"></i><div>',
+		array('class'=>'', 'data-btn-submit' => $CI->lang->line('common_submit'), 'title'=>$CI->lang->line($controller_name.'_view')));
+	}
 	return $data;
 }
 
@@ -1709,12 +1765,11 @@ function get_database_data_row($item, $no)
 		'hk' => $item->hk,
 		'sla' => (($item->hk <= $item->sla) ? 'Y' : 'N'),
 		'closed_date' => $item->closed_date,
-	);
-
-	$data['status'] = get_status($item->status);
-
-
-
+		'jumlahsla' => $item->sla,
+		);
+	
+	$data['status'] = get_status($item->status); 
+	
 	return $data;
 }
 

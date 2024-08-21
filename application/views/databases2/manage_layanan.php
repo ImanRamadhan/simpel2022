@@ -39,8 +39,6 @@
 		<?php endif; ?>
 	<?php endif;*/ ?>
 
-
-
 		$('#status').on('hidden.bs.select', function(e) {
 			table_support.refresh();
 		});
@@ -345,6 +343,17 @@
 					{
 						"field": "tglpengaduan",
 						"title": "Tgl Layanan",
+						"switchable": true,
+						"sortable": false,
+						"valign": "top",
+						"class": "",
+						"sorter": "",
+						"align": "center",
+						"rowspan": 2
+					},
+          {
+						"field": "jumlahsla",
+						"title": "Jumlah SLA",
 						"switchable": true,
 						"sortable": false,
 						"valign": "top",

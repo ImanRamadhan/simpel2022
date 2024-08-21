@@ -1401,6 +1401,7 @@ class Drafts extends Secure_Controller
 		$info =  $this->input->post('info');
 		$penerima =  $this->input->post('penerima');
 		$kategori =  $this->input->post('kategori');
+		$kategori_lainnya = $this->input->post('kategori_lainnya');
 		$submited_via =  $this->input->post('submited_via');
 		$jenis =  $this->input->post('jenis');
 		$shift =  $this->input->post('shift');
@@ -1663,6 +1664,7 @@ class Drafts extends Secure_Controller
 			'info' => $info,
 			'penerima' => $penerima,
 			'kategori' => $kategori,
+			'kategori_lainnya' => $kategori_lainnya,
 			'submited_via' => $submited_via,
 			'jenis' => $jenis,
 			'shift' => $shift,
@@ -2279,7 +2281,7 @@ class Drafts extends Secure_Controller
 		$this->load->view('drafts/confirm_send', $data);
 	}
 
-	public function send_ticket($item_id = -1)
+	public function send_ticket($item_id = -1, $isBulkSend = false)
 	{
 		$item_info = $this->Draft->get_info($item_id);
 		foreach (get_object_vars($item_info) as $property => $value) {
@@ -2363,9 +2365,13 @@ class Drafts extends Secure_Controller
 		$item_data['d5_prioritas'] = $item_info->d5_prioritas;
 
 		$item_data['tglpengaduan'] = $tglpengaduan;
-
-		if ($this->Draft->save_to_ticket($item_data, $item_id)) {
-			if ($item_info->is_rujuk == '1') {
+		
+		if($this->Draft->save_to_ticket($item_data, $item_id))
+		{
+			$users_data = null;
+			$dir_array = null;
+			if($item_info->is_rujuk == '1')
+			{
 				$data = array(
 					'trackid' => $item_data['trackid'],
 					'isu_topik' => $item_info->isu_topik
@@ -2424,11 +2430,19 @@ class Drafts extends Secure_Controller
 					}
 				}
 			}
-
-
-			$this->session->set_flashdata('flash', array('success' => TRUE, 'message' => '<i class="fa fa-check-circle" aria-hidden="true"></i> Data berhasil dikirim dengan ID layanan ' . $item_data['trackid']));
-			echo json_encode(array('success' => TRUE, 'message' => 'Data berhasil dikirim', 'id' => $item_data['id']));
-		} else {
+		
+			if($isBulkSend){
+				return json_encode(array('success' => TRUE, 'message' => 'Data berhasil dikirim', 'id' => $item_data['id'], $users_data,$item_info));;
+			}
+		
+			$this->session->set_flashdata('flash', array('success' => TRUE, 'message' => '<i class="fa fa-check-circle" aria-hidden="true"></i> Data berhasil dikirim dengan ID layanan '.$item_data['trackid']));
+			echo json_encode(array('success' => TRUE, 'message' => 'Data berhasil dikirim', 'id' => $item_data['id'], $users_data,$dir_array));
+		}
+		else
+		{
+			if($isBulkSend){
+				return true;
+			}
 			$this->session->set_flashdata('flash', array('success' => FALSE, 'message' => 'Data gagal dikirim', 'id' => $item_id));
 			echo json_encode(array('success' => FALSE, 'message' => 'Data gagal dikirim', 'id' => $item_id));
 		}
@@ -2438,6 +2452,25 @@ class Drafts extends Secure_Controller
 		//redirect('drafts/list_all');
 	}
 
+
+	public function send()
+	{
+		$items_to_send = $this->input->post('ids');
+		$length_items = count($items_to_send) - 1; 
+		try {
+			foreach($items_to_send as $x => $item){
+				if($x == $length_items){
+					$this->send_ticket($item,true);
+				}else{
+					$this->send_ticket($item,false);
+				}
+			}
+			$message = 'Data berhasil dikirim';
+			echo json_encode(array('success' => TRUE, 'message' => $message));
+		} catch (\Throwable $th) {
+			echo json_encode(array('success' => FALSE, 'message' => $th->getMessage()));
+		}
+	}
 	public function delete()
 	{
 		$items_to_delete = $this->input->post('ids');

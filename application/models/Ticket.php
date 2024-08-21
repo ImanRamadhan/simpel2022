@@ -83,7 +83,7 @@ class Ticket extends CI_Model
 			$this->db->where('tglpengaduan >=', $filters['tgl1']);
 			$this->db->where('tglpengaduan <=', $filters['tgl2']);
 		}
-
+		
 		if ($this->session->city == 'PUSAT') {
 			if (!empty($filters['kota'])) {
 				$this->apply_filter($this->db, $filters['kota']);
@@ -737,7 +737,6 @@ class Ticket extends CI_Model
 		$this->db->from('desk_tickets');
 		$this->db->join('desk_rujukan', 'desk_rujukan.rid = desk_tickets.id', 'LEFT');
 
-
 		if (!empty($filters['tgl1']) && !empty($filters['tgl2'])) {
 			$this->db->where('tglpengaduan >=', $filters['tgl1']);
 			$this->db->where('tglpengaduan <=', $filters['tgl2']);
@@ -770,8 +769,6 @@ class Ticket extends CI_Model
 			$this->db->group_end();
 		}
 
-
-
 		// get_found_rows case
 		if ($count_only == TRUE) {
 			return $this->db->get()->row()->count;
@@ -786,7 +783,6 @@ class Ticket extends CI_Model
 		if ($rows > 0) {
 			$this->db->limit($rows, $limit_from);
 		}
-
 
 
 		return $this->db->get();
@@ -2675,5 +2671,34 @@ class Ticket extends CI_Model
 		$query = $this->db->query($sql);
 
 		return $query->row();
+	}
+
+	public function save_bulk($data){
+		//return $this->db->insert_batch('desk_drafts',$data);
+		$this->db->trans_start(); 
+		$this->db->trans_strict(FALSE); 
+
+		for($i =0; $i< count($data); $i++){
+			$this->db->insert('desk_tickets', $data[$i]);  
+			$insert_id = $this->db->insert_id();
+
+			if($data[$i]['is_rujuk'] == '1'){
+				$datarujukan = array();
+				$datarujukan['rid'] = $insert_id;
+				
+				$this->db->insert('desk_rujukan', $datarujukan);  
+			}
+		}
+
+		$this->db->trans_complete(); 
+		
+		if ($this->db->trans_status() === FALSE) {
+			$this->db->trans_rollback();
+			return FALSE;
+		} 
+		else {
+			$this->db->trans_commit();
+			return TRUE;
+		}
 	}
 }

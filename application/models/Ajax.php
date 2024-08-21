@@ -642,6 +642,32 @@ class Ajax extends CI_Model
 		return $query->row()->cnt;
 	}
 
+	public function rujukan_masuk_not_closed_menu($date1, $date2)
+	{
+		
+		$this->db->select('COUNT(desk_tickets.id) as cnt');
+		$this->db->from('desk_tickets');
+		$this->db->join('desk_rujukan', 'desk_rujukan.rid = desk_tickets.id', 'LEFT');
+		$this->db->where('tglpengaduan >=', $date1);
+		$this->db->where('tglpengaduan <=', $date2);
+		//$this->db->where('kota', 'PUSAT');
+		$this->db->where('status !=', '3');
+		$this->db->where('replierid is null');
+		$this->db->group_start();
+		$this->db->where('direktorat', $this->session->direktoratid);
+		$this->db->or_where('direktorat2', $this->session->direktoratid);
+		$this->db->or_where('direktorat3', $this->session->direktoratid);
+		$this->db->or_where('direktorat4', $this->session->direktoratid);
+		$this->db->or_where('direktorat5', $this->session->direktoratid);
+		//$this->db->or_where('direktorat6', $this->session->direktoratid);
+		//$this->db->or_where('direktorat7', $this->session->direktoratid);
+		$this->db->group_end();
+		$this->db->where_in('info', array('P', 'I'));
+    
+    	$query = $this->db->get();
+		return $query->row()->cnt;
+	} 
+  
 	public function ppid_need_action()
 	{
 		

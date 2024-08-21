@@ -10,6 +10,7 @@ $lang["common_confirm_search"] = "You have selected one or more rows, these will
 $lang["common_country"] = "Country";
 $lang["common_date"] = "Date";
 $lang["common_delete"] = "Hapus";
+$lang["common_send"] = "Send";
 $lang["common_det"] = "details";
 $lang["common_download_import_template"] = "Download Import Excel Template (CSV)";
 $lang["common_edit"] = "edit";

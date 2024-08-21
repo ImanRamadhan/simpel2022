@@ -107,6 +107,9 @@ $(document).ready(function()
 						<button id="delete" class="btn btn-soft-info btn-sm">
 							<span class="fa fa-trash">&nbsp;</span><?php echo $this->lang->line("common_delete"); ?>
 						</button>
+						<button id="send" class="btn btn-soft-success mx-2 btn-sm">
+							<span class="fa fa-send">&nbsp;</span><?php echo $this->lang->line("common_send"); ?>
+						</button>
 					  
 					   
 					</div>

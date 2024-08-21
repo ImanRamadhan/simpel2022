@@ -63,7 +63,7 @@ $(document).ready(function()
 					</div>
 				</div>
 				<div id="table_holder">
-					<table id="table" class="table table-striped"></table>
+					<table id="table" class="table tbody"></table>
 				</div>
 				
 			</div>

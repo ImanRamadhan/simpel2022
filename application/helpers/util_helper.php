@@ -774,7 +774,7 @@ function get_last_notifikasi()
 	$CI = &get_instance();
 	$CI->load->model('Notification');
 
-	return $CI->Notification->get_notifications($CI->session->id, FALSE, 3);
+	return $CI->Notification->get_notifications($CI->session->id, TRUE, 3);
 }
 
 function is_allowed($fname)
