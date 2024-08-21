@@ -2076,6 +2076,7 @@ class Report extends CI_Model
 		$num_of_rows = count($item_data);
 
 		$array_produk = array(
+			0 => array(0, 0, 0, 0, 0, 0),
 			1 => array(0, 0, 0, 0, 0, 0),
 			2 => array(0, 0, 0, 0, 0, 0),
 			3 => array(0, 0, 0, 0, 0, 0),
@@ -2107,6 +2108,7 @@ class Report extends CI_Model
 		//$array_mekanisme_i = $array_mekanisme;
 
 		$array_profesi = array(
+			0 => array(0, 0, 0, 0, 0, 0),
 			1 => array(0, 0, 0, 0, 0, 0),
 			2 => array(0, 0, 0, 0, 0, 0),
 			3 => array(0, 0, 0, 0, 0, 0),
