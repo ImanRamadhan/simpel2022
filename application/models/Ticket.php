@@ -88,6 +88,13 @@ class Ticket extends CI_Model
 			if (!empty($filters['kota'])) {
 				$this->apply_filter($this->db, $filters['kota']);
 			}
+			if (!empty($filters['direktorat'])) {
+				$this->db->where('direktorat', $filters['direktorat']);
+				$this->db->or_where('direktorat2', $filters['direktorat']);
+				$this->db->or_where('direktorat3', $filters['direktorat']);
+				$this->db->or_where('direktorat4', $filters['direktorat']);
+				$this->db->or_where('direktorat5', $filters['direktorat']);
+			}
 		} else if ($this->session->city == 'UNIT TEKNIS') {
 			$this->db->where('owner_dir', $this->session->direktoratid);
 		} else {

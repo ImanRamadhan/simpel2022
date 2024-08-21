@@ -332,6 +332,7 @@ class Excels extends CI_Controller
         $inputTgl1          = convert_date1($this->input->post('tgl1'));
         $inputTgl2             = convert_date1($this->input->post('tgl2'));
         $reportType         = $this->input->post('type');
+        $direktorat         = $this->input->post('direktorat');
         $filename           = "";
 
         if ($reportType == '1') {
@@ -471,17 +472,18 @@ class Excels extends CI_Controller
         $inputKategori         = $this->input->post('kategori');
         $inputStatusRujukan = $this->input->post('statusRujukan');
         $reportType         = $this->input->post('type');
+        $direktorat         = $this->input->post('direktorat');
 
         if ($reportType == '1') {
-            $data_pengaduan_konsumen    = $this->DatabaseM->get_data_pengaduan_konsumen($inputTgl1, $inputTgl2, $inputKota, $inputKategori, $inputDatasource, '', '', '');
+            $data_pengaduan_konsumen    = $this->DatabaseM->get_data_pengaduan_konsumen($inputTgl1, $inputTgl2, $inputKota, $inputKategori, $inputDatasource, '', '', '', '', '', '', $direktorat);
 
             $this->build_databases_body($worksheet, "A", 10, $data_pengaduan_konsumen);
         } else if ($reportType == '4') {
-            $data_pengaduan_konsumen    = $this->DatabaseM->get_data_yanblik($inputTgl1, $inputTgl2, $inputKota, $inputKategori, $inputDatasource, '', '', '');
+            $data_pengaduan_konsumen    = $this->DatabaseM->get_data_yanblik($inputTgl1, $inputTgl2, $inputKota, $inputKategori, $inputDatasource, '', '', '', '', '', '', '', '',  $direktorat);
 
             $this->build_databases_body($worksheet, "A", 10, $data_pengaduan_konsumen);
         } else if ($reportType == '3') {
-            $data_resume    = $this->DatabaseM->get_data_resume(is_admin(), get_userid(), $inputTgl1, $inputTgl2, $inputKota, '', '', '');
+            $data_resume    = $this->DatabaseM->get_data_resume(is_admin(), get_userid(), $inputTgl1, $inputTgl2, $inputKota, '', $direktorat);
 
             $this->build_databases_resume_body($worksheet, "A", 10, $data_resume);
         } else if ($reportType == '2') {

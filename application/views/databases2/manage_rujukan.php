@@ -77,6 +77,21 @@
 					name: 'tickets.kota',
 					value: $('#kota').val()
 				});
+
+				if ($(this).val() == '') {
+					$('#direktorat').empty();
+					return;
+				}
+
+				$.getJSON("<?php echo site_url('lapsingv2/get_direktorat/'); ?>" + $(this).val(), function(data) {
+					if (data) {
+						$('#direktorat').empty();
+						$('#direktorat').append($('<option></option>').attr('value', '').text('ALL'));
+						$.each(data, function(key, entry) {
+							$('#direktorat').append($('<option></option>').attr('value', entry.id).text(entry.name));
+						})
+					}
+				});
 			});
 
 			if ($.remember({
@@ -869,6 +884,13 @@
 						<div class='col-sm-4'>
 							<?php
 							echo form_dropdown('kota', $cities, '', 'class="form-control form-control-sm" id="kota"'); ?>
+						</div>
+					</div>
+					<div class="form-group form-group-sm row">
+						<?php echo form_label('Pilih Direktorat', 'label_direktorat', array('class' => 'required col-form-label col-sm-2')); ?>
+						<div class='col-sm-4'>
+							<?php
+							echo form_dropdown('direktorat',  $direktorat, '', 'class="form-control form-control-sm" id="direktorat"'); ?>
 						</div>
 					</div>
 				<?php endif; ?>

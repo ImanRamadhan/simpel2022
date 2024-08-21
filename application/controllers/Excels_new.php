@@ -132,6 +132,7 @@ class Excels_new extends CI_Controller
 		$kota = $this->input->post('kota');
 		$tgl1 = $this->input->post('tgl1');
 		$tgl2 = $this->input->post('tgl2');
+		$direktorat = $this->input->post('direktorat');
 
 		$kategori = $this->input->post('kategori');
 		if ($kategori == 'ALL') $kategori = '';
@@ -142,6 +143,7 @@ class Excels_new extends CI_Controller
 			'tgl1' => $tgl1,
 			'tgl2' => $tgl2,
 			'kategori' => $kategori,
+			'direktorat' => $direktorat,
 			'jenis' => $jenis,
 			'kota' => $kota
 		);
@@ -156,6 +158,7 @@ class Excels_new extends CI_Controller
 		$kota = $this->input->post('kota');
 		$tgl1 = $this->input->post('tgl1');
 		$tgl2 = $this->input->post('tgl2');
+		$direktorat = $this->input->post('direktorat');
 
 		/*$kategori = $this->input->post('kategori');
 		if($kategori == 'ALL')$kategori = '';
@@ -167,7 +170,8 @@ class Excels_new extends CI_Controller
 			'tgl2' => $tgl2,
 			//'kategori' => $kategori,
 			//'jenis' => $jenis,
-			'kota' => $kota
+			'kota' => $kota,
+			'direktorat' => $direktorat
 		);
 		//print_r($filters);exit;
 		$file_out = 'Resume_' . $kota . '_' . $tgl1 . '_s.d_' . $tgl2 . '.xlsx';
@@ -198,6 +202,7 @@ class Excels_new extends CI_Controller
 		$tgl1 = $filters['tgl1'];
 		$tgl2 = $filters['tgl2'];
 		$kota = $filters['kota'];
+		$direktorat = $filters['direktorat'];
 
 		$spreadsheet = IOFactory::load(realpath(APPPATH . '/doc_templates/template_layanan_new.xls'));
 		$worksheet = $spreadsheet->getSheet(0);
@@ -207,14 +212,16 @@ class Excels_new extends CI_Controller
 
 		$this->load->model('DatabaseP');
 		//$search = '';
-		if ($tipe == 'LAYANAN' || $tipe == 'DATABASE' || $tipe == 'RESUME')
+		if ($tipe == 'LAYANAN' || $tipe == 'DATABASE')
 			$records = $this->DatabaseP->get_data_layanan($search, $filters);
+		elseif ($tipe == 'RESUME')
+			$records = $this->DatabaseP->get_data_resume($search, $filters);
 		elseif ($tipe == 'LAYANANSAYA')
 			$records = $this->DatabaseP->get_data_layanan_saya($search, $filters);
 		elseif ($tipe == 'RUJUKAN_MASUK')
 			$records = $this->DatabaseP->get_data_rujukan_masuk($search, $filters);
-		//print_r($records);
-		//exit;
+		// print_r($records);
+		// exit;
 
 		$start_index = 10;
 

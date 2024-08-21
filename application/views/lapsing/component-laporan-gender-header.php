@@ -10,6 +10,13 @@
 						echo form_dropdown('kota', $cities, '', 'class="form-control form-control-sm" id="kota"'); ?>
 					</div>
 				</div>
+				<div class="form-group form-group-sm row">
+					<?php echo form_label('Pilih Direktorat', 'label_direktorat', array('class' => 'required col-form-label col-sm-2')); ?>
+					<div class='col-sm-4'>
+						<?php
+						echo form_dropdown('direktorat',  $direktorat, '', 'class="form-control form-control-sm" id="direktorat"'); ?>
+					</div>
+				</div>
 			<?php endif; ?>
 			<div class="form-group form-group-sm row">
 				<?php echo form_label('Pilih gender', 'label_gender', array('class' => 'required col-form-label col-sm-2')); ?>

@@ -58,6 +58,13 @@ class Tickets extends Secure_Controller
 		}
 		$data['categories'] = $categories_array;
 
+		$direktorat = $this->Dept->get_direktorat('');
+		$direktorat_array = array('ALL' => 'ALL');
+		foreach ($direktorat->result() as $dir) {
+			$direktorat_array[$dir->id] = $dir->name;
+		}
+		$data['direktorat'] = $direktorat_array;
+
 		$jobs = $this->Ticket->get_profesi();
 		$jobs_array = array('' => 'ALL');
 		foreach ($jobs->result() as $cat) {
@@ -212,6 +219,7 @@ class Tickets extends Secure_Controller
 		$order = $this->input->get('order');
 
 		$kota = $this->input->get('kota');
+		$direktorat = $this->input->get('direktorat');
 		$tgl1 = $this->input->get('tgl1');
 		$tgl2 = $this->input->get('tgl2');
 
@@ -244,19 +252,18 @@ class Tickets extends Secure_Controller
 			'is_verified' => $is_verified,
 			'iden_profesi' => $iden_profesi,
 			'submited_via' => $submited_via,
-			'sla' => $sla
+			'sla' => $sla,
 		);
-		if (is_pusat())
+		if (is_pusat()) {
 			$filters['kota'] = $kota;
+			$filters['direktorat'] = $direktorat;
+		}
 
 		// check if any filter is set in the multiselect dropdown
 		//$filledup = array_fill_keys($this->input->get('filters'), TRUE);
 		//$filters = array_merge($filters, $filledup);
 
-
-
 		$items = $this->Ticket->search($search, $filters, $limit, $offset, $sort, $order);
-
 		$total_rows = $this->Ticket->get_found_rows($search, $filters);
 
 		$data_rows = array();

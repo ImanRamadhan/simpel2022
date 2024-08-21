@@ -29,6 +29,7 @@
                     tgl1: tgl1,
                     tgl2: tgl2,
                     kota: $("#kota").val() || "",
+                    direktorat: $("#direktorat").val() || "",
                     kategori: $("#kategori").val(),
                     jenis: $("#datasource").val(),
                     //type        : "3",

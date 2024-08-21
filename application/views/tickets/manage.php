@@ -145,8 +145,10 @@
 				return $.extend(arguments[0], {
 					<?php if (is_pusat()): ?>
 						kota: $("#kota").val() || "",
+						direktorat: $("#direktorat").val() || "",
 					<?php else: ?>
 						kota: '<?php echo $this->session->city; ?>',
+						direktorat: "",
 					<?php endif; ?>
 					tgl1: moment($("#tgl1").val(), 'DD/MM/YYYY').format('YYYY-MM-DD') || "",
 					tgl2: moment($("#tgl2").val(), 'DD/MM/YYYY').format('YYYY-MM-DD') || "",

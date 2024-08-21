@@ -72,6 +72,7 @@
                     kategori: $("#kategori").val(),
                     gender: $("#gender").val(),
                     jenis: $("#jenis").val(),
+                    direktorat: $("#direktorat").val(),
                     <?php echo $this->security->get_csrf_token_name(); ?>: csrf_token()
                 },
                 type: 'POST',
@@ -97,6 +98,7 @@
                     kategori: $("#kategori").val(),
                     jenis: $("#jenis").val(),
                     gender: $("#gender").val(),
+                    direktorat: $("#direktorat").val(),
                     <?php echo $this->security->get_csrf_token_name(); ?>: csrf_token()
                 },
                 type: 'POST',
@@ -122,6 +124,7 @@
                     kategori: $("#kategori").val(),
                     jenis: $("#jenis").val(),
                     gender: $("#gender").val(),
+                    direktorat: $("#direktorat").val(),
                     <?php echo $this->security->get_csrf_token_name(); ?>: csrf_token()
                 },
                 type: 'POST',
@@ -146,6 +149,7 @@
                     kategori: $("#kategori").val(),
                     jenis: $("#jenis").val(),
                     gender: $("#gender").val(),
+                    direktorat: $("#direktorat").val(),
                     <?php echo $this->security->get_csrf_token_name(); ?>: csrf_token()
                 },
                 type: 'POST',
@@ -170,6 +174,7 @@
                     kategori: $("#kategori").val(),
                     jenis: $("#jenis").val(),
                     gender: $("#gender").val(),
+                    direktorat: $("#direktorat").val(),
                     <?php echo $this->security->get_csrf_token_name(); ?>: csrf_token()
                 },
                 type: 'POST',
@@ -195,6 +200,7 @@
                     kategori: $("#kategori").val(),
                     jenis: $("#jenis").val(),
                     gender: $("#gender").val(),
+                    direktorat: $("#direktorat").val(),
                     <?php echo $this->security->get_csrf_token_name(); ?>: csrf_token()
                 },
                 type: 'POST',
@@ -219,6 +225,7 @@
                     type: "7",
                     kategori: $("#kategori").val(),
                     jenis: $("#jenis").val(),
+                    direktorat: $("#direktorat").val(),
                     gender: $("#gender").val(),
                     <?php echo $this->security->get_csrf_token_name(); ?>: csrf_token()
                 },
@@ -244,6 +251,7 @@
                     type: "8",
                     kategori: $("#kategori").val(),
                     jenis: $("#jenis").val(),
+                    direktorat: $("#direktorat").val(),
                     gender: $("#gender").val(),
                     <?php echo $this->security->get_csrf_token_name(); ?>: csrf_token()
                 },
@@ -270,6 +278,7 @@
                     kategori: $("#kategori").val(),
                     jenis: $("#jenis").val(),
                     gender: $("#gender").val(),
+                    direktorat: $("#direktorat").val(),
                     <?php echo $this->security->get_csrf_token_name(); ?>: csrf_token()
                 },
                 type: 'POST',
@@ -295,6 +304,7 @@
                     kategori: $("#kategori").val(),
                     jenis: $("#jenis").val(),
                     gender: $("#gender").val(),
+                    direktorat: $("#direktorat").val(),
                     <?php echo $this->security->get_csrf_token_name(); ?>: csrf_token()
                 },
                 type: 'POST',
@@ -532,6 +542,21 @@
                 name: 'lapsing.kota',
                 value: $('#kota').val()
             })
+
+            if ($(this).val() == '') {
+                $('#direktorat').empty();
+                return;
+            }
+
+            $.getJSON("<?php echo site_url('lapsingv2/get_direktorat/'); ?>" + $(this).val(), function(data) {
+                if (data) {
+                    $('#direktorat').empty();
+                    $('#direktorat').append($('<option></option>').attr('value', '').text('ALL'));
+                    $.each(data, function(key, entry) {
+                        $('#direktorat').append($('<option></option>').attr('value', entry.id).text(entry.name));
+                    })
+                }
+            });
         });
 
         if ($.remember({
