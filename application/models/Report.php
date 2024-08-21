@@ -2028,6 +2028,19 @@ class Report extends CI_Model
 		return $results->result_array();
 	}
 
+	public function getMaxIDTable($tableName)
+	{
+		$sql = "
+			SELECT id
+			FROM $tableName
+			WHERE deleted = 0
+			ORDER BY id DESC  
+			LIMIT 0,1 
+			";
+
+		return $this->db->query($sql)->row()->id;
+	}
+
 	public function get_data_lapsing($sheet, $form_type, $inputTgl1, $inputTgl2, $inputKota, $kategori, $jenis, $gender, $inputdirektorat = '')
 	{
 
@@ -2077,11 +2090,10 @@ class Report extends CI_Model
 
 		$array_produk = array();
 		$arrNormal = array(0, 0, 0, 0, 0, 0);
-		$get_products = $this->Report->get_products();
-		foreach ($get_products as $key => $value) {
+		$maxProductID = $this->Report->getMaxIDTable("desk_categories");
+		for ($z = 0; $z <= $maxProductID; $z++) {
 			array_push($array_produk, $arrNormal);
 		}
-		array_push($array_produk, $arrNormal);
 		// $array_produk = array(
 		// 	0 => array(0, 0, 0, 0, 0, 0),
 		// 	1 => array(0, 0, 0, 0, 0, 0),
@@ -2114,11 +2126,10 @@ class Report extends CI_Model
 		//$array_mekanisme_p = $array_mekanisme;
 		//$array_mekanisme_i = $array_mekanisme;
 		$array_profesi = array();
-		$get_profesi = $this->Report->get_profesi();
-		foreach ($get_profesi as $key => $value) {
+		$maxProfesiID = $this->Report->getMaxIDTable("desk_profesi");
+		for ($z = 0; $z <= $maxProfesiID; $z++) {
 			array_push($array_profesi, $arrNormal);
 		}
-		array_push($array_profesi, $arrNormal);
 		// $array_profesi = array(
 		// 	0 => array(0, 0, 0, 0, 0, 0),
 		// 	1 => array(0, 0, 0, 0, 0, 0),
