@@ -239,6 +239,11 @@ class Lapsingv2 extends Secure_Controller
 		$data['kota'] = $inputKota;
 		$data['jenis'] = $inputJenis;
 
+		// echo ("<pre>");
+		// print_r($data);
+		// echo ("</pre>");
+		// die;
+
 		$this->load->view('lapsingv2/form_lapsing', $data);
 	}
 
