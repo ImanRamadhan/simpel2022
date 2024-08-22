@@ -29,7 +29,7 @@
 			</div>
 		</div>
 		<div class="form-group form-group-sm row">
-			<?php echo form_label('Tidak Lengkap? <span class="text-danger">*</span>', 'tidak_lengkap', array('for' => 'message', 'class' => 'col-form-label col-sm-3')); ?>
+			<?php echo form_label('Kelengkapan Data', 'tidak_lengkap', array('for' => 'message', 'class' => 'col-form-label col-sm-3')); ?>
 			<div class="col-sm-5">
 				<?php echo form_dropdown('is_lengkap', array('ALL' => 'ALL', 'Lengkap' => 'Lengkap', 'Tidak_Lengkap' => 'Tidak Lengkap'), null, 'class="form-control form-control-sm" id="is_lengkap"'); ?>
 			</div>
