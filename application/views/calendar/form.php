@@ -21,12 +21,10 @@
 	
 	<div class="row">
 		<div class="col-lg-8">
-		
-		<ul id="error_message_box" class="error_message_box alert-danger"></ul>
-		
-		
+		<div id="error_message_box" class="error_message_box alert-danger"></div>
 		<div class="card">
 			<div class="card-header bg-primary text-white">
+				
 				<?php echo $page_title; ?>
 			</div>
 			<div class="card-body">
@@ -99,7 +97,11 @@ $(document).ready(function()
 				{
 					$.notify(response.message, { type: response.success ? 'success' : 'danger' });
 					
-					setTimeout(function(){window.location.href = "<?php echo site_url('calendars'); ?>";}, 3000);
+					if (response.success) {
+						setTimeout(function(){window.location.href = "<?php echo site_url('calendars'); ?>";}, 2000);
+					}
+
+					$('#submit').attr('disabled',false);
 				},
 				dataType: 'json'
 			});

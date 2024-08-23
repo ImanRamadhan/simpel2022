@@ -52,6 +52,13 @@ class Calendar extends CI_Model
 		return $this->db->count_all_results();
 	}
 
+	public function get_exist_date($date)
+	{
+		$this->db->from('desk_holiday');
+		$this->db->where('tgl', $date);
+
+		return ($this->db->get()->num_rows() == 1);
+	}
 	
 
 	/*
