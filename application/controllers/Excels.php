@@ -1047,7 +1047,7 @@ class Excels extends CI_Controller
             }
             $start_index++;
         }
-      
+
         $styleArray = array(
             'borders' => array(
                 'allBorders' => array(
@@ -2155,6 +2155,7 @@ class Excels extends CI_Controller
         $inputTgl1      = $this->input->post('tgl1');
         $inputTgl2         = $this->input->post('tgl2');
         $formType          = $this->input->post('formType');
+        $direktorat          = $this->input->post('direktorat');
 
         $spreadsheet = IOFactory::load(realpath(APPPATH . '/doc_templates/template01_lapsing_new.xls'));
 
@@ -2169,7 +2170,7 @@ class Excels extends CI_Controller
         else
             $inputKota        = $this->session->city;
 
-        $raw_data = $this->Report->get_data_lapsing_ppid(1, $formType, $inputTgl1, $inputTgl2, $inputKota);
+        $raw_data = $this->Report->get_data_lapsing_ppid(1, $formType, $inputTgl1, $inputTgl2, $inputKota, $direktorat);
 
         $start_index    = 10;
 
@@ -2447,84 +2448,84 @@ class Excels extends CI_Controller
             $data['subklasifikasi_id'] = $idget;
 
             //tindak lanjut
-            $data['is_rujuk'] = $workSheet->getCell('AL'.$column)->getValue() == 'Ya' ? '1' :  '0';
-            if($data['is_rujuk'] == '1'){
+            $data['is_rujuk'] = $workSheet->getCell('AL' . $column)->getValue() == 'Ya' ? '1' :  '0';
+            if ($data['is_rujuk'] == '1') {
                 $columns = ['AM', 'AO', 'AQ', 'AS', 'AU'];
                 $priorities = ['AN', 'AP', 'AR', 'AT', 'AV'];
-            
+
                 foreach ($columns as $index => $col) {
                     $direktoratKey = $index == 0 ? 'direktorat' : 'direktorat' . ($index + 1);
-                    $data[$direktoratKey] = $workSheet->getCell($col . $column)->getValue() != '' 
-                        ? $this->get_direktorat_id($workSheet->getCell($col . $column)->getValue()) 
+                    $data[$direktoratKey] = $workSheet->getCell($col . $column)->getValue() != ''
+                        ? $this->get_direktorat_id($workSheet->getCell($col . $column)->getValue())
                         : '0';
                 }
-            
+
                 foreach ($priorities as $index => $col) {
                     $priorityKey = 'd' . ($index + 1) . '_prioritas';
-                    $data[$priorityKey] = $workSheet->getCell($col . $column)->getValue() != '' 
-                        ? explode(' ', $workSheet->getCell($col . $column)->getValue())[0] 
+                    $data[$priorityKey] = $workSheet->getCell($col . $column)->getValue() != ''
+                        ? explode(' ', $workSheet->getCell($col . $column)->getValue())[0]
                         : '0';
                 }
             }
-            
+
 
             //Jawaban
-            $data['jawaban'] = $workSheet->getCell('AW'.$column)->getValue() == '' ? '' :  $workSheet->getCell('AW'.$column)->getValue();
-            $data['keterangan'] = $workSheet->getCell('AX'.$column)->getValue() == '' ? '' :  $workSheet->getCell('AX'.$column)->getValue();
-            $data['petugas_entry'] = $workSheet->getCell('AY'.$column)->getValue() == '' ? '' :  $workSheet->getCell('AY'.$column)->getValue();
-            $data['penjawab'] = $workSheet->getCell('AZ'.$column)->getValue() == '' ? '' :  $workSheet->getCell('AZ'.$column)->getValue();
-            $data['answered_via'] = $workSheet->getCell('BA'.$column)->getValue() == '' ? '' :  $workSheet->getCell('BA'.$column)->getValue();
+            $data['jawaban'] = $workSheet->getCell('AW' . $column)->getValue() == '' ? '' :  $workSheet->getCell('AW' . $column)->getValue();
+            $data['keterangan'] = $workSheet->getCell('AX' . $column)->getValue() == '' ? '' :  $workSheet->getCell('AX' . $column)->getValue();
+            $data['petugas_entry'] = $workSheet->getCell('AY' . $column)->getValue() == '' ? '' :  $workSheet->getCell('AY' . $column)->getValue();
+            $data['penjawab'] = $workSheet->getCell('AZ' . $column)->getValue() == '' ? '' :  $workSheet->getCell('AZ' . $column)->getValue();
+            $data['answered_via'] = $workSheet->getCell('BA' . $column)->getValue() == '' ? '' :  $workSheet->getCell('BA' . $column)->getValue();
 
             //default
             $data['owner'] = $this->session->id;
             $data['kota'] = $this->session->city;
             $data['dt'] = $dt;
             $data['tglpengaduan'] = date('Y-m-d');
-            
+
             $data['trackid'] = '';
             $data['waktu'] = date('H:i:s');
             $data['owner_dir'] = $this->session->direktoratid;
 
             $data['tipe_medsos'] = '';
-            if((int)$this->input->post("type") == 2){
-                      $data['is_sent'] = '1';
-                  } else {
-                      $data['is_sent'] = '0';
-                  }
-
-                  $data_bulk[] = $data;
-                  $column++;
-              }
-      
-            try {
-                $prefix = 'PST';
-                if($this->session->city != 'PUSAT')
-                    $prefix = $this->Balai->get_prefix($this->session->city);
-
-                $this->Draft->save_bulk($data_bulk);
-
-                if((int)$this->input->post("type") == 2){
-
-                    $item_save = array_map(function($item) use($prefix) {
-                        $item['is_sent'] = '1';
-                        $item['trackid'] = $this->Draft->generate_ticketid($this->session->city,$prefix,date('Y-m-d'));
-                        return $item;
-                    }, $data_bulk);
-
-                    $this->Ticket->save_bulk($item_save);
-                }
-
-                $msg = array('status' => 'S', 'msg' => "Berhasil mengirim upload file!");
-
-            } catch (\Throwable $th) {
-                $msg = array('status' => 'F', 'msg' => "Upload Gagal!");
+            if ((int)$this->input->post("type") == 2) {
+                $data['is_sent'] = '1';
+            } else {
+                $data['is_sent'] = '0';
             }
 
-            echo json_encode($msg);
+            $data_bulk[] = $data;
+            $column++;
         }
 
-    private function get_direktorat_id($name){
-        return $this->db->get_where("desk_direktorat",["name" => $name])->row()->id;
+        try {
+            $prefix = 'PST';
+            if ($this->session->city != 'PUSAT')
+                $prefix = $this->Balai->get_prefix($this->session->city);
+
+            $this->Draft->save_bulk($data_bulk);
+
+            if ((int)$this->input->post("type") == 2) {
+
+                $item_save = array_map(function ($item) use ($prefix) {
+                    $item['is_sent'] = '1';
+                    $item['trackid'] = $this->Draft->generate_ticketid($this->session->city, $prefix, date('Y-m-d'));
+                    return $item;
+                }, $data_bulk);
+
+                $this->Ticket->save_bulk($item_save);
+            }
+
+            $msg = array('status' => 'S', 'msg' => "Berhasil mengirim upload file!");
+        } catch (\Throwable $th) {
+            $msg = array('status' => 'F', 'msg' => "Upload Gagal!");
+        }
+
+        echo json_encode($msg);
+    }
+
+    private function get_direktorat_id($name)
+    {
+        return $this->db->get_where("desk_direktorat", ["name" => $name])->row()->id;
     }
 
     public function download_template_upload()
@@ -2910,4 +2911,3 @@ class Excels extends CI_Controller
         $writer->save('php://output');
     }
 }
-

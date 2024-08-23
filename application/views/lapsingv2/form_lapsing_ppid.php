@@ -25,6 +25,7 @@
 					tgl1: moment($("#tgl1").val(), "DD/MM/YYYY").format("YYYY-MM-DD"),
 					tgl2: moment($("#tgl2").val(), "DD/MM/YYYY").format("YYYY-MM-DD"),
 					kota: $("#kota").val() || "",
+					direktorat: $("#direktorat").val() || "",
 					formType: $("#formType").val(),
 					kategori: $("#kategori").val(),
 					gender: $("#gender").val(),
