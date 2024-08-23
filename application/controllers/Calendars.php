@@ -113,12 +113,22 @@ class Calendars extends Secure_Controller
 
 	public function save($item_id = -1)
 	{
-		
+		$tgl_input = $this->input->post('tgl');
+		$tgl = date("Y-m-d", strtotime($tgl_input));
 		//Save item data
 		$item_data = array(
-			'tgl' => date("Y-m-d", strtotime($this->input->post('tgl'))),
+			'tgl' => $tgl,
 			'keterangan' => $this->input->post('keterangan'),
 		);
+
+		if($this->Calendar->get_exist_date($tgl))
+		{
+			$message = "Tanggal Input ".$tgl_input." Sudah ada pada database !";
+			
+			echo json_encode(array('success' => FALSE, 'message' => $message, 'id' => -1));
+
+			return;
+		}
 		
 		if($this->Calendar->save($item_data, $item_id))
 		{
