@@ -42,7 +42,7 @@
 									//if($edit)
 									//	$flag = 'disabled="disabled"';
 									
-									echo form_dropdown('info', array('P' => 'P - Pengaduan', 'I' => 'I - Informasi'), $item_info->info, 'class="form-control form-control-sm" id="info" '.$flag);
+									echo form_dropdown('info', array('P' => 'P - Pengaduan', 'I' => 'I - Informasi'), isset($item_info) ? '' : $item_info->info, 'class="form-control form-control-sm" id="info" '.$flag);
 									
 									?>
 								</div>
@@ -50,7 +50,7 @@
 							<div class="form-group form-group-sm row">
 								<?php echo form_label('Komoditi <span class="text-danger">*</span>', 'komoditi', array('class'=>'required col-form-label col-sm-3')); ?>
 								<div class='col-sm-4'>
-									<?php echo form_dropdown('komoditi_id', $commodities, $item_info->komoditi_id, 'class="form-control form-control-sm" id="komoditi_id" ');?>
+									<?php echo form_dropdown('komoditi_id', $commodities, isset($item_info) ? '' : $item_info->komoditi_id, 'class="form-control form-control-sm" id="komoditi_id" ');?>
 								</div>
 							</div>
 							<div class="form-group form-group-sm row">
@@ -61,7 +61,7 @@
 									//if($edit)
 									//	$flag = 'disabled="disabled"';
 									
-									echo form_dropdown('klasifikasi_id', $klasifikasis, $item_info->klasifikasi_id, 'class="form-control form-control-sm" id="klasifikasi_id" '.$flag);
+									echo form_dropdown('klasifikasi_id', $klasifikasis, isset($item_info) ? '' : $item_info->klasifikasi_id, 'class="form-control form-control-sm" id="klasifikasi_id" '.$flag);
 									
 									?>
 								</div>
@@ -74,7 +74,7 @@
 									<?php 
 									
 									//if($edit)
-										echo form_dropdown('subklasifikasi_id', $subklasifikasis, $item_info->subklasifikasi_id, 'class="form-control form-control-sm" id="subklasifikasi_id" ');
+										echo form_dropdown('subklasifikasi_id', $subklasifikasis, isset($item_info) ? '' : $item_info->subklasifikasi_id, 'class="form-control form-control-sm" id="subklasifikasi_id" ');
 									//else
 									//	echo form_dropdown('subklasifikasi_id', null, $item_info->subklasifikasi_id, 'class="form-control form-control-sm" id="subklasifikasi_id" ');
 									?>
