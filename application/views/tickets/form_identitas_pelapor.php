@@ -113,7 +113,7 @@
 				<?php echo form_input(array(
 					'name'=>'iden_telp',
 					'id'=>'iden_telp',
-					
+					'onkeypress'=>'return isNumberKey(event)',
 					'class'=>'form-control form-control-sm',
 					'value'=>$item_info->iden_telp)
 					);?>
@@ -123,7 +123,7 @@
 				<?php echo form_input(array(
 					'name'=>'iden_fax',
 					'id'=>'iden_fax',
-					
+					'onkeypress'=>'return isNumberKey(event)',
 					'class'=>'form-control form-control-sm',
 					'value'=>$item_info->iden_fax)
 					);?>
