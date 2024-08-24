@@ -69,7 +69,7 @@ class Login extends CI_Controller
 
 		$image = new Securimage();
 		if ($image->check($code) == false) {
-			$this->form_validation->set_message('login_check', 'Kode validasi salah');
+			$this->form_validation->set_message('login_check', $this->lang->line('login_invalid_username_and_password'));//'Kode validasi salah');
 			return FALSE;
 		}
 
