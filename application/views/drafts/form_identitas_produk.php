@@ -102,7 +102,7 @@
 				<?php echo form_dropdown('prod_negara', $countries, $item_info->prod_negara, 'class="form-control form-control-sm" id="prod_negara" ');?>
 			</div>
 		</div>
-		<div class="form-group form-group-sm row">
+		<div id="div-prod-provinsi" class="form-group form-group-sm row">
 			<?php echo form_label('Provinsi', 'provinsi', array('class'=>' col-form-label col-sm-3')); ?>
 			<div class='col-sm-8'>
 				<?php echo form_dropdown('prod_provinsi', $provinces2, $item_info->prod_provinsi, 'class="form-control form-control-sm" id="prod_provinsi" ');?>
