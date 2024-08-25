@@ -248,4 +248,86 @@ function realName($key){
 	$returnvalue = (array_key_exists($key,$arr)) ? $arr[$key]: '';
     return $returnvalue;
 }
+
+    function sanitize_input($input)
+	{
+        $CI = get_instance();
+        $CI->load->helper('security');
+		// XSS filtering to remove dangerous elements
+		$sanitized_input = xss_clean($input);
+
+		// Optionally strip out any tags you do not want
+		$allowed_tags = '<b><i><u><code>';
+		$sanitized_input = strip_tags($sanitized_input, $allowed_tags);
+
+		return $sanitized_input;
+	}
+
+    function escape_input($input)
+    {
+        // Convert special characters to HTML entities
+        return htmlspecialchars($input, ENT_QUOTES, 'UTF-8');
+    }
+
+    function custom_escape($input)
+    {
+        // Convert only special HTML characters that could be harmful
+        $escaped_input = htmlspecialchars($input, ENT_NOQUOTES, 'UTF-8');
+
+        // Allow typical password characters like @, #, $, etc.
+        // Do not escape these as they are not harmful in this context
+        $allowed_characters = ['@', '#', '$', '%', '&', '*', '_', '-', '+', '!', '~', '`'];
+
+        // Optionally, handle special characters by converting them back if needed
+        foreach ($allowed_characters as $char) {
+            $escaped_input = str_replace(htmlspecialchars($char, ENT_NOQUOTES, 'UTF-8'), $char, $escaped_input);
+        }
+
+        return $escaped_input;
+    }
+
+	function validate_input($input)
+	{
+        $alert_string = "removed";
+        if (strpos($input, $alert_string) !== false) {
+            return false;
+        } else {
+            return true;
+        }
+	}
+
+    function validate_strong_password($password)
+    {
+        // Define password complexity requirements
+        $min_length = 8;
+
+        // Check length
+        if (strlen($password) < $min_length) {
+            return false;
+        }
+
+        // Check for at least one uppercase letter
+        if (!preg_match('/[A-Z]/', $password)) {
+            return false;
+        }
+
+        // Check for at least one lowercase letter
+        if (!preg_match('/[a-z]/', $password)) {
+            return false;
+        }
+
+        // Check for at least one digit
+        if (!preg_match('/\d/', $password)) {
+            return false;
+        }
+
+        // Check for at least one special character
+        if (!preg_match('/[\W_]/', $password)) { // \W matches any non-word character
+            return false;
+        }
+
+        // If all checks pass, return true
+        return true;
+    }
+
 ?>

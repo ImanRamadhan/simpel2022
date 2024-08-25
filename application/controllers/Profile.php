@@ -68,9 +68,26 @@ class Profile extends Secure_Controller
 		$newpassword = $this->input->post('newpassword');
 		$confirmpassword = $this->input->post('newpassword2');
 		
+		$sanitized_input = sanitize_input($newpassword);
+		$safe_input = custom_escape($sanitized_input);
+		
+		if (!(validate_input($safe_input)))
+		{
+			echo json_encode(array('success' => FALSE, 'message' => 'Password tidak sesuai format', 'id' => -1));
+			return;
+		}
+
+		if (!(validate_strong_password($safe_input)))
+		{
+			echo json_encode(array('success' => FALSE, 'message' => 'Password tidak memenuhi syarat strong password', 'id' => -1));
+			return;
+		}
+
+
 		if($newpassword != $confirmpassword)
 		{
-			echo json_encode(array('success' => FALSE, 'message' => 'Password tidak sama', 'id' => 0));
+			echo json_encode(array('success' => FALSE, 'message' => 'Password tidak sama', 'id' => -1));
+			return;
 		}
 		else
 		{
@@ -85,6 +102,7 @@ class Profile extends Secure_Controller
 				if($this->User->change_password($user_data, $this->session->id))
 				{
 					echo json_encode(array('success' => TRUE, 'message' => 'Password berhasil diubah', 'id' => 0));
+					return;
 				}
 				else
 				{
