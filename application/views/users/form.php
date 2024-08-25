@@ -243,7 +243,7 @@ $(document).ready(function()
 				{
 					$.notify(response.message, { type: response.success ? 'success' : 'danger' });
 					if (response.success) {
-						setTimeout(function(){window.location.href = "<?php echo site_url('users'); ?>";}, 3000);
+						setTimeout(function(){window.location.href = "<?php echo site_url('users'); ?>";}, 2000);
 					}
 					$('#submit').attr('disabled',false);
 				},
