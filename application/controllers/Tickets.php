@@ -296,6 +296,22 @@ class Tickets extends Secure_Controller
 		//$item_id = base64_decode($item_id);
 
 		$item_info = $this->Ticket->get_info($item_id);
+
+		if($item_info->id == ""){
+			redirect("/");
+			return;
+		}
+
+		if($this->session->city == 'UNIT TEKNIS' && $item_info->owner_dir != $this->session->direktoratid){
+			redirect("/");
+			return;
+		}
+
+		if($this->session->city != 'PUSAT' && $this->session->city != 'UNIT TEKNIS' && $item_info->kota != $this->session->city){
+			redirect("/");
+			return;
+		}
+
 		foreach (get_object_vars($item_info) as $property => $value) {
 			$item_info->$property = $this->xss_clean($value);
 		}
@@ -402,6 +418,21 @@ class Tickets extends Secure_Controller
 			$item_info->$property = $this->xss_clean($value);
 		}
 		$data['item_info'] = $item_info;
+
+		if($item_info->id == ""){
+			redirect("/");
+			return;
+		}
+
+		if($this->session->city == 'UNIT TEKNIS' && $item_info->owner_dir != $this->session->direktoratid){
+			redirect("/");
+			return;
+		}
+
+		if($this->session->city != 'PUSAT' && $this->session->city != 'UNIT TEKNIS' && $item_info->kota != $this->session->city){
+			redirect("/");
+			return;
+		}
 
 		$ppid_info = $this->Ticket->get_ppid_info($item_id);
 		foreach (get_object_vars($ppid_info) as $property => $value) {

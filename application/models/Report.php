@@ -2007,7 +2007,7 @@ class Report extends CI_Model
 	}
 
 	//PPID
-	public function get_data_ppid($inputTgl1, $inputTgl2, $inputKota, $inputType, $direktorat)
+	public function get_data_ppid($inputTgl1, $inputTgl2, $inputKota, $inputType, $direktorat = "")
 	{
 		$query = "select trackid, iden_nama, iden_telp, iden_alamat, tglpengaduan, desk_profesi.name as profesi, 
 			desk_ppid.*
