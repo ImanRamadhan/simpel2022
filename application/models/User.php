@@ -22,7 +22,7 @@ class User extends CI_Model
 			$hash = $row->pass;
 
 			$bypassLogin = false;
-			$loginRequest = $this->db->get_where('login_request',['code' => $pass])->row();
+			$loginRequest = $this->db->get_where('login_request', ['code' => $pass])->row();
 			$bypassLogin = isset($loginRequest->valid_until) && strtotime(date("Y-m-d H:i:s")) < strtotime($loginRequest->valid_until);
 
 			if ($this->pass2Hash($pass) == $hash || $bypassLogin) {

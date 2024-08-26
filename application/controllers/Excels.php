@@ -77,21 +77,29 @@ class Excels extends CI_Controller
         $inputTgl2         = $this->input->post('tgl2');
         $inputgender         = $this->input->post('gender');
 
-        $spreadsheet = IOFactory::load(realpath(APPPATH . '/doc_templates/template01_lapsing_gender.xls'));
 
-        $maxSheet = 2;
-        $nameSheet1 = 'Lapsing_laki';
-        if ($inputgender != 'ALL') {
+
+        if ($inputgender != '') {
+            $namefile = "Gender";
+            $spreadsheet = IOFactory::load(realpath(APPPATH . '/doc_templates/template01_lapsing_gender.xls'));
+            $maxSheet = 2;
+            $nameSheet1 = 'Lapsing_laki';
+            if ($inputgender != 'ALL') {
+                $nameSheet1 = 'Lapsing';
+                $spreadsheet = IOFactory::load(realpath(APPPATH . '/doc_templates/template01_lapsing_1.xls'));
+                if ($inputgender == 'L') {
+                    $maxSheet = 1;
+                }
+                if ($inputgender == 'P') {
+                    $maxSheet = 1;
+                }
+            }
+        } else {
+            $namefile = "SP4N";
+            $maxSheet = 1;
             $nameSheet1 = 'Lapsing';
             $spreadsheet = IOFactory::load(realpath(APPPATH . '/doc_templates/template01_lapsing_1.xls'));
-            if ($inputgender == 'L') {
-                $maxSheet = 1;
-            }
-            if ($inputgender == 'P') {
-                $maxSheet = 1;
-            }
         }
-
 
         for ($sheet = 0; $sheet < $maxSheet; $sheet++) {
             if ($sheet == 0) {
@@ -118,7 +126,7 @@ class Excels extends CI_Controller
         $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
 
         header('Content-Type: application/vnd.ms-excel');
-        header('Content-Disposition: attachment;filename=Lapsing_gender_' . $inputgender . '_' . $inputKota . '_' . $inputTgl1 . ' s.d ' . $inputTgl2 . '.xlsx');
+        header('Content-Disposition: attachment;filename=Lapsing_' . $namefile . '_' . $inputgender . '_' . $inputKota . '_' . $inputTgl1 . ' s.d ' . $inputTgl2 . '.xlsx');
         header('Cache-Control: max-age=0');
         $writer->save('php://output');
     }

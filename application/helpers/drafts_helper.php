@@ -2,7 +2,7 @@
 function saveToDBDraft($item_id = -1, $inputdata)
 {
     $CI = get_instance();
-    
+
     $iden_nama = $inputdata['iden_nama'];
     $iden_jk =  $inputdata['iden_jk'];
     $iden_instansi =  $inputdata['iden_instansi'];
@@ -12,15 +12,14 @@ function saveToDBDraft($item_id = -1, $inputdata)
     $iden_negara =  $inputdata['iden_negara'];
     $iden_provinsi =  $inputdata['iden_provinsi'];
     $iden_provinsi2 =  $inputdata['iden_provinsi2'];
-    $iden_kota =  $inputdata['iden_kota'];		
+    $iden_kota =  $inputdata['iden_kota'];
     $iden_kota2 =  $inputdata['iden_kota2'];
-    
-    if(strtolower($iden_negara)!='indonesia')
-    {
+
+    if (strtolower($iden_negara) != 'indonesia') {
         $iden_provinsi = $iden_provinsi2;
         $iden_kota = $iden_kota2;
     }
-    
+
     $iden_telp =  $inputdata['iden_telp'];
     $iden_fax =  $inputdata['iden_fax'];
     $iden_profesi =  $inputdata['iden_profesi'];
@@ -35,12 +34,11 @@ function saveToDBDraft($item_id = -1, $inputdata)
     $prod_negara =  $inputdata['prod_negara'];
     $prod_provinsi =  $inputdata['prod_provinsi'];
     $prod_provinsi2 =  $inputdata['prod_provinsi2'];
-    
-    if(strtolower($prod_negara)!='indonesia')
-    {
+
+    if (strtolower($prod_negara) != 'indonesia') {
         $prod_provinsi = $prod_provinsi2;
     }
-    
+
     $prod_kadaluarsa =  $inputdata['prod_kadaluarsa'];
     $prod_diperoleh =  $inputdata['prod_diperoleh'];
     $prod_diperoleh_tgl =  $inputdata['prod_diperoleh_tgl'];
@@ -53,52 +51,51 @@ function saveToDBDraft($item_id = -1, $inputdata)
     $submited_via =  $inputdata['submited_via'];
     $jenis =  $inputdata['jenis'];
     $shift =  $inputdata['shift'];
-    
+
     $klasifikasi_id =  $inputdata['klasifikasi_id'];
     $subklasifikasi_id = $inputdata['subklasifikasi_id'];
-    
+
     $CI->load->model('Klasifikasi');
     $kla_info = $CI->Klasifikasi->get_info($klasifikasi_id);
     $klasifikasi = $kla_info->nama;
-    
+
     $CI->load->model('Subklasifikasi');
     $subkla_info = $CI->Subklasifikasi->get_info($subklasifikasi_id);
     $subklasifikasi = $subkla_info->subklasifikasi;
-    
+
     $is_rujuk =  $inputdata['is_rujuk'];
     $dir1 =  $inputdata['dir1'];
     $dir2 =  $inputdata['dir2'];
     $dir3 =  $inputdata['dir3'];
     $dir4 =  $inputdata['dir4'];
     $dir5 =  $inputdata['dir5'];
-    
+
     $sla1 =  $inputdata['sla1'];
     $sla2 =  $inputdata['sla2'];
     $sla3 =  $inputdata['sla3'];
     $sla4 =  $inputdata['sla4'];
     $sla5 =  $inputdata['sla5'];
-    
-    if($is_rujuk == '0')
-    {
+
+    if ($is_rujuk == '0') {
         $dir1 = 0;
         $dir2 = 0;
         $dir3 = 0;
         $dir4 = 0;
         $dir5 = 0;
-        
+
         $sla1 = 0;
         $sla2 = 0;
         $sla3 = 0;
         $sla4 = 0;
         $sla5 = 0;
     }
-    
+
     $jawaban =  $inputdata['jawaban'];
     $keterangan =  $inputdata['keterangan'];
     $petugas_entry =  $inputdata['petugas_entry'];
     $penjawab =  $inputdata['penjawab'];
     $answered_via =  $inputdata['answered_via'];
-    
+
     //ppid data
     /*$tgl_diterima = $inputdata['tgl_diterima'];
     if(!empty($tgl_diterima))
@@ -270,11 +267,11 @@ function saveToDBDraft($item_id = -1, $inputdata)
         'keberatan_nama_pejabat' => $keberatan_nama_pejabat,
         'alasan_ditolak' => $alasan_ditolak	
     );*/
-    
+
     $tipe_medsos =  $inputdata['tipe_medsos'];
-    if(!empty($submited_via) && $submited_via != 'Medsos')
+    if (!empty($submited_via) && $submited_via != 'Medsos')
         $tipe_medsos = '';
-        
+
     //Save item data
     $item_data = array(
         'iden_nama' => $iden_nama,
@@ -293,7 +290,7 @@ function saveToDBDraft($item_id = -1, $inputdata)
         'usia' => $usia,
         'prod_nama' => $prod_nama,
         'prod_generik' => $prod_generik,
-        'prod_pabrik' => $prod_pabrik, 
+        'prod_pabrik' => $prod_pabrik,
         'prod_noreg' => $prod_noreg,
         'prod_nobatch' => $prod_nobatch,
         'prod_alamat' => $prod_alamat,
@@ -303,7 +300,7 @@ function saveToDBDraft($item_id = -1, $inputdata)
         'prod_kadaluarsa' => convert_date1($prod_kadaluarsa),
         'prod_diperoleh' => $prod_diperoleh,
         'prod_diperoleh_tgl' => convert_date1($prod_diperoleh_tgl),
-        'prod_digunakan_tgl' => convert_date1($prod_digunakan_tgl),         
+        'prod_digunakan_tgl' => convert_date1($prod_digunakan_tgl),
         'isu_topik' => $isu_topik,
         'prod_masalah' => $prod_masalah,
         'info' => $info,
@@ -318,23 +315,23 @@ function saveToDBDraft($item_id = -1, $inputdata)
         'subklasifikasi_id' => $subklasifikasi_id,
         //'sla' => $sla,
         'is_rujuk' => $is_rujuk,
-        
+
         'direktorat' => $dir1,
         'direktorat2' => $dir2,
         'direktorat3' => $dir3,
-        'direktorat4' => $dir4,              
+        'direktorat4' => $dir4,
         'direktorat5' => $dir5,
-        
+
         'd1_prioritas' => $sla1,
         'd2_prioritas' => $sla2,
         'd3_prioritas' => $sla3,
-        'd4_prioritas' => $sla4,              
+        'd4_prioritas' => $sla4,
         'd5_prioritas' => $sla5,
-        
-                    
+
+
         'jawaban' =>  $jawaban,
-        'keterangan' =>  $keterangan,          
-        'petugas_entry' =>  $petugas_entry,     
+        'keterangan' =>  $keterangan,
+        'petugas_entry' =>  $petugas_entry,
         'penjawab' =>  $penjawab,
         'answered_via' =>  $answered_via,
         //'ppid_rincian' => $ppid_rincian,
@@ -351,11 +348,10 @@ function saveToDBDraft($item_id = -1, $inputdata)
     }
     */
     //$data['item_info'] = $item_info;
-    
+
     $item_data['id'] = $item_id;
-    
-    if($item_id == -1)
-    {
+
+    if ($item_id == -1) {
         //$item_data['trackid'] = $this->Draft->generate_ticketid($this->session->city, 'DRF', date('Y-m-d'));
         $item_data['trackid'] = '';
         $item_data['owner'] = $CI->session->id;
@@ -364,50 +360,44 @@ function saveToDBDraft($item_id = -1, $inputdata)
         $item_data['tglpengaduan'] = date('Y-m-d');
         $item_data['waktu'] = date('H:i:s');
         //$item_data['info'] = 'P';
-        $item_data['owner_dir'] = $CI->session->direktoratid;	
+        $item_data['owner_dir'] = $CI->session->direktoratid;
     }
-    
+
     //for balai
-    if($CI->session->city != 'PUSAT')
-    {
+    if ($CI->session->city != 'PUSAT') {
         $tglpengaduan = $inputdata['tglpengaduan'];
-        if(!empty($tglpengaduan))
+        if (!empty($tglpengaduan))
             $tglpengaduan = convert_date1($tglpengaduan);
-        
+
         $waktu = $inputdata['waktu'];
-        
+
         $item_data['tglpengaduan'] = $tglpengaduan;
         $item_data['waktu'] = $waktu;
         //$item_data['trackid'] = $this->Draft->generate_ticketid($this->session->city, 'DRF', $tglpengaduan);
         $item_data['trackid'] = '';
     }
-    
+
     $send = $inputdata['send'];
-    
+
     $CI->load->model('Draft');
-    if($CI->Draft->save($item_data, $item_id))
-    {
-        $message = 'Data berhasil disimpan';	
-        
+    if ($CI->Draft->save($item_data, $item_id)) {
+        $message = 'Data berhasil disimpan';
+
         $ppid_data['id'] = $item_data['id'];
         //if(!empty($jenis) && $jenis == 'PPID')
-        if(1)
-        {
+        if (1) {
             //if(empty($tgl_diterima))
             //	$ppid_data['tgl_diterima'] = date('Y-m-d'];
-            
-           // $CI->Draft->save_ppid($ppid_data, $item_data['id']);
-            
+
+            // $CI->Draft->save_ppid($ppid_data, $item_data['id']);
+
         }
 
         return json_encode(array('success' => TRUE, 'message' => $message, 'id' => $item_data['id']));
-        
-    }
-    else // failure
+    } else // failure
     {
         $message = 'Data gagal disimpan';
-        
+
         return json_encode(array('success' => FALSE, 'message' => $message, 'id' => $item_id));
     }
 }
-?>

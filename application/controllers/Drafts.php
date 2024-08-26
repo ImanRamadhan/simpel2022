@@ -198,7 +198,7 @@ class Drafts extends Secure_Controller
 
 		$data['range_age'] = get_range_age();
 
-		$data['sumberdata'] = array('' => '','SP4N' => 'SP4N','PPID'=>'PPID');
+		$data['sumberdata'] = array('' => '', 'SP4N' => 'SP4N', 'PPID' => 'PPID');
 		//$data['klasifikasi'] = get_klasifikasi_sla($item_info->kategori, $item_info->info);
 		$data['klasifikasi'] = get_klasifikasi();
 		$data['subklasifikasi'] = get_subklasifikasi2($item_info->klasifikasi);
@@ -362,8 +362,8 @@ class Drafts extends Secure_Controller
 		//$data['products'] = get_products_sla('P');
 
 		$data['range_age'] = get_range_age();
-		$data['sumberdata'] = array('' => '','SP4N' => 'SP4N','PPID'=>'PPID');
-		
+		$data['sumberdata'] = array('' => '', 'SP4N' => 'SP4N', 'PPID' => 'PPID');
+
 		$data['klasifikasi'] = get_klasifikasi();
 		//$data['klasifikasi'] = array();
 
@@ -434,9 +434,9 @@ class Drafts extends Secure_Controller
 		$data['products'] = get_products();
 		//$data['products'] = get_products_sla('P');
 		$data['range_age'] = get_range_age();
-		
-		
-		$data['sumberdata'] = array('' => '','SP4N' => 'SP4N' /*,'PPID'=>'PPID'*/);
+
+
+		$data['sumberdata'] = array('' => '', 'SP4N' => 'SP4N' /*,'PPID'=>'PPID'*/);
 		$data['klasifikasi'] = get_klasifikasi();
 		//$data['klasifikasi'] = array();
 
@@ -2365,13 +2365,11 @@ class Drafts extends Secure_Controller
 		$item_data['d5_prioritas'] = $item_info->d5_prioritas;
 
 		$item_data['tglpengaduan'] = $tglpengaduan;
-		
-		if($this->Draft->save_to_ticket($item_data, $item_id))
-		{
+
+		if ($this->Draft->save_to_ticket($item_data, $item_id)) {
 			$users_data = null;
 			$dir_array = null;
-			if($item_info->is_rujuk == '1')
-			{
+			if ($item_info->is_rujuk == '1') {
 				$data = array(
 					'trackid' => $item_data['trackid'],
 					'isu_topik' => $item_info->isu_topik
@@ -2430,17 +2428,15 @@ class Drafts extends Secure_Controller
 					}
 				}
 			}
-		
-			if($isBulkSend){
-				return json_encode(array('success' => TRUE, 'message' => 'Data berhasil dikirim', 'id' => $item_data['id'], $users_data,$item_info));;
+
+			if ($isBulkSend) {
+				return json_encode(array('success' => TRUE, 'message' => 'Data berhasil dikirim', 'id' => $item_data['id'], $users_data, $item_info));;
 			}
-		
-			$this->session->set_flashdata('flash', array('success' => TRUE, 'message' => '<i class="fa fa-check-circle" aria-hidden="true"></i> Data berhasil dikirim dengan ID layanan '.$item_data['trackid']));
-			echo json_encode(array('success' => TRUE, 'message' => 'Data berhasil dikirim', 'id' => $item_data['id'], $users_data,$dir_array));
-		}
-		else
-		{
-			if($isBulkSend){
+
+			$this->session->set_flashdata('flash', array('success' => TRUE, 'message' => '<i class="fa fa-check-circle" aria-hidden="true"></i> Data berhasil dikirim dengan ID layanan ' . $item_data['trackid']));
+			echo json_encode(array('success' => TRUE, 'message' => 'Data berhasil dikirim', 'id' => $item_data['id'], $users_data, $dir_array));
+		} else {
+			if ($isBulkSend) {
 				return true;
 			}
 			$this->session->set_flashdata('flash', array('success' => FALSE, 'message' => 'Data gagal dikirim', 'id' => $item_id));
@@ -2456,13 +2452,13 @@ class Drafts extends Secure_Controller
 	public function send()
 	{
 		$items_to_send = $this->input->post('ids');
-		$length_items = count($items_to_send) - 1; 
+		$length_items = count($items_to_send) - 1;
 		try {
-			foreach($items_to_send as $x => $item){
-				if($x == $length_items){
-					$this->send_ticket($item,true);
-				}else{
-					$this->send_ticket($item,false);
+			foreach ($items_to_send as $x => $item) {
+				if ($x == $length_items) {
+					$this->send_ticket($item, true);
+				} else {
+					$this->send_ticket($item, false);
 				}
 			}
 			$message = 'Data berhasil dikirim';
@@ -2546,7 +2542,6 @@ class Drafts extends Secure_Controller
 	public function upload_lamp_jawaban()
 	{
 		$draftid = $this->input->post('draftid');
-
 		if ($draftid) {
 			$this->load->library('upload', $this->config->item('upload_draft_setting'));
 
@@ -2559,7 +2554,7 @@ class Drafts extends Secure_Controller
 					$_FILES['file2_']['error'] = $_FILES['file2']['error'][$i];
 					$_FILES['file2_']['size'] = $_FILES['file2']['size'][$i];
 
-
+					$this->upload->set_xss_clean(true);
 					if ($this->upload->do_upload('file2_')) {
 						$data = $this->upload->data();
 						$att_data = array(
