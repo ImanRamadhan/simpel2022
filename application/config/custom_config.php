@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 $config['upload_setting'] = array(
 	'upload_path' => getenv('UPLOAD_PATH_ATTACHMENT'),
@@ -14,7 +14,7 @@ $config['upload_setting'] = array(
 
 $config['upload_draft_setting'] = array(
 	//'upload_path' => './uploads/drafts/',
-	'upload_path' => 'C:/Apache24/htdocs/simpellpk/attachments_drafts/',
+	'upload_path' => getenv('UPLOAD_PATH_DRAFT_ATTACHMENT'),
 	'allowed_types' => 'gif|jpg|png|pdf|doc|docx|zip|rar|txt|csv|jpeg',
 	'max_size' => '20480',
 	'max_size_mb' => '20MB',

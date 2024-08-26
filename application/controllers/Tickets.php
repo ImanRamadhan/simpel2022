@@ -297,19 +297,8 @@ class Tickets extends Secure_Controller
 
 		$item_info = $this->Ticket->get_info($item_id);
 
-		if($item_info->id == ""){
-			redirect("/");
-			return;
-		}
-
-		if($this->session->city == 'UNIT TEKNIS' && $item_info->owner_dir != $this->session->direktoratid){
-			redirect("/");
-			return;
-		}
-
-		if($this->session->city != 'PUSAT' && $this->session->city != 'UNIT TEKNIS' && $item_info->kota != $this->session->city){
-			redirect("/");
-			return;
+		if (empty($item_info->id)) {
+			redirect('/NotFound404/view/tickets', 'refresh');
 		}
 
 		foreach (get_object_vars($item_info) as $property => $value) {
@@ -414,6 +403,14 @@ class Tickets extends Secure_Controller
 	{
 
 		$item_info = $this->Ticket->get_info($item_id);
+		if (empty($item_info->id)) {
+			redirect('/NotFound404/view/tickets', 'refresh');
+		}
+
+		if (!checkAuthorize($item_info)) {
+			redirect('/NoAuth401/view/tickets', 'refresh');
+		}
+
 		foreach (get_object_vars($item_info) as $property => $value) {
 			$item_info->$property = $this->xss_clean($value);
 		}
@@ -773,6 +770,8 @@ class Tickets extends Secure_Controller
 
 	public function save($item_id = -1)
 	{
+
+
 		$item_info = $this->Ticket->get_info($item_id);
 
 		foreach (get_object_vars($item_info) as $property => $value) {
@@ -2053,7 +2052,22 @@ class Tickets extends Secure_Controller
 					$_FILES['file_']['error'] = $_FILES['file']['error'][$i];
 					$_FILES['file_']['size'] = $_FILES['file']['size'][$i];
 
+					// $gftype = pathinfo($_FILES['file_']['name'], PATHINFO_EXTENSION);;
+					// $rftype = explode('/', mime_content_type($_FILES['file_']['tmp_name']))[1];
 
+					// echo $gftype;
+					// echo $rftype;
+					// print_r($_FILES['file_']);
+					// die;
+					// if ($gftype === $rftype) {
+
+					// 	echo "real type";
+					// } else {
+					// 	echo 'This is not real extension';
+					// }
+
+					// die;
+					//$this->upload->set_xss_clean(true);
 					if ($this->upload->do_upload('file_')) {
 						$data = $this->upload->data();
 						$att_data = array(
@@ -2094,7 +2108,7 @@ class Tickets extends Secure_Controller
 					$_FILES['file2_']['error'] = $_FILES['file2']['error'][$i];
 					$_FILES['file2_']['size'] = $_FILES['file2']['size'][$i];
 
-
+					$this->upload->set_xss_clean(true);
 					if ($this->upload->do_upload('file2_')) {
 						$data = $this->upload->data();
 						$att_data = array(

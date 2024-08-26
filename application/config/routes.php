@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 /*
 | -------------------------------------------------------------------------
@@ -81,7 +81,5 @@ $route['reports/specific_employee'] = 'reports/specific_employee_input';
 $route['reports/specific_discount'] = 'reports/specific_discount_input';
 
 
-$route['404_override'] = '';
+$route['404_override'] = 'NotFound404';
 $route['translate_uri_dashes'] = FALSE;
-
-

@@ -9,9 +9,7 @@ class Rujukan extends Secure_Controller
 		parent::__construct('rujukan');
 	}
 
-	public function index()
-	{
-	}
+	public function index() {}
 
 	public function setup_search(&$data)
 	{
@@ -172,9 +170,7 @@ class Rujukan extends Secure_Controller
 	}
 
 
-	public function get_row($row_id)
-	{
-	}
+	public function get_row($row_id) {}
 
 	public function view($item_id = -1)
 	{
@@ -182,6 +178,14 @@ class Rujukan extends Secure_Controller
 		//$item_id = base64_decode($item_id);
 
 		$item_info = $this->Ticket->get_info($item_id);
+		if (empty($item_info->id)) {
+			redirect('/NotFound404/view/rujukan', 'refresh');
+		}
+
+		if (!checkAuthorize($item_info)) {
+			redirect('/NoAuth401/view/rujukan', 'refresh');
+		}
+
 		foreach (get_object_vars($item_info) as $property => $value) {
 			$item_info->$property = $this->xss_clean($value);
 		}
@@ -268,21 +272,13 @@ class Rujukan extends Secure_Controller
 		$this->load->view('rujukan/view', $data);
 	}
 
-	public function edit($item_id = -1)
-	{
-	}
+	public function edit($item_id = -1) {}
 
-	public function create()
-	{
-	}
+	public function create() {}
 
-	public function save($item_id = -1)
-	{
-	}
+	public function save($item_id = -1) {}
 
-	public function delete()
-	{
-	}
+	public function delete() {}
 
 	public function confirm_tl_yes($id = 0, $item_id = -1, $dir_id = -1)
 	{

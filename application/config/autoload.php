@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 /*
 | -------------------------------------------------------------------
@@ -89,7 +89,7 @@ $autoload['drivers'] = array();
 |
 |	$autoload['helper'] = array('url', 'file');
 */
-$autoload['helper'] = array('form', 'url', 'tabular', 'text', 'locale', 'html', 'download', 'directory', 'migration', 'util', 'admin','audit');
+$autoload['helper'] = array('form', 'url', 'tabular', 'text', 'locale', 'html', 'download', 'directory', 'migration', 'util', 'admin', 'audit', 'cekauth');
 
 /*
 | -------------------------------------------------------------------
@@ -132,4 +132,4 @@ $autoload['language'] = array();
 |
 |	$autoload['model'] = array('first_model' => 'first');
 */
-$autoload['model'] = array('Appconfig', 'Person', 'User' , 'Module', 'Ticket', 'City', 'Dept','Draft','Report','DatabaseM','Ajax','Ajaxb', 'Ajaxc','Balai','Notification','Sla','Klasifikasi','Subklasifikasi','Database','Rujuk');
+$autoload['model'] = array('Appconfig', 'Person', 'User', 'Module', 'Ticket', 'City', 'Dept', 'Draft', 'Report', 'DatabaseM', 'Ajax', 'Ajaxb', 'Ajaxc', 'Balai', 'Notification', 'Sla', 'Klasifikasi', 'Subklasifikasi', 'Database', 'Rujuk');

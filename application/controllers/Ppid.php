@@ -212,22 +212,15 @@ class Ppid extends Secure_Controller
 	public function view($item_id = -1)
 	{
 		$item_id = (int)$item_id;
-
 		$item_info = $this->Ticket->get_info($item_id);
-		if($item_info->id == ""){
-			redirect("/");
-			return;
+
+		if (empty($item_info->id)) {
+			redirect('/NotFound404/view/ppid', 'refresh');
 		}
 
-		if($this->session->city == 'UNIT TEKNIS' && $item_info->owner_dir != $this->session->direktoratid){
-			redirect("/");
-			return;
+		if (!checkAuthorize($item_info)) {
+			redirect('/NoAuth401/view/ppid', 'refresh');
 		}
-
-		if($this->session->city != 'PUSAT' && $this->session->city != 'UNIT TEKNIS' && $item_info->kota != $this->session->city){
-			redirect("/");
-			return;
-		}		
 
 		foreach (get_object_vars($item_info) as $property => $value) {
 			$item_info->$property = $this->xss_clean($value);
@@ -314,6 +307,15 @@ class Ppid extends Secure_Controller
 	{
 
 		$item_info = $this->Ticket->get_info($item_id);
+
+		if (empty($item_info->id)) {
+			redirect('/NotFound404/view/ppid', 'refresh');
+		}
+
+		if (!checkAuthorize($item_info)) {
+			redirect('/NoAuth401/view/ppid', 'refresh');
+		}
+
 		foreach (get_object_vars($item_info) as $property => $value) {
 			$item_info->$property = $this->xss_clean($value);
 		}
