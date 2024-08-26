@@ -195,8 +195,14 @@ $(document).ready(function()
 			$('#iden_provinsi').select2().next().hide();
 			$('#iden_provinsi2').show();
 			$('#iden_kota').select2().next().hide();
-			$('#iden_kota2').show();
+			//$('#iden_kota2').show();
 			
+			/** Iman Edit Refix SIT - 23 Agustus 2024 */
+			$('#div-iden-provinsi').hide();
+			$('#iden_provinsi').val("");
+			$('#div-iden-kota-kab').hide();
+			$('#iden_kota').val("");
+
 			//$('#iden_provinsi').hide();
 			//$('#iden_provinsi2').show();
 			//$('#iden_kota').hide();
@@ -210,6 +216,12 @@ $(document).ready(function()
 			$('#iden_kota2').hide();
 			//$('#iden_kota').show();
 			$('#iden_kota').select2().next().show();
+
+			/** Iman Edit Refix SIT - 23 Agustus 2024 */
+			$('#div-iden-provinsi').show();
+			$('#iden_provinsi').val("");
+			$('#div-iden-kota-kab').show();
+			$('#iden_kota2').val("");
 		}
 	});
 	
@@ -220,11 +232,17 @@ $(document).ready(function()
 		{
 			$('#prod_provinsi').select2().next().hide();
 			$('#prod_provinsi2').show();
+
+			$('#div-prod-provinsi').hide();
+			$('#prod_provinsi').val("");
 		}
 		else
 		{
 			$('#prod_provinsi2').hide();
 			$('#prod_provinsi').select2().next().show();
+
+			$('#div-prod-provinsi').show();
+			$('#prod_provinsi2').val("");
 		}
 	});
 	

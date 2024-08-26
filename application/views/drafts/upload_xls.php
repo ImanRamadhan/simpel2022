@@ -35,7 +35,7 @@ $(document).ready(function()
                 
 					<div class="form-group form-group-sm row">
 						<div class='col-sm-4'>
-							<p><a href="<?php echo base_url().'excels/download_template_upload' ?>" class="btn btn-icon btn-dark"><i class="far fa-file"></i></a>
+							<p><a href="<?php echo base_url().'excels/download_template_upload' ?>" class="btn btn-icon btn-info"><i class="far fa-file"><b>&nbsp;Download File Template</b></i></a>
                         <label style="color:red">Silahkan Download File Template Excel Upload !</label></p>
 						</div>
 					</div>

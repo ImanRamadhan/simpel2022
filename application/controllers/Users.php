@@ -227,8 +227,34 @@ class Users extends Secure_Controller
 		$email = $this->xss_clean(strtolower($this->input->post('email')));
 		$user = $this->xss_clean(strtolower($this->input->post('user')));
 		
-		$password = $this->xss_clean(strtolower($this->input->post('pass')));
-		$password2 = $this->xss_clean(strtolower($this->input->post('pass2')));
+		$password = $this->input->post('pass');
+		$password2 = $this->input->post('pass2');
+
+		if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+			echo json_encode(array('success' => FALSE, 'message' => 'Email tidak sesuai format', 'id' => -1));
+			return;
+		} 
+
+		$sanitized_input = sanitize_input($password);
+		$safe_input = custom_escape($sanitized_input);
+		
+		if (!(validate_input($safe_input)))
+		{
+			echo json_encode(array('success' => FALSE, 'message' => 'Password tidak sesuai format', 'id' => -1));
+			return;
+		}
+
+		if (!(validate_strong_password($safe_input)))
+		{
+			echo json_encode(array('success' => FALSE, 'message' => 'Password tidak memenuhi syarat strong password', 'id' => -1));
+			return;
+		}
+
+		if($password != $password2)
+		{
+			echo json_encode(array('success' => FALSE, 'message' => 'Password tidak sama', 'id' => -1));
+			return;
+		}
 
 		$person_data = array(
 			'name' => $name,

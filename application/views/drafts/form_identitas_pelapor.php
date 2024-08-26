@@ -83,7 +83,7 @@
 				<?php echo form_dropdown('iden_negara', $countries, $item_info->iden_negara, 'class="form-control form-control" id="iden_negara" ');?>
 			</div>
 		</div>
-		<div class="form-group form-group-sm row">
+		<div id="div-iden-provinsi" class="form-group form-group-sm row">
 			<?php echo form_label('Provinsi', 'provinsi', array('class'=>'required col-form-label col-sm-3')); ?>
 			<div class='col-sm-8'>
 				<?php echo form_dropdown('iden_provinsi', $provinces, $item_info->iden_provinsi, 'class="form-control form-control" id="iden_provinsi" ');?>
@@ -95,7 +95,7 @@
 				);?>
 			</div>
 		</div>
-		<div class="form-group form-group-sm row">
+		<div id="div-iden-kota-kab" class="form-group form-group-sm row">
 			<?php echo form_label('Kota/Kab', 'iden_kota', array('class'=>'required col-form-label col-sm-3')); ?>
 			<div class='col-sm-8'>
 				<?php echo form_dropdown('iden_kota', $kabs, $item_info->iden_kota, 'class="form-control form-control" id="iden_kota" ');?>
