@@ -133,14 +133,14 @@
 			<div class="form-group form-group-sm row">
 				<?php echo form_label('Rincian Informasi yang Dibutuhkan', 'alamat_label', array('for' => 'message', 'class' => 'col-form-label col-sm-3')); ?>
 				<div class="col-sm-8">
-					<p class="form-control-plaintext"><?php echo $ppid_info->rincian; ?></p>
+					<p class="form-control-plaintext"><?php echo escape_input($ppid_info->rincian); ?></p>
 
 				</div>
 			</div>
 			<div class="form-group form-group-sm row">
 				<?php echo form_label('Tujuan Penggunaan Informasi', 'alamat_label', array('for' => 'message', 'class' => 'col-form-label col-sm-3')); ?>
 				<div class="col-sm-8">
-					<p class="form-control-plaintext"><?php echo $ppid_info->tujuan; ?></p>
+					<p class="form-control-plaintext"><?php echo escape_input($ppid_info->tujuan); ?></p>
 				</div>
 			</div>
 			<div class="form-group form-group-sm row">
@@ -228,7 +228,7 @@
 				<?php echo form_label('Penguasaan Informasi Publik', 'alamat_label', array('for' => 'message', 'class' => 'col-form-label col-sm-3')); ?>
 				<div class="col-sm-8">
 					<?php if ($ppid_info->penguasaan_kami): ?>
-						<p class="form-control-plaintext">Kami: <?php echo $ppid_info->penguasaan_kami_teks; ?></p>
+						<p class="form-control-plaintext">Kami: <?php echo escape_input($ppid_info->penguasaan_kami_teks); ?></p>
 					<?php endif; ?>
 					<?php if ($ppid_info->penguasaan_badan_lain): ?>
 						<p class="form-control-plaintext">Badan Publik Lain: <?php echo $ppid_info->nama_badan_lain; ?></p>
@@ -313,7 +313,7 @@
 			<div class="form-group form-group-sm row">
 				<?php echo form_label('Penjelasan penghitaman / pengaburan Informasi yang dimohon', 'alamat_label', array('for' => 'message', 'class' => 'col-form-label col-sm-3')); ?>
 				<div class="col-sm-8">
-					<p class="form-control-plaintext"><?php echo $ppid_info->penghitaman; ?></p>
+					<p class="form-control-plaintext"><?php echo escape_input($ppid_info->penghitaman); ?></p>
 
 				</div>
 			</div>
@@ -363,7 +363,7 @@
 				<div class="col-sm-8">
 					<p class="form-control-plaintext"><?php echo $ppid_info->pengecualian_pasal17 ? 'Pasal 17 huruf ' . $ppid_info->pasal17_huruf . ' UU KIP' : ''; ?>
 						<br />
-						<?php echo $ppid_info->pasal_lain_uu; ?>
+						<?php echo escape_input($ppid_info->pasal_lain_uu); ?>
 					</p>
 
 				</div>
@@ -372,7 +372,7 @@
 				<?php echo form_label('Membuka informasi tersebut dapat menimbulkan konsekuensi sebagai berikut',  'alamat_label', array('for' => 'message', 'class' => 'col-form-label col-sm-3')); ?>
 				<div class="col-sm-8">
 					<p class="form-control-plaintext">
-						<?php echo $ppid_info->konsekuensi; ?>
+						<?php echo escape_input($ppid_info->konsekuensi); ?>
 					</p>
 
 				</div>
@@ -418,7 +418,7 @@
 				<?php echo form_label('Perihal',  'alamat_label', array('for' => 'message', 'class' => 'col-form-label col-sm-3')); ?>
 				<div class="col-sm-8">
 					<p class="form-control-plaintext">
-						<?php echo $ppid_info->tt_perihal; ?>
+						<?php echo escape_input($ppid_info->tt_perihal); ?>
 					</p>
 
 				</div>
@@ -427,7 +427,7 @@
 				<?php echo form_label('Isi Surat',  'alamat_label', array('for' => 'message', 'class' => 'col-form-label col-sm-3')); ?>
 				<div class="col-sm-8">
 					<p class="form-control-plaintext">
-						<?php echo $ppid_info->tt_isi; ?>
+						<?php echo escape_input($ppid_info->tt_isi); ?>
 					</p>
 
 				</div>
