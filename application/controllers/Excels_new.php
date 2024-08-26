@@ -202,7 +202,7 @@ class Excels_new extends CI_Controller
 		$tgl1 = $filters['tgl1'];
 		$tgl2 = $filters['tgl2'];
 		$kota = $filters['kota'];
-		$direktorat = $filters['direktorat'];
+		//$direktorat = $filters['direktorat'];
 
 		$spreadsheet = IOFactory::load(realpath(APPPATH . '/doc_templates/template_layanan_new.xls'));
 		$worksheet = $spreadsheet->getSheet(0);

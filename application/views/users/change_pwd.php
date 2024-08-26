@@ -19,13 +19,20 @@
 	
 	<div class="row">
 		<div class="col-lg-8">
-		<ul id="error_message_box" class="error_message_box card alert-danger"></ul>		
+		<div class="col-lg-4 alert-info" style="margin-bottom:10px">
+			<span>Password harus mengandung :</span></br>
+			<span>- Minimal 8 Character</span></br>
+			<span>- Minimal mengandung 1 Huruf Besar</span></br>
+			<span>- Minimal mengandung 1 Huruf Kecil</span></br>
+			<span>- Minimal mengandung 1 Angka</span></br>
+			<span>- Minimal mengandung 1 Karakter Spesial</span></br>
+		</div>
+		<div id="error_message_box" class="error_message_box card alert-danger"></div>		
 		<div class="card">
 			<div class="card-header bg-primary text-white">
 				<?php echo $page_title; ?>
 			</div>
 			<div class="card-body">
-			
 				<div class="row">
 						<div class="col-sm-12 col-lg-12">
 			
@@ -104,14 +111,17 @@ $(document).ready(function()
 		{
 			$(form).ajaxSubmit({
 				beforeSubmit: function() {
-					//$('#submit').attr('disabled',true);
+					$('#submit').attr('disabled',true);
 					//$('#submit').html("<i class='fa fa-spinner fa-spin'></i> Processing...");
 				},
 				success: function(response)
 				{
 					$.notify(response.message, { type: response.success ? 'success' : 'danger' });
 					
-					setTimeout(function(){window.location.href = "<?php echo site_url('profile/change_pwd'); ?>";}, 3000);
+					if (response.success) {
+						setTimeout(function(){window.location.href = "<?php echo site_url('profile/change_pwd'); ?>";}, 2000);
+					}
+					$('#submit').attr('disabled',false);
 				},
 				dataType: 'json'
 			});

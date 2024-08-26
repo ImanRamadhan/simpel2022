@@ -21,10 +21,15 @@
 	
 	<div class="row">
 		<div class="col-sm-12 col-lg-12">
-		
-		<ul id="error_message_box" class="error_message_box card alert-danger"></ul>
-		
-		
+		<div class="col-lg-4 alert-info" style="margin-bottom:10px">
+			<span>Password harus mengandung :</span></br>
+			<span>- Minimal 8 Character</span></br>
+			<span>- Minimal mengandung 1 Huruf Besar</span></br>
+			<span>- Minimal mengandung 1 Huruf Kecil</span></br>
+			<span>- Minimal mengandung 1 Angka</span></br>
+			<span>- Minimal mengandung 1 Karakter Spesial</span></br>
+		</div>
+		<div id="error_message_box" class="error_message_box card alert-danger"></div>
 		<div class="card">
 			<div class="card-header bg-primary text-white">
 				<?php echo $page_title; ?>
@@ -98,6 +103,7 @@
 								<?php echo form_input(array(
 									'name'=>'no_hp',
 									'id'=>'no_hp',
+									'onkeypress'=>'return isNumberKey(event)',
 									'class'=>'form-control form-control-sm',
 									'value'=>$item_info->no_hp)
 									);?>
@@ -236,8 +242,10 @@ $(document).ready(function()
 				success: function(response)
 				{
 					$.notify(response.message, { type: response.success ? 'success' : 'danger' });
-					
-					setTimeout(function(){window.location.href = "<?php echo site_url('users'); ?>";}, 3000);
+					if (response.success) {
+						setTimeout(function(){window.location.href = "<?php echo site_url('users'); ?>";}, 2000);
+					}
+					$('#submit').attr('disabled',false);
 				},
 				dataType: 'json'
 			});
@@ -413,5 +421,13 @@ $(document).ready(function()
 	});
 	
 });
+
+function isNumberKey(evt) {
+	var charCode = (evt.which) ? evt.which : evt.keyCode;
+	if (charCode != 46 && charCode > 31 &&
+		(charCode < 48 || charCode > 57))
+		return false;
+	return true;
+}
 </script>
 <?php $this->load->view("partial/footer"); ?>
