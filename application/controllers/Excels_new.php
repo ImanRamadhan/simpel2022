@@ -34,6 +34,7 @@ class Excels_new extends CI_Controller
 	public function download_layanan()
 	{
 		$kota = $this->input->get('kota');
+		$direktorat = $this->input->get('direktorat');
 
 		$tgl1 = $this->input->get('tgl1');
 		$tgl2 = $this->input->get('tgl2');
@@ -58,6 +59,7 @@ class Excels_new extends CI_Controller
 			'tgl2' => $tgl2,
 			'field' => $field,
 			'keyword' => $keyword,
+			'direktorat' => $direktorat,
 			'kategori' => $kategori,
 			'jenis' => $jenis,
 			'status' => $status,
@@ -201,8 +203,6 @@ class Excels_new extends CI_Controller
 
 		$tgl1 = $filters['tgl1'];
 		$tgl2 = $filters['tgl2'];
-		$kota = $filters['kota'];
-		//$direktorat = $filters['direktorat'];
 
 		$spreadsheet = IOFactory::load(realpath(APPPATH . '/doc_templates/template_layanan_new.xls'));
 		$worksheet = $spreadsheet->getSheet(0);
