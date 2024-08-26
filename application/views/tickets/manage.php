@@ -250,6 +250,7 @@
 		$('#export').on('click', function(e) {
 			e.preventDefault();
 			var kota = $("#kota").val() || "";
+			var direktorat = $("#direktorat").val() || "";
 			var tgl1 = moment($("#tgl1").val(), 'DD/MM/YYYY').format('YYYY-MM-DD') || "";
 			var tgl2 = moment($("#tgl2").val(), 'DD/MM/YYYY').format('YYYY-MM-DD') || "";
 			var keyword = $("#keyword").val() || "";
@@ -264,7 +265,7 @@
 			var submited_via = $('#submited_via').val() || "";
 			var sla = $('#sla').val() || "";
 
-			window.location.href = "<?php echo site_url('excels_new/download_layanan'); ?>?tgl1=" + tgl1 + "&tgl2=" + tgl2 + "&kota=" + kota + "&keyword=" + keyword + "&field=" + field + "&kategori=" + kategori + "&jenis=" + jenis + "&status=" + status + "&tl=" + tl + "&fb=" + fb + "&sla=" + sla + "&iden_profesi=" + iden_profesi + "&submited_via=" + submited_via;
+			window.location.href = "<?php echo site_url('excels_new/download_layanan'); ?>?tgl1=" + tgl1 + "&tgl2=" + tgl2 + "&kota=" + kota + "&keyword=" + keyword + "&field=" + field + "&kategori=" + kategori + "&jenis=" + jenis + "&status=" + status + "&tl=" + tl + "&fb=" + fb + "&sla=" + sla + "&iden_profesi=" + iden_profesi + "&submited_via=" + submited_via + "&direktorat=" + direktorat;
 			return false;
 		});
 	});
