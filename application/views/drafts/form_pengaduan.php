@@ -146,6 +146,9 @@
 				this.on("success", function(file, response) {
 					$.fn.load_attachments();
 					this.removeAllFiles();
+
+					if(data.error)
+				  	$.notify(data.message, { type: 'danger' });
 				});
 				this.on("addedfile", function(file) {
 					console.log(file);

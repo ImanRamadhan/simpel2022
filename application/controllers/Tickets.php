@@ -2072,6 +2072,14 @@ class Tickets extends Secure_Controller
 					$_FILES['file_']['error'] = $_FILES['file']['error'][$i];
 					$_FILES['file_']['size'] = $_FILES['file']['size'][$i];
 
+					$mime_type = mime_content_type($_FILES['file_']['tmp_name']);
+					// If you want to allow certain files
+					$allowed_file_types = ['image/png', 'image/jpeg', 'application/pdf', 'image/gif', 'image/jpg', 'application/doc', 'application/docx', 'application/zip', 'application/rar',  'text/csv'];
+					if (! in_array($mime_type, $allowed_file_types)) {
+						echo json_encode(array('error' => 1, 'message' => "file type not allowed"));
+						return;
+					}
+
 					// $gftype = pathinfo($_FILES['file_']['name'], PATHINFO_EXTENSION);;
 					// $rftype = explode('/', mime_content_type($_FILES['file_']['tmp_name']))[1];
 
