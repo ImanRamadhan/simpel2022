@@ -131,6 +131,7 @@
 			parallelUploads: 10,
 			maxFiles: 10,
 			paramName: "file",
+			maxFilesize: 20,
 			dictDefaultMessage: 'Drop file di sini untuk upload',
 			init: function() {
 				thisDropzone = this;

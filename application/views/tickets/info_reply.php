@@ -68,6 +68,7 @@
 			addRemoveLinks: true,
 			autoProcessQueue: false,
 			parallelUploads: 5,
+			maxFilesize: 20,
 			dictDefaultMessage: 'Drop file di sini untuk upload',
 			uploadMultiple: true,
 			init: function() {
