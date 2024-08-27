@@ -84,6 +84,15 @@
 					//$.fn.load_attachments();
 					this.removeAllFiles();
 
+					var data = $.parseJSON(response);
+					console.log("DATAA? ", data)
+					if (data.error){
+						$.notify(data.message, {
+							type: 'danger'
+						});
+						return
+					}
+
 					$.notify('Balasan berhasil dikirim', {
 						type: 'success'
 					});
