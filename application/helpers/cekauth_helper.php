@@ -4,38 +4,21 @@ function checkAuthorize($ticketInfo)
 {
     $CI = get_instance();
 
-    $useridLoggedIn = $CI->session->id;
     $userDirLoggedIn = $CI->session->direktoratid;
+    $userCityLoggedIn = $CI->session->city;
 
-    $returnValue = False;
-    if ($CI->session->city != 'PUSAT') {
-        if ($useridLoggedIn == $ticketInfo->owner) {
-            $returnValue = true;
-        } else if ($userDirLoggedIn == $ticketInfo->owner_dir) {
-            $returnValue = true;
-        } else {
-            if ($userDirLoggedIn == $ticketInfo->direktorat) {
-                $returnValue = true;
-            }
+    $returnValue = True;
 
-            if ($userDirLoggedIn == $ticketInfo->direktorat2) {
-                $returnValue = true;
-            }
+    if ($userCityLoggedIn == "UNIT TEKNIS" && $userDirLoggedIn != $ticketInfo->owner_dir) {
+        $returnValue = False;
+    }
 
-            if ($userDirLoggedIn == $ticketInfo->direktorat3) {
-                $returnValue = true;
-            }
+    if ($userCityLoggedIn != "PUSAT" && $userCityLoggedIn != "UNIT TEKNIS" && $userCityLoggedIn != $ticketInfo->kota) {
+        $returnValue = False;
+    }
 
-            if ($userDirLoggedIn == $ticketInfo->direktorat4) {
-                $returnValue = true;
-            }
-
-            if ($userDirLoggedIn == $ticketInfo->direktorat5) {
-                $returnValue = true;
-            }
-        }
-    } else {
-        $returnValue = true;
+    if ($userDirLoggedIn != '1' && $userDirLoggedIn != $ticketInfo->owner_dir) {
+        $returnValue = False;
     }
 
     return $returnValue;
