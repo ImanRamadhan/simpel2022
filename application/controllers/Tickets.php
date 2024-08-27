@@ -301,6 +301,26 @@ class Tickets extends Secure_Controller
 			redirect('/NotFound404/view/tickets', 'refresh');
 		}
 
+		if($item_info->id == ""){
+			redirect('/NotFound404/view/tickets', 'refresh');
+			return;
+		}
+
+		if($this->session->city == 'UNIT TEKNIS' && $item_info->owner_dir != $this->session->direktoratid){
+			redirect('/NotFound404/view/tickets', 'refresh');
+			return;
+		}
+
+		if($this->session->city != 'PUSAT' && $this->session->city != 'UNIT TEKNIS' && $item_info->kota != $this->session->city){
+			redirect('/NotFound404/view/tickets', 'refresh');
+			return;
+		}
+
+		if($this->session->direktoratid != 1 && $item_info->owner_dir != $this->session->direktoratid){
+			redirect('/NotFound404/view/tickets', 'refresh');
+			return;
+		}
+
 		foreach (get_object_vars($item_info) as $property => $value) {
 			$item_info->$property = $this->xss_clean($value);
 		}
