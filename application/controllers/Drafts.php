@@ -2514,6 +2514,14 @@ class Drafts extends Secure_Controller
 					$_FILES['file_']['error'] = $_FILES['file']['error'][$i];
 					$_FILES['file_']['size'] = $_FILES['file']['size'][$i];
 
+					$mime_type = mime_content_type($_FILES['file_']['tmp_name']);
+					// If you want to allow certain files
+					$allowed_file_types = ['image/png', 'image/jpeg', 'application/pdf', 'image/gif', 'image/jpg', 'application/doc', 'application/docx', 'application/zip', 'application/rar',  'text/csv'];
+					if (! in_array($mime_type, $allowed_file_types)) {
+						echo json_encode(array('error' => 1, 'message' => "file type not allowed"));
+						return;
+					}
+
 
 					if ($this->upload->do_upload('file_')) {
 						$data = $this->upload->data();
@@ -2553,6 +2561,9 @@ class Drafts extends Secure_Controller
 					$_FILES['file2_']['tmp_name'] = $_FILES['file2']['tmp_name'][$i];
 					$_FILES['file2_']['error'] = $_FILES['file2']['error'][$i];
 					$_FILES['file2_']['size'] = $_FILES['file2']['size'][$i];
+
+					$mime_type = mime_content_type($_FILES['input_name']['tmp_name'][$i]);
+					echo "MIME TYPE : "  . $mime_type;
 
 					$this->upload->set_xss_clean(true);
 					if ($this->upload->do_upload('file2_')) {
