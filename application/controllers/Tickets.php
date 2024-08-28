@@ -23,17 +23,16 @@ class Tickets extends Secure_Controller
         'Monolog',
         'PendingRequest',
         '\\<script',
-        'ThinkPHP',
+        //'ThinkPHP',
 		'alert',
-		'XSS',
-		'<?php',
-
+		//'<?php'
 	];
 
 	protected $malicious_patterns = [
 			'/system\(\s*[\'"]ping\s+/i',              // ping used in system function
 			'/exec\(\s*[\'"]ping\s+/i',                // ping used in exec function
 			'/passthru\(\s*[\'"]ping\s+/i',            // ping used in passthru function
+			'/<?php/',
 	];
 
 	public function setup_search(&$data)
@@ -751,6 +750,29 @@ class Tickets extends Secure_Controller
 			$_FILES['file']['error'] = $files['file']['error'][$i];
 			$_FILES['file']['size'] = $files['file']['size'][$i];
 
+			$mime_type = mime_content_type($_FILES['file']['tmp_name']);
+			// If you want to allow certain files
+			$allowed_file_types = ['image/png', 'image/jpeg', 'application/pdf', 'image/gif', 'image/jpg', 'application/doc', 'application/docx', 'application/zip', 'application/rar',  'text/csv'];
+			if (! in_array($mime_type, $allowed_file_types)) {
+				echo json_encode(array('error' => 1, 'message' => "file type not allowed"));
+				return;
+			}
+
+			$fileUpload = file_get_contents($_FILES['file']['tmp_name'], true);
+			$binary = base64_decode(base64_encode($fileUpload));
+			
+			if (preg_match('/(' . implode('|', $this->malicious_keywords) . ')/im', $binary, $matches))  {
+				echo json_encode(array('error' => 1, 'message' => "File tidak valid! Found the following malicious keywords: " . implode(', ', array_unique($matches))));
+				return;
+			}
+
+			foreach ($this->malicious_patterns as $pattern) {
+				if (preg_match($pattern, $binary, $matches)) {
+					echo json_encode(array('error' => 1, 'message' => "File tidak valid! Found the following malicious keywords: " . implode(', ', array_unique($matches))));
+					return;
+				}
+			}
+			
 			if ($this->upload->do_upload('file')) {
 				$data = $this->upload->data();
 				$att_data = array(
@@ -2056,6 +2078,36 @@ class Tickets extends Secure_Controller
 
 		if ($ticketid) {
 			$this->load->library('upload', $this->config->item('upload_setting'));
+			
+			$_FILES['file_']['name'] = $_FILES['file']['name'][0];
+			$_FILES['file_']['type'] = $_FILES['file']['type'][0];
+			$_FILES['file_']['tmp_name'] = $_FILES['file']['tmp_name'][0];
+			$_FILES['file_']['error'] = $_FILES['file']['error'][0];
+			$_FILES['file_']['size'] = $_FILES['file']['size'][0];
+
+			$mime_type = mime_content_type($_FILES['file_']['tmp_name']);
+			// If you want to allow certain files
+			$allowed_file_types = ['image/png', 'image/jpeg', 'application/pdf', 'image/gif', 'image/jpg', 'application/doc', 'application/docx', 'application/zip', 'application/rar',  'text/csv'];
+			if (! in_array($mime_type, $allowed_file_types)) {
+				echo json_encode(array('error' => 1, 'message' => "file type not allowed"));
+				return;
+			}
+
+			$fileUpload = file_get_contents($_FILES['file_']['tmp_name'], true);
+			$binary = base64_decode(base64_encode($fileUpload));
+			
+			if (preg_match('/(' . implode('|', $this->malicious_keywords) . ')/im', $binary, $matches))  {
+				echo json_encode(array('error' => 1, 'message' => "File tidak valid! Found the following malicious keywords: " . implode(', ', array_unique($matches))));
+				return;
+			}
+
+			foreach ($this->malicious_patterns as $pattern) {
+				if (preg_match($pattern, $binary, $matches)) {
+					echo json_encode(array('error' => 1, 'message' => "File tidak valid! Found the following malicious keywords: " . implode(', ', array_unique($matches))));
+					return;
+				}
+			}
+
 			if ($this->upload->do_upload('file')) {
 				$data = $this->upload->data();
 				$att_data = array(
@@ -2172,7 +2224,30 @@ class Tickets extends Secure_Controller
 					$_FILES['file2_']['error'] = $_FILES['file2']['error'][$i];
 					$_FILES['file2_']['size'] = $_FILES['file2']['size'][$i];
 
-					$this->upload->set_xss_clean(true);
+					$mime_type = mime_content_type($_FILES['file2_']['tmp_name']);
+					// If you want to allow certain files
+					$allowed_file_types = ['image/png', 'image/jpeg', 'application/pdf', 'image/gif', 'image/jpg', 'application/doc', 'application/docx', 'application/zip', 'application/rar',  'text/csv'];
+					if (! in_array($mime_type, $allowed_file_types)) {
+						echo json_encode(array('error' => 1, 'message' => "file type not allowed"));
+						return;
+					}
+
+					$fileUpload = file_get_contents($_FILES['file2_']['tmp_name'], true);
+					$binary = base64_decode(base64_encode($fileUpload));
+					
+					if (preg_match('/(' . implode('|', $this->malicious_keywords) . ')/im', $binary, $matches))  {
+						echo json_encode(array('error' => 1, 'message' => "File tidak valid! Found the following malicious keywords: " . implode(', ', array_unique($matches))));
+						return;
+					}
+
+					foreach ($this->malicious_patterns as $pattern) {
+						if (preg_match($pattern, $binary, $matches)) {
+							echo json_encode(array('error' => 1, 'message' => "File tidak valid! Found the following malicious keywords: " . implode(', ', array_unique($matches))));
+							return;
+						}
+					}
+
+					//$this->upload->set_xss_clean(true);
 					if ($this->upload->do_upload('file2_')) {
 						$data = $this->upload->data();
 						$att_data = array(

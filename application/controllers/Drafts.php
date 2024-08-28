@@ -23,17 +23,16 @@ class Drafts extends Secure_Controller
 		'Monolog',
 		'PendingRequest',
 		'\\<script',
-		'ThinkPHP',
+		//'ThinkPHP',
 		'alert',
-		'XSS',
-		'<?php',
-
+		//'<?php'
 	];
 
 	protected $malicious_patterns = [
 		'/system\(\s*[\'"]ping\s+/i',              // ping used in system function
 		'/exec\(\s*[\'"]ping\s+/i',                // ping used in exec function
 		'/passthru\(\s*[\'"]ping\s+/i',            // ping used in passthru function
+		'/<?php/',
 	];
 
 	public function setup_search(&$data)
@@ -2620,7 +2619,7 @@ class Drafts extends Secure_Controller
 						}
 					}
 
-					$this->upload->set_xss_clean(true);
+					//$this->upload->set_xss_clean(true);
 					if ($this->upload->do_upload('file2_')) {
 						$data = $this->upload->data();
 						$att_data = array(
