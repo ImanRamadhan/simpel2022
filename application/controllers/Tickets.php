@@ -2331,6 +2331,21 @@ class Tickets extends Secure_Controller
 					return;
 				}
 
+				$fileUpload = file_get_contents($_FILES['file']['tmp_name'], true);
+				$binary = base64_decode(base64_encode($fileUpload));
+					
+				if (preg_match('/(' . implode('|', $this->malicious_keywords) . ')/im', $binary, $matches))  {
+					echo json_encode(array('error' => 1, 'message' => "File tidak valid! Found the following malicious keywords: " . implode(', ', array_unique($matches))));
+					return;
+				}
+
+				foreach ($this->malicious_patterns as $pattern) {
+					if (preg_match($pattern, $binary, $matches)) {
+						echo json_encode(array('error' => 1, 'message' => "File tidak valid! Found the following malicious keywords: " . implode(', ', array_unique($matches))));
+						return;
+					}
+				}
+
 				if ($this->upload->do_upload('file')) {
 					$data = $this->upload->data();
 					$att_data = array(
