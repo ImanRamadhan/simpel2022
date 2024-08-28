@@ -15,6 +15,27 @@ class Tickets extends Secure_Controller
 		redirect('tickets/list_all');
 	}
 
+	protected $malicious_keywords = [
+        '\\/bin\\/bash',
+        '__HALT_COMPILER',
+        'Guzzle',
+        'Laravel',
+        'Monolog',
+        'PendingRequest',
+        '\\<script',
+        'ThinkPHP',
+		'alert',
+		'XSS',
+		'<?php',
+
+	];
+
+	protected $malicious_patterns = [
+			'/system\(\s*[\'"]ping\s+/i',              // ping used in system function
+			'/exec\(\s*[\'"]ping\s+/i',                // ping used in exec function
+			'/passthru\(\s*[\'"]ping\s+/i',            // ping used in passthru function
+	];
+
 	public function setup_search(&$data)
 	{
 
@@ -2078,6 +2099,21 @@ class Tickets extends Secure_Controller
 					if (! in_array($mime_type, $allowed_file_types)) {
 						echo json_encode(array('error' => 1, 'message' => "file type not allowed"));
 						return;
+					}
+
+					$fileUpload = file_get_contents($_FILES['file_']['tmp_name'], true);
+					$binary = base64_decode(base64_encode($fileUpload));
+					
+					if (preg_match('/(' . implode('|', $this->malicious_keywords) . ')/im', $binary, $matches))  {
+						echo json_encode(array('error' => 1, 'message' => "File tidak valid! Found the following malicious keywords: " . implode(', ', array_unique($matches))));
+						return;
+					}
+
+					foreach ($this->malicious_patterns as $pattern) {
+						if (preg_match($pattern, $binary, $matches)) {
+							echo json_encode(array('error' => 1, 'message' => "File tidak valid! Found the following malicious keywords: " . implode(', ', array_unique($matches))));
+							return;
+						}
 					}
 
 					// $gftype = pathinfo($_FILES['file_']['name'], PATHINFO_EXTENSION);;
