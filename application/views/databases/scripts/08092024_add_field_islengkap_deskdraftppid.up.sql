@@ -1,0 +1,1 @@
+ALTER TABLE `desk_ppid_drafts` ADD `is_lengkap` VARCHAR(15)  NULL  DEFAULT 'Lengkap';
