@@ -1,0 +1,1 @@
+ALTER TABLE `desk_ppid_drafts` DROP `is_lengkap`;
