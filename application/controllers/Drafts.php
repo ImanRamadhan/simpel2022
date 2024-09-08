@@ -896,11 +896,8 @@ class Drafts extends Secure_Controller
 			$item_info->$property = $this->xss_clean($value);
 		}
 		//$data['item_info'] = $item_info;
-
 		$item_data['id'] = $item_id;
-
-
-
+			
 		if ($item_id == -1) {
 			//$item_data['trackid'] = $this->Draft->generate_ticketid($this->session->city, 'DRF', date('Y-m-d'));
 			$item_data['trackid'] = '';
@@ -1317,13 +1314,12 @@ class Drafts extends Secure_Controller
 		//$data['item_info'] = $item_info;
 
 		$item_data['id'] = $item_id;
-
-
-
+		//change owner logic for ppid keberatan drafts
+		$item_data['owner'] = $this->session->id;
+			
 		if ($item_id == -1) {
 			//$item_data['trackid'] = $this->Draft->generate_ticketid($this->session->city, 'DRF', date('Y-m-d'));
 			$item_data['trackid'] = '';
-			$item_data['owner'] = $this->session->id;
 			$item_data['kota'] = $this->session->city;
 			$item_data['dt'] = date('Y-m-d H:i:s');
 			$item_data['tglpengaduan'] = date('Y-m-d');
@@ -1728,13 +1724,12 @@ class Drafts extends Secure_Controller
 		//$data['item_info'] = $item_info;
 
 		$item_data['id'] = $item_id;
-
-
-
+		//change owner logic for ppid drafts
+		$item_data['owner'] = $this->session->id;
+		
 		if ($item_id == -1) {
 			//$item_data['trackid'] = $this->Draft->generate_ticketid($this->session->city, 'DRF', date('Y-m-d'));
 			$item_data['trackid'] = '';
-			$item_data['owner'] = $this->session->id;
 			$item_data['kota'] = $this->session->city;
 			$item_data['dt'] = date('Y-m-d H:i:s');
 			$item_data['tglpengaduan'] = date('Y-m-d');

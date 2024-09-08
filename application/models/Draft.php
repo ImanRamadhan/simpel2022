@@ -82,7 +82,11 @@ class Draft extends CI_Model
 
 		$this->db->from('desk_drafts');
 		//$this->db->join('desk_categories','desk_categories.id = desk_drafts.kategori','left');
+		$this->db->group_start();
 		$this->db->where('owner', $this->session->id);
+		$this->db->or_where('owner', '9999');
+		$this->db->group_end();
+		
 		$this->db->where('is_sent', '0');
 		//$this->db->where_in('info', array('P','I'));
 
