@@ -1177,6 +1177,13 @@ class Tickets extends Secure_Controller
 
 		);
 
+		if ($jenis == 'PPID') {
+			$item_data['tl_date'] = $tt_tgl;
+			$item_data['fb_date'] = $tt_tgl;
+			$item_data['tl'] = 1;
+			$item_data['fb'] = 1;
+		}
+
 		$item_info = $this->Ticket->get_info($item_id);
 		foreach (get_object_vars($item_info) as $property => $value) {
 			$item_info->$property = $this->xss_clean($value);

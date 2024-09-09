@@ -800,8 +800,12 @@ class Ppid extends Secure_Controller
 			'petugas_entry' =>  $petugas_entry,
 			'penjawab' =>  $penjawab,
 			'answered_via' =>  $answered_via,
-			'tipe_medsos' => $tipe_medsos
+			'tipe_medsos' => $tipe_medsos,
 
+			'tl_date' => $tt_tgl,
+			'fb_date' => $tt_tgl,
+			'tl' => 1,
+			'fb' => 1
 		);
 
 		$item_info = $this->Ticket->get_info($item_id);
