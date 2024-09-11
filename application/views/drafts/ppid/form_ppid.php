@@ -38,6 +38,7 @@
 			<div class="col-sm-8">
 				<?php echo form_input(array(
 					'class' => 'form-control form-control-sm',
+					'onkeypress'=>'return isNumberKey(event)',
 					'name' => 'no_ktp',
 					'id' => 'no_ktp',
 					'value' => $ppid_info->no_ktp
