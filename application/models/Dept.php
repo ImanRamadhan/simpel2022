@@ -289,15 +289,15 @@ class Dept extends CI_Model
 
 	public function get_direktorat($kota)
 	{
-		$this->db->select('name, id');
+		$this->db->select('name, id, kota');
 		$this->db->from('desk_direktorat');
-		if ($kota != '') {
+		if ($kota != '' && $kota != 'ALL') {
 
 			if ($kota == 'UNIT_TEKNIS') {
 				$kota = 'UNIT TEKNIS';
 			}
 			$this->db->where('kota', $kota);
-
+			
 			if ($kota == 'PUSAT'){
 				$this->db->not_like('name','balai besar jakarta');
 			}

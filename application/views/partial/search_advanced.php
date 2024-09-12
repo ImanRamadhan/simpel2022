@@ -104,7 +104,7 @@
 							$('#direktorat').empty();
 							$('#direktorat').append($('<option></option>').attr('value', '').text('ALL'));
 							$.each(data, function(key, entry) {
-								$('#direktorat').append($('<option></option>').attr('value', entry.id).text(entry.name));
+								$('#direktorat').append($('<option></option>').attr('value', entry.id).text(`${entry.name}[${entry.kota}]`));
 							})
 						}
 					});
