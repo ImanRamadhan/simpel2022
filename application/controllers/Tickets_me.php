@@ -167,6 +167,16 @@ class Tickets_me extends Secure_Controller
 
 	public function delete()
 	{
+	
+		$items_to_delete = $this->input->post('ids');
+
+		if ($this->Ticket->delete_list($items_to_delete)) {
+			$message = $this->lang->line('items_successful_deleted') . ' ' . count($items_to_delete) . ' ' . $this->lang->line('items_one_or_multiple');
+			echo json_encode(array('success' => TRUE, 'message' => $message));
+		} else {
+			echo json_encode(array('success' => FALSE, 'message' => $this->lang->line('items_cannot_be_deleted')));
+		}
+
 	}
 	
 }
