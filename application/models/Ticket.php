@@ -756,7 +756,10 @@ class Ticket extends CI_Model
 				if ($v == '1') {
 					$this->db->where('replierid is not null');
 				} else {
+					$this->db->group_start();
 					$this->db->where('replierid is null');
+					$this->db->or_where('replierid !=', $this->session->id);
+					$this->db->group_end();
 				}
 			}
 		}
