@@ -2380,6 +2380,7 @@ class Ticket extends CI_Model
 		$this->db->from('desk_attachments_ppidtl');
 		$this->db->where('ticket_id', $item_id);
 		$this->db->where('mode', $mode);
+		$this->db->order_by('att_id', 'desc');
 		return $this->db->get();
 	}
 
