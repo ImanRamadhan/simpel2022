@@ -1,0 +1,1 @@
+ALTER TABLE `desk_tickets_hist` DROP `kategori_lainnya`;

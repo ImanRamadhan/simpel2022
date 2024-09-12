@@ -1,0 +1,1 @@
+ALTER TABLE `desk_tickets_hist` ADD `kategori_lainnya` VARCHAR(255)  NULL  DEFAULT NULL  AFTER `kategori`;
