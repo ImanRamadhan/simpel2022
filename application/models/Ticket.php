@@ -84,6 +84,7 @@ class Ticket extends CI_Model
 			$this->db->where('tglpengaduan <=', $filters['tgl2']);
 		}
 
+
 		if ($this->session->city == 'PUSAT') {
 			if (!empty($filters['kota'])) {
 				$this->apply_filter($this->db, $filters['kota']);
@@ -96,14 +97,39 @@ class Ticket extends CI_Model
 					->or_where('direktorat4', $filters['direktorat'] == 'ALL' ? 0 : $filters['direktorat'])
 					->or_where('direktorat5', $filters['direktorat'] == 'ALL' ? 0 : $filters['direktorat'])
 				->group_end();
-			}
-		} else if ($this->session->city == 'UNIT TEKNIS') {
+    } else if ($this->session->city == 'UNIT TEKNIS') {
 			$this->db->where('owner_dir', $this->session->direktoratid);
 		} else {
 			$this->db->where('kota', $this->session->city);
 		}
-
+        
 		if (!empty($filters['keyword'])) {
+			if ($this->session->city == 'PUSAT') {
+				if (!empty($filters['kota'])) {
+					$this->apply_filter($this->db, $filters['kota']);
+				}
+				if (!empty($filters['direktorat']) || 
+				$filters['direktorat'] != 'ALL' ||
+				$filters['direktorat2'] != 'ALL' ||
+				$filters['direktorat3'] != 'ALL' ||
+				$filters['direktorat4'] != 'ALL' ||
+				$filters['direktorat5'] != 'ALL' 
+				) {
+					$this->db->group_start();
+					$this->db->where('direktorat', $filters['direktorat']);
+					$this->db->or_where('direktorat2', $filters['direktorat']);
+					$this->db->or_where('direktorat3', $filters['direktorat']);
+					$this->db->or_where('direktorat4', $filters['direktorat']);
+					$this->db->or_where('direktorat5', $filters['direktorat']);
+					$this->db->group_end();
+				}
+			} else if ($this->session->city == 'UNIT TEKNIS') {
+				$this->db->where('owner_dir', $this->session->direktoratid);
+			} else {
+				$this->db->where('kota', $this->session->city);
+			}
+
+		
 			$field = $filters['field'];
 			if ($field == 'trackid') {
 				$this->db->where('desk_tickets.trackid', $filters['keyword']);
@@ -208,7 +234,7 @@ class Ticket extends CI_Model
 		}
 
 
-
+		//print_r($this->db); die;
 		return $this->db->get();
 	}
 
@@ -749,7 +775,10 @@ class Ticket extends CI_Model
 				if ($v == '1') {
 					$this->db->where('replierid is not null');
 				} else {
+					$this->db->group_start();
 					$this->db->where('replierid is null');
+					$this->db->or_where('replierid !=', $this->session->id);
+					$this->db->group_end();
 				}
 			}
 		}
@@ -2370,6 +2399,7 @@ class Ticket extends CI_Model
 		$this->db->from('desk_attachments_ppidtl');
 		$this->db->where('ticket_id', $item_id);
 		$this->db->where('mode', $mode);
+		$this->db->order_by('att_id', 'desc');
 		return $this->db->get();
 	}
 
