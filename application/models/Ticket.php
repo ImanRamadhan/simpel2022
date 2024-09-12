@@ -96,24 +96,26 @@ class Ticket extends CI_Model
 					->or_where('direktorat3', $filters['direktorat'] == 'ALL' ? 0 : $filters['direktorat'])
 					->or_where('direktorat4', $filters['direktorat'] == 'ALL' ? 0 : $filters['direktorat'])
 					->or_where('direktorat5', $filters['direktorat'] == 'ALL' ? 0 : $filters['direktorat'])
-				->group_end();
-    } else if ($this->session->city == 'UNIT TEKNIS') {
-			$this->db->where('owner_dir', $this->session->direktoratid);
-		} else {
-			$this->db->where('kota', $this->session->city);
+					->group_end();
+			} else if ($this->session->city == 'UNIT TEKNIS') {
+				$this->db->where('owner_dir', $this->session->direktoratid);
+			} else {
+				$this->db->where('kota', $this->session->city);
+			}
 		}
-        
+
 		if (!empty($filters['keyword'])) {
 			if ($this->session->city == 'PUSAT') {
 				if (!empty($filters['kota'])) {
 					$this->apply_filter($this->db, $filters['kota']);
 				}
-				if (!empty($filters['direktorat']) || 
-				$filters['direktorat'] != 'ALL' ||
-				$filters['direktorat2'] != 'ALL' ||
-				$filters['direktorat3'] != 'ALL' ||
-				$filters['direktorat4'] != 'ALL' ||
-				$filters['direktorat5'] != 'ALL' 
+				if (
+					!empty($filters['direktorat']) ||
+					$filters['direktorat'] != 'ALL' ||
+					$filters['direktorat2'] != 'ALL' ||
+					$filters['direktorat3'] != 'ALL' ||
+					$filters['direktorat4'] != 'ALL' ||
+					$filters['direktorat5'] != 'ALL'
 				) {
 					$this->db->group_start();
 					$this->db->where('direktorat', $filters['direktorat']);
@@ -129,7 +131,7 @@ class Ticket extends CI_Model
 				$this->db->where('kota', $this->session->city);
 			}
 
-		
+
 			$field = $filters['field'];
 			if ($field == 'trackid') {
 				$this->db->where('desk_tickets.trackid', $filters['keyword']);
@@ -152,7 +154,7 @@ class Ticket extends CI_Model
 			} elseif ($field == 'subklasifikasi') {
 				$this->db->like('desk_tickets.subklasifikasi', $filters['keyword']);
 			} elseif ($field == 'perusahaan_instansi') {
-				$this->db->where('desk_tickets.iden_instansi like '."'%".$filters['keyword']."%'");
+				$this->db->where('desk_tickets.iden_instansi like ' . "'%" . $filters['keyword'] . "%'");
 			}
 		}
 
