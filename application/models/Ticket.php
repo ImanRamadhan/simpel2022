@@ -126,7 +126,7 @@ class Ticket extends CI_Model
 			} elseif ($field == 'subklasifikasi') {
 				$this->db->like('desk_tickets.subklasifikasi', $filters['keyword']);
 			} elseif ($field == 'perusahaan_instansi') {
-				$this->db->like('desk_tickets.iden_instansi', $filters['keyword']);
+				$this->db->where('desk_tickets.iden_instansi like '."'%".$filters['keyword']."%'");
 			}
 		}
 
