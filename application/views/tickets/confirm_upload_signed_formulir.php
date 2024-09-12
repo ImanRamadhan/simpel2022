@@ -15,7 +15,6 @@
       // validation code here
       
         e.preventDefault();
-        alert("coy")
         if(thisDropzone.getQueuedFiles().length > 0){
           thisDropzone.processQueue();
           console.log("processing upload file ...")
