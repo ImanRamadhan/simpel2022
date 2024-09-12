@@ -25,5 +25,6 @@ $config['upload_draft_setting'] = array(
 
 $config['ppid_setting'] = array(
 	'kop_path' => getenv('PPID_KOP_PATH'),
-	'template_path' => getenv('PPID_TEMPLATE_PATH')
+	'template_path' => getenv('PPID_TEMPLATE_PATH'),
+	'start_berkaspengiriman_date_counted' => getenv('PPID_START_BERKASPENGIRIMAN_DATE_COUNTED')
 );
