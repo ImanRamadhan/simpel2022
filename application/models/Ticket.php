@@ -84,24 +84,33 @@ class Ticket extends CI_Model
 			$this->db->where('tglpengaduan <=', $filters['tgl2']);
 		}
 
-		if ($this->session->city == 'PUSAT') {
-			if (!empty($filters['kota'])) {
-				$this->apply_filter($this->db, $filters['kota']);
-			}
-			if (!empty($filters['direktorat'])) {
-				$this->db->where('direktorat', $filters['direktorat']);
-				$this->db->or_where('direktorat2', $filters['direktorat']);
-				$this->db->or_where('direktorat3', $filters['direktorat']);
-				$this->db->or_where('direktorat4', $filters['direktorat']);
-				$this->db->or_where('direktorat5', $filters['direktorat']);
-			}
-		} else if ($this->session->city == 'UNIT TEKNIS') {
-			$this->db->where('owner_dir', $this->session->direktoratid);
-		} else {
-			$this->db->where('kota', $this->session->city);
-		}
-
 		if (!empty($filters['keyword'])) {
+			if ($this->session->city == 'PUSAT') {
+				if (!empty($filters['kota'])) {
+					$this->apply_filter($this->db, $filters['kota']);
+				}
+				if (!empty($filters['direktorat']) || 
+				$filters['direktorat'] != 'ALL' ||
+				$filters['direktorat2'] != 'ALL' ||
+				$filters['direktorat3'] != 'ALL' ||
+				$filters['direktorat4'] != 'ALL' ||
+				$filters['direktorat5'] != 'ALL' 
+				) {
+					$this->db->group_start();
+					$this->db->where('direktorat', $filters['direktorat']);
+					$this->db->or_where('direktorat2', $filters['direktorat']);
+					$this->db->or_where('direktorat3', $filters['direktorat']);
+					$this->db->or_where('direktorat4', $filters['direktorat']);
+					$this->db->or_where('direktorat5', $filters['direktorat']);
+					$this->db->group_end();
+				}
+			} else if ($this->session->city == 'UNIT TEKNIS') {
+				$this->db->where('owner_dir', $this->session->direktoratid);
+			} else {
+				$this->db->where('kota', $this->session->city);
+			}
+
+		
 			$field = $filters['field'];
 			if ($field == 'trackid') {
 				$this->db->where('desk_tickets.trackid', $filters['keyword']);
@@ -206,7 +215,7 @@ class Ticket extends CI_Model
 		}
 
 
-
+		//print_r($this->db); die;
 		return $this->db->get();
 	}
 
