@@ -93,7 +93,7 @@
 
 
 	<li class="has-submenu">
-		<a href="#"><i class="mdi mdi-buffer"></i>PPID</a><span class="badge badge-danger badge-pill noti-icon-badge" id="ppid_need_action">0</span>
+		<a href="#"><i class="mdi mdi-buffer"></i>PPID</a><span class="badge badge-danger badge-pill noti-icon-badge" id="ppid_need_action" data-toggle="tooltip" data-html="true" title="<em>Jumlah Berkas Layanan PPID</em> <u>yg perlu</u> <b>Anda Upload</b>">0</span>
 		<ul class="submenu">
 			<li><a href="<?php echo site_url('ppid/list_all') ?>">Layanan Permintaan Informasi Publik</a></li>
 			<li><a href="<?php echo site_url('ppid/list_keberatan') ?>">Layanan Pengajuan Keberatan</a></li>

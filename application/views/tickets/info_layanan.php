@@ -134,12 +134,12 @@
 							if($controller_name == 'tickets'){
 								echo '<a class="modal-dlg text-primary" data-btn-submit="Ya"  title="Ubah Status FB" data-href="'.site_url('tickets/confirm_fb_no/'.$item_info->id).'">[Ubah menjadi Belum]</a>';
 								if($item_info->jenis == 'PPID' && !isset($att_ppidtl)){
-									echo '&nbsp;&nbsp;<a class="modal-dlg text-primary" data-btn-submit="Upload Berkas" title="Upload bukti berkas yg sudah ditandatangan" data-href="'.site_url('tickets/confirm_upload_signed_formulir/'.$item_info->id . '/' . $item_info->trackid).'">[Upload Bukti Pengiriman]</a>';
+									echo '&nbsp;&nbsp;<a class="modal-dlg text-primary" data-btn-submit="Upload Berkas" title="Upload bukti berkas yg sudah ditandatangan" data-href="'.site_url('tickets/confirm_upload_signed_formulir/'.$item_info->id . '/' . $item_info->trackid).'">[upload berkas layanan]</a>';
 								}
 
 								if($item_info->jenis == 'PPID' && isset($att_ppidtl)){
 									echo '&nbsp;&nbsp;<a href="'.site_url('uploads/files/').$att_ppidtl->saved_name.'" target="_blank"><i class="fa fa-file-pdf">'.$att_ppidtl->real_name.'</i></a>';
-									echo '&nbsp;&nbsp;<a class="modal-dlg text-primary" data-btn-submit="Upload Berkas" title="Upload bukti berkas yg sudah ditandatangan" data-href="'.site_url('tickets/confirm_upload_signed_formulir/'.$item_info->id . '/' . $item_info->trackid).'">[Upload Bukti Pengiriman]</a>';
+									echo '&nbsp;&nbsp;<a class="modal-dlg text-primary" data-btn-submit="Upload Berkas" title="Upload bukti berkas yg sudah ditandatangan" data-href="'.site_url('tickets/confirm_upload_signed_formulir/'.$item_info->id . '/' . $item_info->trackid).'">[upload berkas layanan]</a>';
 								}	
 
 							}

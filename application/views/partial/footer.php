@@ -17,6 +17,7 @@
 		<script type="text/javascript">
 			$(document).ready(function()
 			{
+				$('[data-toggle="tooltip"]').tooltip();
 				<?php if($this->session->city == 'PUSAT'): ?>
 				// $.getJSON('<?php echo site_url('dashboard/rujukan_keluar_replied');?>', function (data) {
 				// 	//console.log(data);
