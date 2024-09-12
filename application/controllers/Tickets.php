@@ -81,7 +81,7 @@ class Tickets extends Secure_Controller
 		$direktorat = $this->Dept->get_direktorat('');
 		$direktorat_array = array('ALL' => 'ALL');
 		foreach ($direktorat->result() as $dir) {
-			$direktorat_array[$dir->id] = $dir->name;
+			$direktorat_array[$dir->id] = "$dir->name <strong>[$dir->kota]</strong>";
 		}
 		$data['direktorat'] = $direktorat_array;
 

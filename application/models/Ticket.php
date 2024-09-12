@@ -84,6 +84,25 @@ class Ticket extends CI_Model
 			$this->db->where('tglpengaduan <=', $filters['tgl2']);
 		}
 
+
+		if ($this->session->city == 'PUSAT') {
+			if (!empty($filters['kota'])) {
+				$this->apply_filter($this->db, $filters['kota']);
+			}
+			if (!empty($filters['direktorat'])) {
+				$this->db->group_start()
+					->where('direktorat', $filters['direktorat'] == 'ALL' ? 0 : $filters['direktorat'])
+					->or_where('direktorat2', $filters['direktorat'] == 'ALL' ? 0 : $filters['direktorat'])
+					->or_where('direktorat3', $filters['direktorat'] == 'ALL' ? 0 : $filters['direktorat'])
+					->or_where('direktorat4', $filters['direktorat'] == 'ALL' ? 0 : $filters['direktorat'])
+					->or_where('direktorat5', $filters['direktorat'] == 'ALL' ? 0 : $filters['direktorat'])
+				->group_end();
+    } else if ($this->session->city == 'UNIT TEKNIS') {
+			$this->db->where('owner_dir', $this->session->direktoratid);
+		} else {
+			$this->db->where('kota', $this->session->city);
+		}
+        
 		if (!empty($filters['keyword'])) {
 			if ($this->session->city == 'PUSAT') {
 				if (!empty($filters['kota'])) {
@@ -133,7 +152,7 @@ class Ticket extends CI_Model
 			} elseif ($field == 'subklasifikasi') {
 				$this->db->like('desk_tickets.subklasifikasi', $filters['keyword']);
 			} elseif ($field == 'perusahaan_instansi') {
-				$this->db->like('desk_tickets.iden_instansi', $filters['keyword']);
+				$this->db->where('desk_tickets.iden_instansi like '."'%".$filters['keyword']."%'");
 			}
 		}
 
