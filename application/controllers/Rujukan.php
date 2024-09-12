@@ -182,9 +182,11 @@ class Rujukan extends Secure_Controller
 			redirect('/NotFound404/view/rujukan', 'refresh');
 		}
 
+		/*
 		if (!checkAuthorize($item_info)) {
 			redirect('/NoAuth401/view/rujukan', 'refresh');
 		}
+		*/
 
 		foreach (get_object_vars($item_info) as $property => $value) {
 			$item_info->$property = $this->xss_clean($value);

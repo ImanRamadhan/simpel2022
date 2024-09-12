@@ -45,9 +45,11 @@ Dropzone.autoDiscover = false;
 					<li class="nav-item">
 						<a class="nav-link border rounded-lg border-bottom-0" data-toggle="tab" href="#tabklasifikasi" role="tab">Klasifikasi</a>
 					</li>
+					<?php if($this->session->city == "PUSAT"):?>
 					<li class="nav-item">
 						<a class="nav-link border rounded-lg border-bottom-0" data-toggle="tab" href="#tabtindaklanjut" role="tab">Tindak Lanjut</a>
 					</li>
+					<?php endif?>
 					<li class="nav-item">
 						<a class="nav-link border rounded-lg border-bottom-0" data-toggle="tab" href="#tabjawaban" role="tab">Jawaban</a>
 					</li>
