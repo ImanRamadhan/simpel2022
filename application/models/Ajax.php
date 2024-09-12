@@ -670,14 +670,18 @@ class Ajax extends CI_Model
   
 	public function ppid_need_action()
 	{
+		$ppid_setting = $this->config->item('ppid_setting');
+		$start_counted = $ppid_setting['start_berkaspengiriman_date_counted'];
 		
 		$this->db->select('COUNT(a.id) as cnt');
 		$this->db->from('desk_tickets a');
 		$this->db->where('jenis', 'PPID');
 		$this->db->where('owner_dir', $this->session->direktoratid);
 		$this->db->where("NOT EXISTS(SELECT b.ticket_id FROM desk_attachments_ppidtl b WHERE b.ticket_id = a.trackid)", '', FALSE);
+		$this->db->where("date(a.dt) >= '".$start_counted."'");
 
 		$query = $this->db->get();
+
 		return $query->row()->cnt;
 	}
 
