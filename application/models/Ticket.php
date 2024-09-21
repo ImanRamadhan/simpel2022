@@ -782,6 +782,7 @@ class Ticket extends CI_Model
 					$this->db->or_where('replierid !=', $this->session->id);
 					$this->db->group_end();
 				}
+				$this->db->where('status', $v);
 			}
 		}
 
