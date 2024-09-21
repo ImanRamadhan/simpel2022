@@ -758,6 +758,7 @@ class Ticket extends CI_Model
 				} else {
 					$this->db->where('replierid is null');
 				}
+				$this->db->where('status', $v);
 			}
 		}
 
