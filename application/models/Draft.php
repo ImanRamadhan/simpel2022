@@ -87,6 +87,7 @@ class Draft extends CI_Model
 		$this->db->or_where('owner', '9999');
 		$this->db->group_end();
 		
+		$this->db->where('owner_dir', $this->session->direktoratid);
 		$this->db->where('is_sent', '0');
 		//$this->db->where_in('info', array('P','I'));
 
