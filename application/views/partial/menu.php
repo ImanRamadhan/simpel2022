@@ -65,8 +65,8 @@
 			</li>
 			<li>
 				<ul>
-					<li><a href="<?php echo site_url('lapsing/lapsing_ppid') ?>">Lapsing PPID</a></li>
-					<li><a href="<?php echo site_url('lapsingv2/lapsing_ppid') ?>">Lapsing PPID (new)</a></li>
+					<!-- <li><a href="<?php echo site_url('lapsing/lapsing_ppid') ?>">Lapsing PPID</a></li> -->
+					<li><a href="<?php echo site_url('lapsingv2/lapsing_ppid') ?>">Lapsing PPID</a></li>
 					<li><a href="<?php echo site_url('lapsing/lapsing_yanblik') ?>">Lapsing Yanblik</a></li>
 					<li><a href="<?php echo site_url('lapsing/lapsing_gender') ?>">Lapsing Gender</a></li>
 
@@ -79,12 +79,12 @@
 	<li class="has-submenu">
 		<a href="#"><i class="mdi mdi-buffer"></i>Database</a>
 		<ul class="submenu">
-			<li><a href="<?php echo site_url('databases'); ?>">Database</a></li>
-			<li><a href="<?php echo site_url('databasesv2'); ?>">Database (New)</a></li>
-			<li><a href="<?php echo site_url('databases/rujukan'); ?>">Database Rujukan</a></li>
-			<li><a href="<?php echo site_url('databasesv2/rujukan'); ?>">Database Rujukan (New)</a></li>
+			<!-- <li><a href="<?php echo site_url('databases'); ?>">Database</a></li> -->
+			<li><a href="<?php echo site_url('databasesv2'); ?>">Database</a></li>
+			<!-- <li><a href="<?php echo site_url('databases/rujukan'); ?>">Database Rujukan</a></li> -->
+			<li><a href="<?php echo site_url('databasesv2/rujukan'); ?>">Database Rujukan</a></li>
 			<li><a href="<?php echo site_url('databases/resume'); ?>">Resume Harian</a></li>
-			<li><a href="<?php echo site_url('databasesv2/yanblik'); ?>">Database Yanblik (New)</a></li>
+			<li><a href="<?php echo site_url('databasesv2/yanblik'); ?>">Database Yanblik</a></li>
 			<li><a href="<?php echo site_url('monitorings/monbalai'); ?>">Monitoring Balai</a></li>
 			<li><a href="<?php echo site_url('databasesv2/sla'); ?>">Database SLA</a></li>
 		</ul>
