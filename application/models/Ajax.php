@@ -651,8 +651,16 @@ class Ajax extends CI_Model
 		$this->db->where('tglpengaduan >=', $date1);
 		$this->db->where('tglpengaduan <=', $date2);
 		//$this->db->where('kota', 'PUSAT');
-		$this->db->where('status !=', '3');
-		$this->db->where('replierid is null');
+		$this->db->group_start();
+		$this->db->group_start();
+		$this->db->where('status', '0');
+		$this->db->where('replierid IS NULL');
+		$this->db->group_end();
+		$this->db->or_group_start();
+		$this->db->where('status', '2');
+		$this->db->where('replierid IS NOT NULL');
+		$this->db->group_end();
+		$this->db->group_end();
 		$this->db->group_start();
 		$this->db->where('direktorat', $this->session->direktoratid);
 		$this->db->or_where('direktorat2', $this->session->direktoratid);
