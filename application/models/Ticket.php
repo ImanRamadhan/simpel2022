@@ -775,14 +775,28 @@ class Ticket extends CI_Model
 		if (!empty($filters['status'])) {
 			foreach ($filters['status'] as $v) {
 				if ($v == '1') {
-					$this->db->where('replierid is not null');
+					$this->db->group_start();
+					$this->db->group_start();
+					$this->db->where('status', '1');
+					$this->db->where('replierid !=', $this->session->id);
+					$this->db->group_end();
+					$this->db->or_group_start();
+					$this->db->where('status', '3');
+					$this->db->where('replierid !=', $this->session->id);
+					$this->db->group_end();
+					$this->db->group_end();
 				} else {
 					$this->db->group_start();
-					$this->db->where('replierid is null');
-					$this->db->or_where('replierid !=', $this->session->id);
+					$this->db->group_start();
+					$this->db->where('status', '0');
+					$this->db->where('replierid IS NULL');
+					$this->db->group_end();
+					$this->db->or_group_start();
+					$this->db->where('status', '2');
+					$this->db->where('replierid IS NOT NULL');
+					$this->db->group_end();
 					$this->db->group_end();
 				}
-				$this->db->where('status', $v);
 			}
 		}
 
