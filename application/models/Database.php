@@ -198,7 +198,13 @@ class Database extends CI_Model
 			$this->db->select('is_verified, sla, closed_date, fb, fb_date, jenis');
 			//$this->db->select('status, is_rujuk, tl, fb, is_verified, hk, is_sent, lastchange, prod_masalah as problem');
 			/*$this->db->select("CASE WHEN is_rujuk = '1' AND status = '3' THEN hk WHEN is_rujuk = '1' AND status <> '3' THEN  5 * ((DATEDIFF( NOW() , dt) ) DIV 7) + MID('0123455501234445012333450122234501101234000123450', 7 * WEEKDAY(dt) + WEEKDAY(NOW()) + 1, 1) - (select count(tgl) from desk_holiday where tgl between dt AND NOW()) ELSE 0 END as outstanding");*/
-			$this->db->select('TOTAL_HK(tglpengaduan, tl_date) as hk');
+			
+			if(!empty($filters) && $filters['jenis'] == "PPID"){
+				$this->db->select('TOTAL_HK(tglpengaduan, desk_ppid.tgl_pemberitahuan_tertulis) as hk');
+			} else {
+				$this->db->select('TOTAL_HK(tglpengaduan, tl_date) as hk');
+			}
+			
 			$this->db->select("date_format(tglpengaduan,'%d/%m/%Y') as tglpengaduan");
 			$this->db->select("date_format(closed_date,'%d/%m/%Y') as closed_date");
 			$this->db->select("date_format(tl_date,'%d/%m/%Y') as tl_date");
@@ -213,6 +219,9 @@ class Database extends CI_Model
 		$this->db->join('desk_categories', 'desk_categories.id=desk_tickets.kategori', 'left');
 		$this->db->join('desk_profesi', 'desk_profesi.id=desk_tickets.iden_profesi', 'left');
 		$this->db->join('desk_users', 'desk_users.id=desk_tickets.verified_by', 'left');
+		if(!empty($filters) && $filters['jenis'] == "PPID"){
+			$this->db->join('desk_ppid', 'desk_ppid.id=desk_tickets.id', 'left');
+		}
 
 		$this->db->where('closed_date IS NOT NULL');
 		$this->db->where('tl', 1);
