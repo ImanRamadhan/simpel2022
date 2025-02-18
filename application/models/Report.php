@@ -2125,29 +2125,28 @@ class Report extends CI_Model
 
 		//$array_mekanisme_p = $array_mekanisme;
 		//$array_mekanisme_i = $array_mekanisme;
-		$array_profesi = array();
-		$maxProfesiID = $this->Report->getMaxIDTable("desk_profesi");
-		for ($z = 0; $z <= $maxProfesiID; $z++) {
-			array_push($array_profesi, $arrNormal);
-		}
-		// $array_profesi = array(
-		// 	0 => array(0, 0, 0, 0, 0, 0),
-		// 	1 => array(0, 0, 0, 0, 0, 0),
-		// 	2 => array(0, 0, 0, 0, 0, 0),
-		// 	3 => array(0, 0, 0, 0, 0, 0),
-		// 	4 => array(0, 0, 0, 0, 0, 0),
-		// 	5 => array(0, 0, 0, 0, 0, 0),
-		// 	6 => array(0, 0, 0, 0, 0, 0),
-		// 	7 => array(0, 0, 0, 0, 0, 0),
-		// 	8 => array(0, 0, 0, 0, 0, 0),
-		// 	9 => array(0, 0, 0, 0, 0, 0),
-		// 	10 => array(0, 0, 0, 0, 0, 0),
-		// 	11 => array(0, 0, 0, 0, 0, 0),
-		// 	12 => array(0, 0, 0, 0, 0, 0),
-		// 	13 => array(0, 0, 0, 0, 0, 0),
-		// 	14 => array(0, 0, 0, 0, 0, 0),
-		// 	15 => array(0, 0, 0, 0, 0, 0)
-		// );
+		// $array_profesi = array();
+		// $maxProfesiID = $this->Report->getMaxIDTable("desk_profesi");
+		// for ($z = 0; $z <= $maxProfesiID; $z++) {
+		// 	array_push($array_profesi, $arrNormal);
+		// }
+		$array_profesi = array(
+			1 => array(0, 0, 0, 0, 0, 0),
+			2 => array(0, 0, 0, 0, 0, 0),
+			3 => array(0, 0, 0, 0, 0, 0),
+			4 => array(0, 0, 0, 0, 0, 0),
+			5 => array(0, 0, 0, 0, 0, 0),
+			6 => array(0, 0, 0, 0, 0, 0),
+			7 => array(0, 0, 0, 0, 0, 0),
+			8 => array(0, 0, 0, 0, 0, 0),
+			9 => array(0, 0, 0, 0, 0, 0),
+			10 => array(0, 0, 0, 0, 0, 0),
+			11 => array(0, 0, 0, 0, 0, 0),
+			12 => array(0, 0, 0, 0, 0, 0),
+			13 => array(0, 0, 0, 0, 0, 0),
+			14 => array(0, 0, 0, 0, 0, 0),
+			15 => array(0, 0, 0, 0, 0, 0)
+		);
 
 		//$array_profesi_p = $array_profesi;
 		//$array_profesi_i = $array_profesi;
