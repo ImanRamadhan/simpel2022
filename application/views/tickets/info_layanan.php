@@ -138,7 +138,9 @@
 								}
 
 								if($item_info->jenis == 'PPID' && isset($att_ppidtl)){
-									echo '&nbsp;&nbsp;<a href="'.site_url('uploads/files/').$att_ppidtl->saved_name.'" target="_blank"><i class="fa fa-file-pdf">'.$att_ppidtl->real_name.'</i></a>';
+									$config = $this->config->item('upload_setting');
+									$path = $config['upload_view_path'];
+									echo '&nbsp;&nbsp;<a href="'.$path.$att_ppidtl->saved_name.'" target="_blank"><i class="fa fa-file-pdf">'.$att_ppidtl->real_name.'</i></a>';
 									echo '&nbsp;&nbsp;<a class="modal-dlg text-primary" data-btn-submit="Upload Berkas" title="Upload bukti berkas yg sudah ditandatangan" data-href="'.site_url('tickets/confirm_upload_signed_formulir/'.$item_info->id . '/' . $item_info->trackid).'">[upload berkas layanan]</a>';
 								}	
 
